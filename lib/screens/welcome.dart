@@ -13,6 +13,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late RiveAnimationController _btnAnimationController;
+  bool isSignDialogShow = false;
 
   @override
   void initState() {
@@ -27,32 +28,51 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Footstep App',
-              style: Theme.of(context).textTheme.headline4,
+        child: AnimatedPositioned(
+          top: isSignDialogShow ? -50 : 0,
+          duration: Duration(milliseconds: 240),
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Footstep App',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  AnimatedButton(
+                    btnAnimationController: _btnAnimationController,
+                    onPressed: () {
+                      _btnAnimationController.isActive = true;
+                      Future.delayed(
+                          const Duration(
+                            milliseconds: 800,
+                          ), () {
+                        setState(() {
+                          isSignDialogShow = true;
+                        });
+                        customSignInDialog(context, isClosed: (_) {
+                          setState(() {
+                            isSignDialogShow = false;
+                          });
+                        });
+                      });
+                    },
+                  )
+                ],
+              ),
             ),
-            AnimatedButton(
-              btnAnimationController: _btnAnimationController,
-              onPressed: () {
-                _btnAnimationController.isActive = true;
-                Future.delayed(
-                    const Duration(
-                      milliseconds: 800,
-                    ), () {
-                  customSignInDialog(context);
-                });
-              },
-            )
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Future<Object?> customSignInDialog(BuildContext context) {
+  Future<Object?> customSignInDialog(BuildContext context,
+      {required ValueChanged isClosed}) {
     return showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -141,6 +161,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         );
       }),
-    );
+    ).then(isClosed);
   }
 }
