@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quickstep_app/routes/router.gr.dart';
 import 'package:quickstep_app/utils/colors.dart';
-import 'package:auto_route/auto_route.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -25,9 +23,7 @@ class ProfilePage extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () {
-                  context.router.push(
-                    SingleProfileRoute(profileId: "mwiriwe ariko"),
-                  );
+                  
                 },
                 child: const CircleAvatar(
                   radius: 25,

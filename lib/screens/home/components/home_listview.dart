@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:auto_route/auto_route.dart';
 
-import '../../../routes/router.gr.dart';
 import '../../../utils/colors.dart';
 
 class HomeListView extends StatelessWidget {

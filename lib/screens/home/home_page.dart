@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:auto_route/auto_route.dart';
-import 'package:quickstep_app/routes/router.gr.dart';
 import 'package:quickstep_app/utils/colors.dart';
 
 import 'components/home_listview.dart';
@@ -98,11 +96,11 @@ class HomePage extends StatelessWidget {
                 textDirection: TextDirection.rtl,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    context.router.push(
-                      SingleHomeRoute(
-                        homeId: "Amata yaraye",
-                      ),
-                    );
+                    // context.router.push(
+                    //   SingleHomeRoute(
+                    //     homeId: "Amata yaraye",
+                    //   ),
+                    // );
                   },
                   icon: const Icon(Icons.arrow_back),
                   label: const Text("Explore more"),

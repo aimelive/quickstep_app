@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickstep_app/models/movement.dart';
-import 'package:quickstep_app/screens/movements/movement_live_map.dart';
+import 'package:quickstep_app/screens/movements/map/movement_live_map.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
@@ -12,7 +12,7 @@ class MovementTile extends StatelessWidget {
   }) : super(key: key);
   final Movement movement;
   @override
-  Widget build(BuildContext ctx) {
+  Widget build(BuildContext context) {
     return Container(
       height: 100.h,
       margin: EdgeInsets.symmetric(vertical: 18.h, horizontal: 2.w),
@@ -148,7 +148,7 @@ class MovementTile extends StatelessWidget {
                           size: 20.sp,
                         ),
                         onPressed: () => pushPage(
-                          ctx,
+                          context,
                           to: const MovementLiveMap(),
                         ),
                         style: ElevatedButton.styleFrom(

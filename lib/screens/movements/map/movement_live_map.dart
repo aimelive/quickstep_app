@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:quickstep_app/utils/colors.dart';
+
+import 'over_map_widget.dart';
 
 const LatLng currentLocation = LatLng(25.11, 55.37);
 
@@ -17,17 +20,36 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GoogleMap(
-        initialCameraPosition: const CameraPosition(
-          target: currentLocation,
-          zoom: 14,
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: SafeArea(
+        top: false,
+        child: Scaffold(
+          body: Stack(
+            children: [
+              GoogleMap(
+                initialCameraPosition: const CameraPosition(
+                  target: currentLocation,
+                  zoom: 14,
+                ),
+                onMapCreated: (controller) {
+                  mapController = controller;
+                  addMarker("uniqueid", currentLocation);
+                },
+                markers: markers.values.toSet(),
+              ),
+              const OverMapWidget()
+            ],
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: primary,
+            onPressed: () {},
+            child: const Icon(
+              Icons.share,
+            ),
+          ),
         ),
-        onMapCreated: (controller) {
-          mapController = controller;
-          addMarker("uniqueid", currentLocation);
-        },
-        markers: markers.values.toSet(),
       ),
     );
   }

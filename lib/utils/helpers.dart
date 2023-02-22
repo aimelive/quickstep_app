@@ -16,7 +16,7 @@ void popPage(BuildContext context) => Navigator.pop(context);
 
 /// Adding horizontal space in a row
 SizedBox addHorizontalSpace(double width) {
-  return SizedBox(width: width.h);
+  return SizedBox(width: width.w);
 }
 
 /// Adding vertical space in a row

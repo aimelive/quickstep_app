@@ -1,10 +1,9 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 class CreateMovementPage extends StatelessWidget {
   const CreateMovementPage({
     super.key,
-    @PathParam() required this.liveId,
+    required this.liveId,
   });
   final String liveId;
   @override
