@@ -9,8 +9,6 @@ import 'package:quickstep_app/screens/movements/movements_page.dart';
 import 'package:quickstep_app/screens/movements/create_movement.dart';
 import 'package:quickstep_app/screens/profile/single_profile_page.dart';
 
-import '../screens/groups/groups_page.dart';
-import '../screens/groups/single_group_page.dart';
 import '../screens/profile/profile_page.dart';
 
 @MaterialAutoRouter(
@@ -51,24 +49,24 @@ import '../screens/profile/profile_page.dart';
             ),
           ],
         ),
+        // AutoRoute(
+        //   path: "groups",
+        //   name: "GroupsRouter",
+        //   page: EmptyRouterPage,
+        //   children: [
+        //     AutoRoute(
+        //       path: '',
+        //       page: GroupsPage,
+        //     ),
+        //     AutoRoute(
+        //       path: ":groupId",
+        //       page: SingleGroupPage,
+        //     ),
+        //   ],
+        // ),
         AutoRoute(
-          path: "groups",
-          name: "GroupsRouter",
-          page: EmptyRouterPage,
-          children: [
-            AutoRoute(
-              path: '',
-              page: GroupsPage,
-            ),
-            AutoRoute(
-              path: ":groupId",
-              page: SingleGroupPage,
-            ),
-          ],
-        ),
-        AutoRoute(
-          path: "lives",
-          name: "LivesRouter",
+          path: "movements",
+          name: "MovementsRouter",
           page: EmptyRouterPage,
           children: [
             AutoRoute(

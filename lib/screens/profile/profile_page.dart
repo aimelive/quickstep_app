@@ -38,9 +38,14 @@ class ProfilePage extends StatelessWidget {
           ),
           const ListTile(
             leading: Icon(Icons.logout),
+            title: Text("Inactive"),
+            subtitle: Text("Set your self as away"),
+          ),
+          const ListTile(
+            leading: Icon(Icons.logout),
             title: Text("Logout"),
             subtitle: Text("Signed in as Aimelive"),
-          )
+          ),
         ],
       ),
     );

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickstep_app/models/movement.dart';
 import 'package:quickstep_app/routes/router.gr.dart';
+import 'package:quickstep_app/screens/movements/movement_live_map.dart';
+import 'package:quickstep_app/utils/helpers.dart';
 
 import 'widgets/movement_tile.dart';
 
@@ -34,7 +36,7 @@ class _MovementsPageState extends State<MovementsPage> {
               ElevatedButton.icon(
                 onPressed: () {
                   context.router.push(
-                    SingleLiveRoute(liveId: "HereWego"),
+                    CreateMovementRoute(liveId: "HereWego"),
                   );
                 },
                 icon: const Icon(Icons.add),

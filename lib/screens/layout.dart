@@ -38,8 +38,8 @@ class LayoutPage extends StatelessWidget {
           routes: const [
             HomeRouter(),
             ActivitiesRouter(),
-            GroupsRouter(),
-            LivesRouter(),
+            // GroupsRouter(),
+            MovementsRouter(),
             ProfileRouter()
           ],
           bottomNavigationBuilder: (_, tabsRouter) {

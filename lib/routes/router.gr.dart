@@ -11,66 +11,58 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i13;
+import 'package:auto_route/auto_route.dart' as _i11;
 import 'package:auto_route/empty_router_widgets.dart' as _i2;
-import 'package:flutter/material.dart' as _i14;
+import 'package:flutter/material.dart' as _i12;
 
 import '../screens/activities/activities_page.dart' as _i5;
 import '../screens/activities/single_activity_page.dart' as _i6;
-import '../screens/groups/groups_page.dart' as _i7;
-import '../screens/groups/single_group_page.dart' as _i8;
 import '../screens/home/home_page.dart' as _i3;
 import '../screens/home/single_home_page.dart' as _i4;
 import '../screens/layout.dart' as _i1;
-import '../screens/movements/movements_page.dart' as _i9;
-import '../screens/movements/create_movement.dart' as _i10;
-import '../screens/profile/profile_page.dart' as _i11;
-import '../screens/profile/single_profile_page.dart' as _i12;
+import '../screens/movements/create_movement.dart' as _i8;
+import '../screens/movements/movements_page.dart' as _i7;
+import '../screens/profile/profile_page.dart' as _i9;
+import '../screens/profile/single_profile_page.dart' as _i10;
 
-class AppRouter extends _i13.RootStackRouter {
-  AppRouter([_i14.GlobalKey<_i14.NavigatorState>? navigatorKey])
+class AppRouter extends _i11.RootStackRouter {
+  AppRouter([_i12.GlobalKey<_i12.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i13.PageFactory> pagesMap = {
+  final Map<String, _i11.PageFactory> pagesMap = {
     LayoutRoute.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i1.LayoutPage(),
       );
     },
     HomeRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i2.EmptyRouterPage(),
       );
     },
     ActivitiesRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i2.EmptyRouterPage(),
       );
     },
-    GroupsRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: const _i2.EmptyRouterPage(),
-      );
-    },
-    LivesRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+    MovementsRouter.name: (routeData) {
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i2.EmptyRouterPage(),
       );
     },
     ProfileRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i2.EmptyRouterPage(),
       );
     },
     HomeRoute.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i3.HomePage(),
       );
@@ -80,7 +72,7 @@ class AppRouter extends _i13.RootStackRouter {
       final args = routeData.argsAs<SingleHomeRouteArgs>(
           orElse: () =>
               SingleHomeRouteArgs(homeId: pathParams.getString('homeId')));
-      return _i13.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i4.SingleHomePage(
           key: args.key,
@@ -89,7 +81,7 @@ class AppRouter extends _i13.RootStackRouter {
       );
     },
     ActivitiesRoute.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i5.ActivitiesPage(),
       );
@@ -99,7 +91,7 @@ class AppRouter extends _i13.RootStackRouter {
       final args = routeData.argsAs<SingleActivityRouteArgs>(
           orElse: () => SingleActivityRouteArgs(
               activityId: pathParams.getString('activityId')));
-      return _i13.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i6.SingleActivityPage(
           key: args.key,
@@ -107,48 +99,29 @@ class AppRouter extends _i13.RootStackRouter {
         ),
       );
     },
-    GroupsRoute.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+    MovementsRoute.name: (routeData) {
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i7.GroupsPage(),
+        child: const _i7.MovementsPage(),
       );
     },
-    SingleGroupRoute.name: (routeData) {
+    CreateMovementRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<SingleGroupRouteArgs>(
+      final args = routeData.argsAs<CreateMovementRouteArgs>(
           orElse: () =>
-              SingleGroupRouteArgs(groupId: pathParams.getString('groupId')));
-      return _i13.MaterialPageX<dynamic>(
+              CreateMovementRouteArgs(liveId: pathParams.getString('liveId')));
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i8.SingleGroupPage(
-          key: args.key,
-          groupId: args.groupId,
-        ),
-      );
-    },
-    LivesRoute.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: const _i9.MovementsPage(),
-      );
-    },
-    SingleLiveRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<SingleLiveRouteArgs>(
-          orElse: () =>
-              SingleLiveRouteArgs(liveId: pathParams.getString('liveId')));
-      return _i13.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: _i10.CreateMovementPage(
+        child: _i8.CreateMovementPage(
           key: args.key,
           liveId: args.liveId,
         ),
       );
     },
     ProfileRoute.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i11.ProfilePage(),
+        child: const _i9.ProfilePage(),
       );
     },
     SingleProfileRoute.name: (routeData) {
@@ -156,9 +129,9 @@ class AppRouter extends _i13.RootStackRouter {
       final args = routeData.argsAs<SingleProfileRouteArgs>(
           orElse: () => SingleProfileRouteArgs(
               profileId: pathParams.getString('profileId')));
-      return _i13.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i12.SingleProfilePage(
+        child: _i10.SingleProfilePage(
           key: args.key,
           profileId: args.profileId,
         ),
@@ -167,90 +140,73 @@ class AppRouter extends _i13.RootStackRouter {
   };
 
   @override
-  List<_i13.RouteConfig> get routes => [
-        _i13.RouteConfig(
+  List<_i11.RouteConfig> get routes => [
+        _i11.RouteConfig(
           LayoutRoute.name,
           path: '/',
           children: [
-            _i13.RouteConfig(
+            _i11.RouteConfig(
               HomeRouter.name,
               path: 'home',
               parent: LayoutRoute.name,
               children: [
-                _i13.RouteConfig(
+                _i11.RouteConfig(
                   HomeRoute.name,
                   path: '',
                   parent: HomeRouter.name,
                 ),
-                _i13.RouteConfig(
+                _i11.RouteConfig(
                   SingleHomeRoute.name,
                   path: ':homeId',
                   parent: HomeRouter.name,
                 ),
               ],
             ),
-            _i13.RouteConfig(
+            _i11.RouteConfig(
               ActivitiesRouter.name,
               path: 'activities',
               parent: LayoutRoute.name,
               children: [
-                _i13.RouteConfig(
+                _i11.RouteConfig(
                   ActivitiesRoute.name,
                   path: '',
                   parent: ActivitiesRouter.name,
                 ),
-                _i13.RouteConfig(
+                _i11.RouteConfig(
                   SingleActivityRoute.name,
                   path: ':activityId',
                   parent: ActivitiesRouter.name,
                 ),
               ],
             ),
-            _i13.RouteConfig(
-              GroupsRouter.name,
-              path: 'groups',
+            _i11.RouteConfig(
+              MovementsRouter.name,
+              path: 'movements',
               parent: LayoutRoute.name,
               children: [
-                _i13.RouteConfig(
-                  GroupsRoute.name,
+                _i11.RouteConfig(
+                  MovementsRoute.name,
                   path: '',
-                  parent: GroupsRouter.name,
+                  parent: MovementsRouter.name,
                 ),
-                _i13.RouteConfig(
-                  SingleGroupRoute.name,
-                  path: ':groupId',
-                  parent: GroupsRouter.name,
-                ),
-              ],
-            ),
-            _i13.RouteConfig(
-              LivesRouter.name,
-              path: 'lives',
-              parent: LayoutRoute.name,
-              children: [
-                _i13.RouteConfig(
-                  LivesRoute.name,
-                  path: '',
-                  parent: LivesRouter.name,
-                ),
-                _i13.RouteConfig(
-                  SingleLiveRoute.name,
+                _i11.RouteConfig(
+                  CreateMovementRoute.name,
                   path: ':liveId',
-                  parent: LivesRouter.name,
+                  parent: MovementsRouter.name,
                 ),
               ],
             ),
-            _i13.RouteConfig(
+            _i11.RouteConfig(
               ProfileRouter.name,
               path: 'profile',
               parent: LayoutRoute.name,
               children: [
-                _i13.RouteConfig(
+                _i11.RouteConfig(
                   ProfileRoute.name,
                   path: '',
                   parent: ProfileRouter.name,
                 ),
-                _i13.RouteConfig(
+                _i11.RouteConfig(
                   SingleProfileRoute.name,
                   path: ':profileId',
                   parent: ProfileRouter.name,
@@ -264,8 +220,8 @@ class AppRouter extends _i13.RootStackRouter {
 
 /// generated route for
 /// [_i1.LayoutPage]
-class LayoutRoute extends _i13.PageRouteInfo<void> {
-  const LayoutRoute({List<_i13.PageRouteInfo>? children})
+class LayoutRoute extends _i11.PageRouteInfo<void> {
+  const LayoutRoute({List<_i11.PageRouteInfo>? children})
       : super(
           LayoutRoute.name,
           path: '/',
@@ -277,8 +233,8 @@ class LayoutRoute extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.EmptyRouterPage]
-class HomeRouter extends _i13.PageRouteInfo<void> {
-  const HomeRouter({List<_i13.PageRouteInfo>? children})
+class HomeRouter extends _i11.PageRouteInfo<void> {
+  const HomeRouter({List<_i11.PageRouteInfo>? children})
       : super(
           HomeRouter.name,
           path: 'home',
@@ -290,8 +246,8 @@ class HomeRouter extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.EmptyRouterPage]
-class ActivitiesRouter extends _i13.PageRouteInfo<void> {
-  const ActivitiesRouter({List<_i13.PageRouteInfo>? children})
+class ActivitiesRouter extends _i11.PageRouteInfo<void> {
+  const ActivitiesRouter({List<_i11.PageRouteInfo>? children})
       : super(
           ActivitiesRouter.name,
           path: 'activities',
@@ -303,34 +259,21 @@ class ActivitiesRouter extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.EmptyRouterPage]
-class GroupsRouter extends _i13.PageRouteInfo<void> {
-  const GroupsRouter({List<_i13.PageRouteInfo>? children})
+class MovementsRouter extends _i11.PageRouteInfo<void> {
+  const MovementsRouter({List<_i11.PageRouteInfo>? children})
       : super(
-          GroupsRouter.name,
-          path: 'groups',
+          MovementsRouter.name,
+          path: 'movements',
           initialChildren: children,
         );
 
-  static const String name = 'GroupsRouter';
+  static const String name = 'MovementsRouter';
 }
 
 /// generated route for
 /// [_i2.EmptyRouterPage]
-class LivesRouter extends _i13.PageRouteInfo<void> {
-  const LivesRouter({List<_i13.PageRouteInfo>? children})
-      : super(
-          LivesRouter.name,
-          path: 'lives',
-          initialChildren: children,
-        );
-
-  static const String name = 'LivesRouter';
-}
-
-/// generated route for
-/// [_i2.EmptyRouterPage]
-class ProfileRouter extends _i13.PageRouteInfo<void> {
-  const ProfileRouter({List<_i13.PageRouteInfo>? children})
+class ProfileRouter extends _i11.PageRouteInfo<void> {
+  const ProfileRouter({List<_i11.PageRouteInfo>? children})
       : super(
           ProfileRouter.name,
           path: 'profile',
@@ -342,7 +285,7 @@ class ProfileRouter extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.HomePage]
-class HomeRoute extends _i13.PageRouteInfo<void> {
+class HomeRoute extends _i11.PageRouteInfo<void> {
   const HomeRoute()
       : super(
           HomeRoute.name,
@@ -354,9 +297,9 @@ class HomeRoute extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.SingleHomePage]
-class SingleHomeRoute extends _i13.PageRouteInfo<SingleHomeRouteArgs> {
+class SingleHomeRoute extends _i11.PageRouteInfo<SingleHomeRouteArgs> {
   SingleHomeRoute({
-    _i14.Key? key,
+    _i12.Key? key,
     required String homeId,
   }) : super(
           SingleHomeRoute.name,
@@ -377,7 +320,7 @@ class SingleHomeRouteArgs {
     required this.homeId,
   });
 
-  final _i14.Key? key;
+  final _i12.Key? key;
 
   final String homeId;
 
@@ -389,7 +332,7 @@ class SingleHomeRouteArgs {
 
 /// generated route for
 /// [_i5.ActivitiesPage]
-class ActivitiesRoute extends _i13.PageRouteInfo<void> {
+class ActivitiesRoute extends _i11.PageRouteInfo<void> {
   const ActivitiesRoute()
       : super(
           ActivitiesRoute.name,
@@ -401,9 +344,9 @@ class ActivitiesRoute extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.SingleActivityPage]
-class SingleActivityRoute extends _i13.PageRouteInfo<SingleActivityRouteArgs> {
+class SingleActivityRoute extends _i11.PageRouteInfo<SingleActivityRouteArgs> {
   SingleActivityRoute({
-    _i14.Key? key,
+    _i12.Key? key,
     required String activityId,
   }) : super(
           SingleActivityRoute.name,
@@ -424,7 +367,7 @@ class SingleActivityRouteArgs {
     required this.activityId,
   });
 
-  final _i14.Key? key;
+  final _i12.Key? key;
 
   final String activityId;
 
@@ -435,102 +378,55 @@ class SingleActivityRouteArgs {
 }
 
 /// generated route for
-/// [_i7.GroupsPage]
-class GroupsRoute extends _i13.PageRouteInfo<void> {
-  const GroupsRoute()
+/// [_i7.MovementsPage]
+class MovementsRoute extends _i11.PageRouteInfo<void> {
+  const MovementsRoute()
       : super(
-          GroupsRoute.name,
+          MovementsRoute.name,
           path: '',
         );
 
-  static const String name = 'GroupsRoute';
+  static const String name = 'MovementsRoute';
 }
 
 /// generated route for
-/// [_i8.SingleGroupPage]
-class SingleGroupRoute extends _i13.PageRouteInfo<SingleGroupRouteArgs> {
-  SingleGroupRoute({
-    _i14.Key? key,
-    required String groupId,
-  }) : super(
-          SingleGroupRoute.name,
-          path: ':groupId',
-          args: SingleGroupRouteArgs(
-            key: key,
-            groupId: groupId,
-          ),
-          rawPathParams: {'groupId': groupId},
-        );
-
-  static const String name = 'SingleGroupRoute';
-}
-
-class SingleGroupRouteArgs {
-  const SingleGroupRouteArgs({
-    this.key,
-    required this.groupId,
-  });
-
-  final _i14.Key? key;
-
-  final String groupId;
-
-  @override
-  String toString() {
-    return 'SingleGroupRouteArgs{key: $key, groupId: $groupId}';
-  }
-}
-
-/// generated route for
-/// [_i9.MovementsPage]
-class LivesRoute extends _i13.PageRouteInfo<void> {
-  const LivesRoute()
-      : super(
-          LivesRoute.name,
-          path: '',
-        );
-
-  static const String name = 'LivesRoute';
-}
-
-/// generated route for
-/// [_i10.CreateMovementPage]
-class SingleLiveRoute extends _i13.PageRouteInfo<SingleLiveRouteArgs> {
-  SingleLiveRoute({
-    _i14.Key? key,
+/// [_i8.CreateMovementPage]
+class CreateMovementRoute extends _i11.PageRouteInfo<CreateMovementRouteArgs> {
+  CreateMovementRoute({
+    _i12.Key? key,
     required String liveId,
   }) : super(
-          SingleLiveRoute.name,
+          CreateMovementRoute.name,
           path: ':liveId',
-          args: SingleLiveRouteArgs(
+          args: CreateMovementRouteArgs(
             key: key,
             liveId: liveId,
           ),
           rawPathParams: {'liveId': liveId},
         );
 
-  static const String name = 'SingleLiveRoute';
+  static const String name = 'CreateMovementRoute';
 }
 
-class SingleLiveRouteArgs {
-  const SingleLiveRouteArgs({
+class CreateMovementRouteArgs {
+  const CreateMovementRouteArgs({
     this.key,
     required this.liveId,
   });
 
-  final _i14.Key? key;
+  final _i12.Key? key;
 
   final String liveId;
 
   @override
   String toString() {
-    return 'SingleLiveRouteArgs{key: $key, liveId: $liveId}';
+    return 'CreateMovementRouteArgs{key: $key, liveId: $liveId}';
   }
 }
 
 /// generated route for
-/// [_i11.ProfilePage]
-class ProfileRoute extends _i13.PageRouteInfo<void> {
+/// [_i9.ProfilePage]
+class ProfileRoute extends _i11.PageRouteInfo<void> {
   const ProfileRoute()
       : super(
           ProfileRoute.name,
@@ -541,10 +437,10 @@ class ProfileRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i12.SingleProfilePage]
-class SingleProfileRoute extends _i13.PageRouteInfo<SingleProfileRouteArgs> {
+/// [_i10.SingleProfilePage]
+class SingleProfileRoute extends _i11.PageRouteInfo<SingleProfileRouteArgs> {
   SingleProfileRoute({
-    _i14.Key? key,
+    _i12.Key? key,
     required String profileId,
   }) : super(
           SingleProfileRoute.name,
@@ -565,7 +461,7 @@ class SingleProfileRouteArgs {
     required this.profileId,
   });
 
-  final _i14.Key? key;
+  final _i12.Key? key;
 
   final String profileId;
 

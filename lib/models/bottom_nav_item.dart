@@ -27,16 +27,11 @@ List<BottomBarItem> menuItems = [
       selectedColor: Colors.blue.shade200),
   BottomBarItem(
       index: 2,
-      text: "Groups", //Channels i belong to and the one I manage
-      icon: Icons.group,
-      selectedColor: Colors.pink.shade100),
-  BottomBarItem(
-      index: 3,
       text: "Live",
       icon: Icons.location_on_outlined,
       selectedColor: Colors.green.shade400),
   BottomBarItem(
-    index: 4,
+    index: 3,
     text: "Profile",
     icon: Icons.account_circle,
     selectedColor: Colors.amberAccent,
