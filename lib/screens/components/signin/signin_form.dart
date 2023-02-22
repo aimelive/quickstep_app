@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:quickstep_app/screens/layout.dart';
 
 class SignInForm extends StatelessWidget {
   const SignInForm({
@@ -52,7 +53,17 @@ class SignInForm extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 8, bottom: 24),
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                Future.delayed(const Duration(seconds: 1), () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const LayoutPage(),
+                    ),
+                  );
+                });
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFF77D8E),
                 minimumSize: const Size(double.infinity, 56),
