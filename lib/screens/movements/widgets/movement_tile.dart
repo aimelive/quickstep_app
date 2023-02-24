@@ -147,10 +147,12 @@ class MovementTile extends StatelessWidget {
                           Icons.arrow_back,
                           size: 20.sp,
                         ),
-                        onPressed: () => pushPage(
-                          context,
-                          to: const MovementLiveMap(),
-                        ),
+                        onPressed: () {
+                          pushPage(
+                            context,
+                            to: const MovementLiveMap(),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           minimumSize: Size.zero,

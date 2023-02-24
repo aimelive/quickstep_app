@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quickstep_app/utils/colors.dart';
 
 class ActivitiesPage extends StatelessWidget {
   const ActivitiesPage({super.key});
@@ -6,17 +8,18 @@ class ActivitiesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const Text("Activities goes here"),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text("Click to go to single activity"),
-            )
-          ],
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.warning_amber,
+            size: 30.sp,
+            color: lightPrimary,
+          ),
+          const Text(
+            "No activities detected yet!",
+          ),
+        ],
       ),
     );
   }

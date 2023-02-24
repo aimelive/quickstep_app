@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quickstep_app/screens/authentication/welcome.dart';
 import 'package:quickstep_app/screens/layout.dart';
 import 'package:quickstep_app/utils/theme.dart';
+
+bool isSignedIn = false;
 
 void main() {
   runApp(const AppWidget());
@@ -24,7 +27,7 @@ class AppWidget extends StatelessWidget {
           home: child,
         );
       },
-      child: const LayoutPage(),
+      child: isSignedIn ? const LayoutPage() : const WelcomeScreen(),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickstep_app/utils/colors.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -6,10 +7,10 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 5.w),
       child: Column(
         children: [
-          // const MyAppBar(),
           ListTile(
             title: const Text("Aime Ndayambaje"),
             subtitle: const Text("Member since 12 Feb, 2022"),
@@ -22,9 +23,7 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               child: GestureDetector(
-                onTap: () {
-                  
-                },
+                onTap: () {},
                 child: const CircleAvatar(
                   radius: 25,
                   foregroundImage: AssetImage("assets/images/aime.png"),
@@ -32,16 +31,25 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
           ),
-          const ListTile(
-            leading: Icon(Icons.logout),
-            title: Text("Inactive"),
-            subtitle: Text("Set your self as away"),
-          ),
-          const ListTile(
-            leading: Icon(Icons.logout),
-            title: Text("Logout"),
-            subtitle: Text("Signed in as Aimelive"),
-          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.run_circle_outlined),
+                  title: const Text("Inactive"),
+                  subtitle: const Text("Set your self as away"),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text("Logout"),
+                  subtitle: const Text("Signed in as Aimelive"),
+                  onTap: () {},
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

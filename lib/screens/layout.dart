@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickstep_app/models/bottom_nav_item.dart';
 import 'package:quickstep_app/screens/activities/activities_page.dart';
 import 'package:quickstep_app/screens/components/app_bar.dart';
@@ -19,13 +20,29 @@ class LayoutPage extends StatefulWidget {
 }
 
 class _LayoutPageState extends State<LayoutPage> {
-  final pages = [
-    const HomePage(),
-    const ActivitiesPage(),
-    const MovementsPage(),
-    const ProfilePage(),
-  ];
+  late List<Widget> pages;
   int currentPage = 0;
+
+  void gotoExplore() {
+    pages = [
+      HomePage(
+        onExploreMore: () {
+          setState(() {
+            currentPage = 2;
+          });
+        },
+      ),
+      const ActivitiesPage(),
+      const MovementsPage(),
+      const ProfilePage(),
+    ];
+  }
+
+  @override
+  void initState() {
+    gotoExplore();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +59,14 @@ class _LayoutPageState extends State<LayoutPage> {
             foregroundColor: primary,
             elevation: 0.0,
             centerTitle: true,
-            // leading: const AutoLeadingButton(
-            //   color: white,
-            // ),
-            flexibleSpace: const MyAppBar(),
+            automaticallyImplyLeading: false,
+            flexibleSpace: Hero(
+              tag: "appbar-hero-custom-1",
+              child: Material(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: const MyAppBar(),
+              ),
+            ),
             toolbarHeight: 100,
           ),
           body: SlideFadeSwitcher(child: pages[currentPage]),
@@ -72,11 +93,21 @@ class _LayoutPageState extends State<LayoutPage> {
                       (item) => SalomonBottomBarItem(
                         selectedColor: Colors.blue.shade200,
                         unselectedColor: veryLightGrey,
-                        icon: Icon(
-                          item.icon,
-                          size: 30,
-                        ),
-                        title: Text(item.text),
+                        icon: item.index == 3
+                            ? Transform.scale(
+                                scale: 1.3,
+                                child: CircleAvatar(
+                                  backgroundColor: lightPrimary,
+                                  radius: 14.r,
+                                  foregroundImage: const AssetImage(
+                                      "assets/images/aime.png"),
+                                ),
+                              )
+                            : Icon(
+                                item.icon,
+                                size: 25.sp,
+                              ),
+                        title: Text(item.index == 3 ? "Aime" : item.text),
                       ),
                     )
                     .toList(),

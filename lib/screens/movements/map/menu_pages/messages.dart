@@ -25,47 +25,70 @@ class MessagesPage extends StatelessWidget {
           ),
           SafeArea(
             child: Container(
-              color: white,
+              // color: lightPrimary.withOpacity(0.1),
               padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.mic,
-                    size: 26.sp,
-                    color: primary,
+                  CircleAvatar(
+                    backgroundColor: lightPrimary.withOpacity(0.3),
+                    child: Icon(
+                      Icons.mic,
+                      size: 22.sp,
+                      color: primary,
+                    ),
                   ),
                   addHorizontalSpace(10),
                   Expanded(
-                    child: TextField(
-                      cursorColor: lightPrimary,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25.r),
-                          borderSide: BorderSide(
-                            color: primary,
-                            width: 2.w,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.r),
+                        color: lightPrimary.withOpacity(0.3),
+                      ),
+                      child: TextField(
+                        cursorColor: lightPrimary,
+                        decoration: InputDecoration(
+                          // enabledBorder: InputBorder.none,
+                          isDense: true,
+                          hintStyle: const TextStyle(color: primary),
+                          // fillColor: lightPrimary.withOpacity(0.5),
+                          // filled: true,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 15.w,
+                            vertical: 10.h,
                           ),
-                        ),
-                        isDense: true,
-                        hintStyle: const TextStyle(color: primary),
-                        fillColor: Theme.of(context).scaffoldBackgroundColor,
-                        filled: true,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 15.w,
-                          vertical: 10.h,
-                        ),
-                        hintText: "Enter a message",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.r),
+                          hintText: "Send a message",
+                          border: InputBorder.none,
                         ),
                       ),
                     ),
                   ),
                   addHorizontalSpace(10),
-                  Icon(
-                    Icons.send,
-                    size: 26.sp,
-                    color: primary,
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12.w,
+                      vertical: 7.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: lightPrimary.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                    child: Row(
+                      children: [
+                        const Text(
+                          " Send",
+                          style: TextStyle(
+                            color: primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        addHorizontalSpace(7),
+                        Icon(
+                          Icons.send,
+                          size: 20.sp,
+                          color: primary,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

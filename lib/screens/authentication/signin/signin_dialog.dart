@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:quickstep_app/screens/authentication/signup/signup_page.dart';
+import 'package:quickstep_app/utils/colors.dart';
+import 'package:quickstep_app/utils/helpers.dart';
 
 import 'signin_form.dart';
 
@@ -74,7 +78,10 @@ Future<Object?> customSignInDialog(BuildContext context,
                       children: [
                         IconButton(
                           padding: EdgeInsets.zero,
-                          onPressed: () {},
+                          onPressed: () {
+                            popPage(context);
+                            pushPage(context, to: const SignUpPage());
+                          },
                           icon: SvgPicture.asset(
                             "assets/icons/email_box.svg",
                             height: 64,
@@ -103,16 +110,30 @@ Future<Object?> customSignInDialog(BuildContext context,
                     )
                   ],
                 ),
-                const Positioned(
+                Positioned(
                   left: 0,
                   right: 0,
                   bottom: -48,
-                  child: CircleAvatar(
-                    radius: 16,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.black,
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: lightPrimary.withOpacity(0.9),
+                          blurRadius: 10,
+                        )
+                      ],
+                    ),
+                    child: GestureDetector(
+                      onTap: () => popPage(context),
+                      child: CircleAvatar(
+                        radius: 20.r,
+                        backgroundColor: Colors.white,
+                        foregroundColor: primary,
+                        child: Icon(
+                          Icons.close,
+                          size: 25.sp,
+                        ),
+                      ),
                     ),
                   ),
                 )

@@ -4,8 +4,8 @@ import 'package:quickstep_app/utils/colors.dart';
 import 'components/home_listview.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
+  const HomePage({super.key,required this.onExploreMore});
+  final VoidCallback onExploreMore;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -95,13 +95,7 @@ class HomePage extends StatelessWidget {
               child: Directionality(
                 textDirection: TextDirection.rtl,
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    // context.router.push(
-                    //   SingleHomeRoute(
-                    //     homeId: "Amata yaraye",
-                    //   ),
-                    // );
-                  },
+                  onPressed: onExploreMore,
                   icon: const Icon(Icons.arrow_back),
                   label: const Text("Explore more"),
                 ),

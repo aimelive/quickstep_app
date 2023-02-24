@@ -33,7 +33,7 @@ class _MovementsPageState extends State<MovementsPage> {
               ),
               ElevatedButton.icon(
                 onPressed: () {
-                  pushPage(context, to: const CreateMovementPage(liveId: "fdjh"));
+                  pushPage(context, to: const CreateMovementPage());
                 },
                 icon: const Icon(Icons.add),
                 label: const Text("Create"),
