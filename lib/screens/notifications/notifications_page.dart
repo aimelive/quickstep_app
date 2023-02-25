@@ -24,6 +24,8 @@ class _NotificationsPageState extends State<NotificationsPage>
       duration: const Duration(
         milliseconds: 350,
       ),
+      // upperBound: 0.0,
+      // lowerBound: 1.0,
     )..addListener(() {
         setState(() {});
       });
@@ -38,6 +40,7 @@ class _NotificationsPageState extends State<NotificationsPage>
 
   @override
   Widget build(BuildContext context) {
+     
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,

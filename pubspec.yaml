@@ -38,6 +38,8 @@ dependencies:
   flutter_svg: ^1.1.6
   salomon_bottom_bar: ^3.3.1
   google_maps_flutter: ^2.2.3
+  location: ^4.4.0
+  flutter_polyline_points: ^1.0.0
   flutter_screenutil: ^5.6.1
   badges: ^3.0.2
   image: ^4.0.15

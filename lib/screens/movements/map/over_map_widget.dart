@@ -28,6 +28,7 @@ class _OverMapWidgetState extends State<OverMapWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconShadowButton(
+                removeShadow: true,
                 onPress: () async {
                   final leave = await showDialog<bool>(
                     context: context,
@@ -43,6 +44,7 @@ class _OverMapWidgetState extends State<OverMapWidget> {
                 icon: Icons.arrow_back,
               ),
               IconShadowButton(
+                removeShadow: true,
                 onPress: () {
                   setState(() {
                     showMenu = !showMenu;

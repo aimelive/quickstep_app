@@ -4,7 +4,7 @@ import 'package:quickstep_app/screens/authentication/welcome.dart';
 import 'package:quickstep_app/screens/layout.dart';
 import 'package:quickstep_app/utils/theme.dart';
 
-bool isSignedIn = false;
+bool isSignedIn = true;
 
 void main() {
   runApp(const AppWidget());

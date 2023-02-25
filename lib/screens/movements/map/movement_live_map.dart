@@ -3,14 +3,25 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:image/image.dart' as image;
 
 import 'over_map_widget.dart';
 import 'widgets/circular_fab_widget.dart';
 
-const LatLng currentLocation = LatLng(-1.9504946, 30.0549678);
+const googleApiKey = 'AIzaSyC5ubzRytHakIp0hADsvsV5JArqVC4wcfo';
+
+const LatLng sourceLocation = LatLng(
+  -1.9167688784786698,
+  30.083218087221134,
+);
+const LatLng destinationLocation = LatLng(
+  -1.9167688784786698,
+  30.081166197413935,
+);
 
 class MovementLiveMap extends StatefulWidget {
   const MovementLiveMap({super.key});
@@ -24,8 +35,81 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
   // final key = GlobalKey();
   Map<String, Marker> markers = {};
 
+  List<LatLng> polylineCoordinates = [];
+  LocationData? currentLocation;
+
+  void getCurrentLocation() async {
+    Location location = Location();
+
+    // GoogleMapController googleMapController = mapController;
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    final _resData = await location.getLocation();
+    setState(() {
+      currentLocation = _resData;
+    });
+    // GoogleMapController cnt = mapController;
+    location.onLocationChanged.listen((newLoc) {
+      setState(() {
+        currentLocation = newLoc;
+      });
+    });
+  }
+
+  //get polylinesloc
+  void getPolylines() async {
+    PolylinePoints polylinePoints = PolylinePoints();
+
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      googleApiKey,
+      PointLatLng(
+        sourceLocation.latitude,
+        sourceLocation.longitude,
+      ),
+      PointLatLng(
+        destinationLocation.latitude,
+        destinationLocation.longitude,
+      ),
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        return polylineCoordinates.add(
+          LatLng(point.latitude, point.longitude),
+        );
+      });
+      setState(() {});
+    }
+  }
+
+  @override
+  void initState() {
+    getCurrentLocation();
+    getPolylines();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(currentLocation);
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: WillPopScope(
@@ -35,19 +119,36 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
         child: Scaffold(
           body: Stack(
             children: [
-              GoogleMap(
-                initialCameraPosition: const CameraPosition(
-                  target: currentLocation,
-                  zoom: 18,
+              if (currentLocation != null)
+                GoogleMap(
+                  initialCameraPosition: const CameraPosition(
+                    target: sourceLocation,
+                    zoom: 18,
+                  ),
+                  polylines: {
+                    Polyline(
+                      polylineId: PolylineId("route"),
+                      points: polylineCoordinates,
+                      color: lightPrimary,
+                    ),
+                  },
+                  mapType: MapType.hybrid,
+                  onMapCreated: (controller) {
+                    mapController = controller;
+                    addMarker("source", sourceLocation);
+                    addMarker("destination", destinationLocation);
+
+                    addMarker(
+                      "currentLocation",
+                      LatLng(
+                        currentLocation!.latitude!,
+                        currentLocation!.longitude!,
+                      ),
+                    );
+                  },
+                  myLocationButtonEnabled: false,
+                  markers: markers.values.toSet(),
                 ),
-                mapType: MapType.hybrid,
-                onMapCreated: (controller) {
-                  mapController = controller;
-                  addMarker("uniqueid", currentLocation);
-                },
-                myLocationButtonEnabled: false,
-                markers: markers.values.toSet(),
-              ),
               const OverMapWidget(),
               // Positioned(
               //   bottom: 0,

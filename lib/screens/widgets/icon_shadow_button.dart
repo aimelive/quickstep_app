@@ -8,10 +8,12 @@ class IconShadowButton extends StatelessWidget {
     Key? key,
     required this.onPress,
     required this.icon,
+    this.removeShadow,
   }) : super(key: key);
 
   final VoidCallback onPress;
   final IconData icon;
+  final bool? removeShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +30,12 @@ class IconShadowButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: white,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.r),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.shade300,
+              color: removeShadow == true
+                  ? Colors.grey.shade600
+                  : Colors.grey.shade300,
               blurRadius: 12,
               offset: const Offset(5, 3),
             ),
