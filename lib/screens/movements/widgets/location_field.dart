@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
 import '../../../utils/colors.dart';
-import '../../components/choose_location_dialog.dart';
 import '../../components/choose_location_dialog_func.dart';
 
 class ChooseLocationWidget extends StatefulWidget {

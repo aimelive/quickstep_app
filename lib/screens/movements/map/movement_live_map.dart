@@ -59,9 +59,9 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
       }
     }
 
-    final _resData = await location.getLocation();
+    final locationData = await location.getLocation();
     setState(() {
-      currentLocation = _resData;
+      currentLocation = locationData;
     });
 
     location.onLocationChanged.listen((newLoc) {
@@ -70,7 +70,7 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
         currentLocation = newLoc;
       });
 
-      print("Hello World new location,${currentLocation?.latitude}");
+      // print("Hello World new location,${currentLocation?.latitude}");
       if (mapController != null) {
         mapController?.animateCamera(
           CameraUpdate.newCameraPosition(

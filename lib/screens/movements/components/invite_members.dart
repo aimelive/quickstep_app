@@ -33,7 +33,7 @@ class InviteMembers extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: onContinue,
-          child: Text("Invite"),
+          child: const Text("Invite"),
         )
       ],
     );

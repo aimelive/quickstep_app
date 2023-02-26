@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
-import '../components/choose_location_dialog_func.dart';
 import 'components/self_made_walks_listview.dart';
 import 'components/start_walk_button.dart';
 

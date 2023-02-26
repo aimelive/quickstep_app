@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../utils/colors.dart';
 
 class AnotherCustomAppBar extends StatelessWidget {
-  const AnotherCustomAppBar({super.key,required this.title});
+  const AnotherCustomAppBar({super.key, required this.title});
 
   final String title;
 
@@ -37,11 +37,16 @@ class AnotherCustomAppBar extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 10.w),
-                  Text(title,
-                    style: TextStyle(
-                      color: white,
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.w600,
+                  Expanded(
+                    child: Text(
+                      title,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: white,
+                        fontSize: 20.sp,
+                        overflow: TextOverflow.ellipsis,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],

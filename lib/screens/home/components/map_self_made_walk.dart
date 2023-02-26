@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:quickstep_app/models/self_made_walk.dart';
+import 'package:quickstep_app/services/hive_service.dart';
+import 'package:quickstep_app/utils/helpers.dart';
 
 import '../../../utils/colors.dart';
 import '../../movements/map/movement_live_map.dart';
@@ -13,23 +15,26 @@ import '../../movements/widgets/app_bar_2.dart';
 enum SelfMadeWalkMapMode { idle, walk }
 
 class SelfMadeWalkMap extends StatefulWidget {
-  const SelfMadeWalkMap({
-    super.key,
-    required this.points,
-    required this.mode,
-    required this.startedAt,
-  });
+  const SelfMadeWalkMap(
+      {super.key,
+      required this.points,
+      required this.mode,
+      required this.startedAt,
+      this.walk});
   final Map<String, LatLng> points;
   final SelfMadeWalkMapMode mode;
   final DateTime startedAt;
+  final SelfMadeWalk? walk;
 
   @override
   State<SelfMadeWalkMap> createState() => _SelfMadeWalkMapState();
 }
 
 class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
+  late HiveService _hiveService;
   late LatLng origin;
   late LatLng destination;
+  late LatLng finalLoc;
 
   LatLng? currentLocation;
 
@@ -47,10 +52,15 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
     origin = widget.points["origin"]!;
     destination = widget.points["destination"]!;
 
+    _hiveService = HiveService();
+
     getRoutePolylines();
 
     if (widget.mode == SelfMadeWalkMapMode.walk) {
+      polylineCurrentLocationCoordinates = [origin];
       getLocation();
+    } else {
+      polylineCurrentLocationCoordinates = widget.walk!.coordinates;
     }
     super.initState();
   }
@@ -75,45 +85,18 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
           LatLng(point.latitude, point.longitude),
         );
       }
+      if (!mounted) return;
       setState(() {});
-    }
-  }
-
-  void updateCurrentRoutePolyline() async {
-    PolylinePoints polylinePoints = PolylinePoints();
-    try {
-      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        googleApiKey,
-        PointLatLng(
-          origin.latitude,
-          origin.longitude,
-        ),
-        PointLatLng(
-          currentLocation!.latitude,
-          currentLocation!.longitude,
-        ),
-      );
-      if (result.points.isNotEmpty) {
-        for (PointLatLng point in result.points) {
-          polylineCurrentLocationCoordinates.add(
-            LatLng(point.latitude, point.longitude),
-          );
-        }
-        if (!mounted) return;
-        setState(() {});
-      }
-    } catch (e) {
-      print("We can't show current route offline");
     }
   }
 
   void getLocation() async {
     Location location = Location();
-    final _resData = await location.getLocation();
+    final locationData = await location.getLocation();
     setState(() {
       currentLocation = LatLng(
-        _resData.latitude!,
-        _resData.longitude!,
+        locationData.latitude!,
+        locationData.longitude!,
       );
     });
 
@@ -144,7 +127,8 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
           "Dear Aime, Current Location",
           "This is your current location",
         );
-        updateCurrentRoutePolyline();
+        polylineCurrentLocationCoordinates.add(currentLocation!);
+        setState(() {});
       }
     });
   }
@@ -176,12 +160,14 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
               elevation: 0.0,
               centerTitle: true,
               automaticallyImplyLeading: false,
-              flexibleSpace: const Hero(
+              flexibleSpace: Hero(
                 tag: "appbar-hero-custom-1",
                 child: Material(
                   color: Colors.transparent,
                   child: AnotherCustomAppBar(
-                    title: "Self-made Walk",
+                    title: widget.walk == null
+                        ? "Self-made Walk"
+                        : widget.walk!.title * 2,
                   ),
                 ),
               ),
@@ -208,7 +194,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                         polylineId: const PolylineId("current-route"),
                         points: polylineCurrentLocationCoordinates,
                         color: Colors.green.shade400,
-                        width: 6,
+                        width: widget.mode == SelfMadeWalkMapMode.idle ? 20 : 6,
                       ),
                     },
                     myLocationButtonEnabled: false,
@@ -226,6 +212,15 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                         "Aime Ndayambaje - Destination",
                         "The destination location",
                       );
+                      if (widget.mode == SelfMadeWalkMapMode.idle) {
+                        addMarker(
+                          "final-made-destination",
+                          polylineCurrentLocationCoordinates[
+                              polylineCurrentLocationCoordinates.length - 1],
+                          "Where I stopped",
+                          "This location took me: ${getTimer(widget.walk!.createdAt, widget.walk!.endedAt)}",
+                        );
+                      }
                     },
                     markers: markers.values.toSet(),
                   ),
@@ -236,18 +231,26 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                     right: 20.w,
                     left: 20.w,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (currentLocation == null) return;
                         final walk = SelfMadeWalk(
                           id: 4,
                           initialPosition: origin,
-                          finalPosition: currentLocation!,
+                          coordinates: polylineCurrentLocationCoordinates,
                           destinationPosition: destination,
                           title: "Aime Ndayambaje - Nice walk",
                           createdAt: widget.startedAt,
                           endedAt: DateTime.now(),
                         );
-                        print(walk);
+                        final res = await _hiveService.addWalk(walk);
+                        if (res) {
+                          // print("Walk saved");
+                        } 
+                        // else {
+                        //   print("Something went wrong while saving walk");
+                        // }
+                        if (!mounted) return;
+                        popPage(context);
                       },
                       child: const Text("Stop"),
                     ),
@@ -258,6 +261,15 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
         ),
       ),
     );
+  }
+
+  String getTimer(DateTime from, DateTime to) {
+    final duration = to.difference(from);
+    String twoDigits(int n) => n.toString().padLeft(2, '');
+    final hours = "${twoDigits(duration.inHours)}hr";
+    final minutes = "${twoDigits(duration.inMinutes.remainder(60))}min";
+    final seconds = "${twoDigits(duration.inSeconds.remainder(60))}sec";
+    return [if (duration.inHours > 0) hours, minutes, seconds].join(' ');
   }
 
   addMarker(String id, LatLng location, String title, String desc) async {

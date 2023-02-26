@@ -125,7 +125,7 @@ class NotificationTile extends StatelessWidget {
             right: 0,
             child: GestureDetector(
               onTap: () {
-                print("Hello!");
+               
               },
               child: CircleAvatar(
                 radius: 15.sp,

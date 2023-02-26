@@ -47,12 +47,28 @@ class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
     setState(() {
       currentLocation = LatLng(locationData.latitude!, locationData.longitude!);
     });
+
+    location.onLocationChanged.listen((newLoc) {
+      if (!mounted) return;
+
+      setState(() {
+        currentLocation = LatLng(
+          newLoc.latitude!,
+          newLoc.longitude!,
+        );
+      });
+    });
   }
 
   @override
   void initState() {
     getCurrentLocation();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -299,8 +315,8 @@ class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
     return Container(
       color: Colors.green,
       width: double.infinity,
-      padding: EdgeInsets.all(5),
-      margin: EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.only(bottom: 5),
       child: Text("Bruce $item"),
     );
   }

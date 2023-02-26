@@ -5,7 +5,6 @@ import 'choose_location_dialog.dart';
 
 Future<Map<String, LatLng>?> chooseLocationDialog(BuildContext context) {
   return showGeneralDialog<Map<String, LatLng>>(
-    // barrierDismissible: true,
     barrierLabel: "choose-location",
     context: context,
     barrierColor: Colors.black26,

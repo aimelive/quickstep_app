@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:quickstep_app/screens/authentication/welcome.dart';
 import 'package:quickstep_app/screens/layout.dart';
+import 'package:quickstep_app/services/hive_service.dart';
 import 'package:quickstep_app/utils/theme.dart';
 
-bool isSignedIn = true;
+bool isSignedIn = false;
 
-void main() {
+void main() async {
+  //Initializing flutter hive database
+  await Hive.initFlutter();
+
+  //Opening database of the saved text box
+  await Hive.openBox(Boxes.selfMadeWalksBox);
+
+  //Running flutter application
   runApp(const AppWidget());
 }
 
