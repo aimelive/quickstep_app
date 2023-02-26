@@ -1,38 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickstep_app/utils/colors.dart';
+import 'package:quickstep_app/utils/helpers.dart';
 
-import 'components/home_listview.dart';
+import '../components/choose_location_dialog_func.dart';
+import 'components/self_made_walks_listview.dart';
+import 'components/start_walk_button.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key,required this.onExploreMore});
+  const HomePage({super.key, required this.onExploreMore});
   final VoidCallback onExploreMore;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               "Hey 👋,\nExplore what's new today?",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             SizedBox(
-              height: 160,
+              height: 160.h,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: 5,
                 itemBuilder: ((context, index) {
                   return Container(
-                    width: 115,
-                    margin: const EdgeInsets.only(right: 10),
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                    width: 115.w,
+                    margin: EdgeInsets.only(right: 10.w),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 8.h,
+                      horizontal: 10.w,
+                    ),
                     decoration: BoxDecoration(
                       color: lightPrimary,
                       image: const DecorationImage(
@@ -40,14 +47,14 @@ class HomePage extends StatelessWidget {
                         fit: BoxFit.cover,
                         colorFilter: ColorFilter.linearToSrgbGamma(),
                       ),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Column(
                       children: [
                         Container(
                           decoration: BoxDecoration(
                             color: primary.withOpacity(0.8),
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(12.r),
                             boxShadow: const [
                               BoxShadow(
                                 color: veryLightGrey,
@@ -56,26 +63,32 @@ class HomePage extends StatelessWidget {
                               )
                             ],
                           ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 1.5,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.w,
+                            vertical: 1.5.h,
                           ),
-                          child: const Text(
+                          child: Text(
                             "On going",
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 12.sp,
                               color: white,
                             ),
                           ),
                         ),
                         const Spacer(),
-                        const CircleAvatar(
-                          radius: 25,
+                        CircleAvatar(
+                          radius: 25.r,
                           backgroundColor: primary,
                           foregroundColor: white,
-                          child: Text("Q"),
+                          child: Text(
+                            "Q",
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
-                        const SizedBox(height: 2),
+                        SizedBox(height: 2.h),
                         const Text(
                           "Quality",
                           maxLines: 1,
@@ -90,7 +103,7 @@ class HomePage extends StatelessWidget {
                 }),
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             Center(
               child: Directionality(
                 textDirection: TextDirection.rtl,
@@ -101,40 +114,21 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
+            addVerticalSpace(10),
             Text(
-              "Travels",
+              "Self-made Walks",
               style: TextStyle(
-                fontSize: 23,
+                fontSize: 18.sp,
                 color: Colors.grey.shade700,
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const HomeListView(),
-            Text(
-              "Orders",
-              style: TextStyle(
-                fontSize: 23,
-                color: Colors.grey.shade700,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const HomeListView(),
-            Text(
-              "Bus Tracking",
-              style: TextStyle(
-                fontSize: 23,
-                color: Colors.grey.shade700,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const HomeListView(),
+            const SelfMadeWalksWidget(),
+            addVerticalSpace(10),
+            const StartWalkingButton(),
           ],
         ),
       ),
     );
   }
 }
-
-
-//context.navigateTo(PostsRouter(children:[
-//SinglePostRoute(postId: id)]))

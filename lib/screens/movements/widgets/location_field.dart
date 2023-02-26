@@ -3,11 +3,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
 import '../../../utils/colors.dart';
+import '../../components/choose_location_dialog.dart';
+import '../../components/choose_location_dialog_func.dart';
 
-class ChooseLocationWidget extends StatelessWidget {
+class ChooseLocationWidget extends StatefulWidget {
   const ChooseLocationWidget({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<ChooseLocationWidget> createState() => _ChooseLocationWidgetState();
+}
+
+class _ChooseLocationWidgetState extends State<ChooseLocationWidget> {
+  String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -26,19 +35,42 @@ class ChooseLocationWidget extends StatelessWidget {
                 color: grey400,
               ),
             ),
-            child: Text(
-              "Choose source location",
-              maxLines: 1,
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
+            child: text != null
+                ? Text(
+                    text!,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: Colors.grey.shade700,
+                      fontWeight: FontWeight.bold,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                : Text(
+                    "Choose location",
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
           ),
         ),
         addHorizontalSpace(8),
         InkWell(
-          onTap: () {},
+          onTap: () async {
+            if (text != null) {
+              setState(() {
+                text = null;
+              });
+              return;
+            }
+            final location = await chooseLocationDialog(context);
+            if (location != null) {
+              setState(() {
+                text = "You have selected $location";
+              });
+            }
+          },
           highlightColor: primary.withOpacity(0.2),
           splashColor: white,
           borderRadius: BorderRadius.circular(10.r),
@@ -55,7 +87,7 @@ class ChooseLocationWidget extends StatelessWidget {
               ),
             ),
             child: Icon(
-              Icons.map,
+              text == null ? Icons.map : Icons.delete_outlined,
               color: primary,
               size: 22.sp,
             ),

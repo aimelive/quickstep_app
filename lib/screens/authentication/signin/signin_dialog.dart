@@ -24,15 +24,18 @@ Future<Object?> customSignInDialog(BuildContext context,
         child: child,
       );
     }),
-    pageBuilder: ((context, animation, secondaryAnimation) {
+    pageBuilder: ((context, _, __) {
       return Center(
         child: Container(
-          height: 620,
-          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 24),
-          margin: const EdgeInsets.symmetric(horizontal: 16),
+          height: 550.h,
+          padding: EdgeInsets.symmetric(
+            vertical: 32.h,
+            horizontal: 30.w,
+          ),
+          margin: EdgeInsets.symmetric(horizontal: 30.w),
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.94),
-            borderRadius: BorderRadius.circular(40),
+            borderRadius: BorderRadius.circular(40.r),
           ),
           child: Scaffold(
             backgroundColor: Colors.transparent,
@@ -41,36 +44,44 @@ Future<Object?> customSignInDialog(BuildContext context,
               children: [
                 Column(
                   children: [
-                    const Text(
+                    Text(
                       "Sign In",
-                      style: TextStyle(fontSize: 34),
+                      style: TextStyle(fontSize: 34.sp),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Text("Get access to your account",
-                          textAlign: TextAlign.center, style: TextStyle()),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.h),
+                      child: Text(
+                        "Get access to your account",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                        ),
+                      ),
                     ),
                     const SignInForm(),
                     Row(
-                      children: const [
-                        Expanded(child: Divider()),
+                      children: [
+                        const Expanded(child: Divider()),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w),
+                          child: const Text(
                             "OR",
                             style: TextStyle(
                               color: Colors.black26,
                             ),
                           ),
                         ),
-                        Expanded(child: Divider()),
+                        const Expanded(child: Divider()),
                       ],
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 20.h),
                       child: Text(
                         "Sign up with Email, Apple or Google",
-                        style: TextStyle(color: Colors.black54),
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 14.sp,
+                        ),
                       ),
                     ),
                     Row(
@@ -84,8 +95,8 @@ Future<Object?> customSignInDialog(BuildContext context,
                           },
                           icon: SvgPicture.asset(
                             "assets/icons/email_box.svg",
-                            height: 64,
-                            width: 64,
+                            height: 64.r,
+                            width: 64.r,
                           ),
                         ),
                         IconButton(
@@ -93,8 +104,8 @@ Future<Object?> customSignInDialog(BuildContext context,
                           onPressed: () {},
                           icon: SvgPicture.asset(
                             "assets/icons/google_box.svg",
-                            height: 64,
-                            width: 64,
+                            height: 64.r,
+                            width: 64.r,
                           ),
                         ),
                         IconButton(
@@ -102,8 +113,8 @@ Future<Object?> customSignInDialog(BuildContext context,
                           onPressed: () {},
                           icon: SvgPicture.asset(
                             "assets/icons/apple_box.svg",
-                            height: 64,
-                            width: 64,
+                            height: 64.r,
+                            width: 64.r,
                           ),
                         ),
                       ],
@@ -113,30 +124,20 @@ Future<Object?> customSignInDialog(BuildContext context,
                 Positioned(
                   left: 0,
                   right: 0,
-                  bottom: -48,
-                  child: Ink(
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: lightPrimary.withOpacity(0.9),
-                          blurRadius: 10,
-                        )
-                      ],
-                    ),
-                    child: GestureDetector(
-                      onTap: () => popPage(context),
-                      child: CircleAvatar(
-                        radius: 20.r,
-                        backgroundColor: Colors.white,
-                        foregroundColor: primary,
-                        child: Icon(
-                          Icons.close,
-                          size: 25.sp,
-                        ),
+                  bottom: -48.h,
+                  child: GestureDetector(
+                    onTap: () => popPage(context),
+                    child: CircleAvatar(
+                      radius: 20.r,
+                      backgroundColor: white,
+                      foregroundColor: primary,
+                      child: Icon(
+                        Icons.close,
+                        size: 25.sp,
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
