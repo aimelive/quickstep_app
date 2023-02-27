@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:quickstep_app/screens/authentication/welcome.dart';
-import 'package:quickstep_app/screens/layout.dart';
+import 'package:quickstep_app/auth_wrapper.dart';
 import 'package:quickstep_app/services/hive_service.dart';
+import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/theme.dart';
-
-bool isSignedIn = false;
 
 void main() async {
   //Initializing flutter hive database
@@ -32,12 +30,13 @@ class AppWidget extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Footstep App',
+          title: 'Quick Step Application',
+          color: primary,
           theme: MyThemes.theme,
           home: child,
         );
       },
-      child: isSignedIn ? const LayoutPage() : const WelcomeScreen(),
+      child: const AuthWrapper(),
     );
   }
 }

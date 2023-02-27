@@ -6,9 +6,14 @@ import 'package:quickstep_app/utils/helpers.dart';
 class WarnDialogWidget extends StatelessWidget {
   const WarnDialogWidget({
     Key? key,
-    this.delete = false,
+    required this.title,
+    required this.subtitle,
+    required this.okButtonText,
   }) : super(key: key);
-  final bool delete;
+
+  final String title;
+  final String subtitle;
+  final String okButtonText;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +28,7 @@ class WarnDialogWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              delete ? "Delete self-made walk?" : "Leave movement?",
+            Text(title,
               style: TextStyle(
                 fontSize: 16.sp,
                 color: white,
@@ -32,10 +36,7 @@ class WarnDialogWidget extends StatelessWidget {
               ),
             ),
             addVerticalSpace(10),
-            Text(
-              delete
-                  ? "Are you sure do you want to delete this walk?"
-                  : "Are you sure do you want to leave this movement?",
+            Text(subtitle,
               style: TextStyle(
                 color: Colors.grey.shade100,
               ),
@@ -60,7 +61,7 @@ class WarnDialogWidget extends StatelessWidget {
                   style: TextButton.styleFrom(
                     foregroundColor: Colors.redAccent,
                   ),
-                  child: Text(delete ? "Delete" : "Leave"),
+                  child: Text(okButtonText),
                 ),
               ],
             )

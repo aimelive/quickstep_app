@@ -34,7 +34,7 @@ class _LayoutPageState extends State<LayoutPage> {
       ),
       const ActivitiesPage(),
       const MovementsPage(),
-      const ProfilePage(),
+      ProfilePage(),
     ];
   }
 

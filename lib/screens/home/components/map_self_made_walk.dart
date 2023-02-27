@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:quickstep_app/controllers/self_made_walks_controller.dart';
 import 'package:quickstep_app/models/self_made_walk.dart';
-import 'package:quickstep_app/services/hive_service.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
 import '../../../utils/colors.dart';
@@ -31,7 +32,8 @@ class SelfMadeWalkMap extends StatefulWidget {
 }
 
 class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
-  late HiveService _hiveService;
+  final walkController = Get.put(WalksController());
+
   late LatLng origin;
   late LatLng destination;
   late LatLng finalLoc;
@@ -51,8 +53,6 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
   void initState() {
     origin = widget.points["origin"]!;
     destination = widget.points["destination"]!;
-
-    _hiveService = HiveService();
 
     getRoutePolylines();
 
@@ -137,11 +137,19 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        if (widget.mode == SelfMadeWalkMapMode.idle) {
+          return true;
+        }
         final leave = await showDialog<bool>(
           context: context,
           barrierColor: Colors.black26,
           builder: ((context) {
-            return const WarnDialogWidget();
+            return const WarnDialogWidget(
+              title: "Stop Travelling",
+              subtitle:
+                  "Changes made on this page will not be saved, are you sure do you want to close?",
+              okButtonText: "Close",
+            );
           }),
         );
         if (leave == true) {
@@ -186,18 +194,25 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                     mapType: MapType.hybrid,
                     polylines: {
                       Polyline(
+                        polylineId: const PolylineId("current-route"),
+                        points: polylineCurrentLocationCoordinates,
+                        color: Colors.green.shade400,
+                        width: 8,
+                      ),
+                      Polyline(
                         polylineId: const PolylineId("destination-route"),
                         points: polylineDestinationCoordinates,
                         color: lightPrimary,
                       ),
-                      Polyline(
-                        polylineId: const PolylineId("current-route"),
-                        points: polylineCurrentLocationCoordinates,
-                        color: Colors.green.shade400,
-                        width: widget.mode == SelfMadeWalkMapMode.idle ? 20 : 6,
-                      ),
                     },
                     myLocationButtonEnabled: false,
+                    onCameraMove: (position) {
+                      if (widget.mode == SelfMadeWalkMapMode.walk) {
+                        setState(() {
+                          zoomLevel = position.zoom;
+                        });
+                      }
+                    },
                     onMapCreated: (controller) {
                       googleMapController = controller;
                       addMarker(
@@ -242,13 +257,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                           createdAt: widget.startedAt,
                           endedAt: DateTime.now(),
                         );
-                        final res = await _hiveService.addWalk(walk);
-                        if (res) {
-                          // print("Walk saved");
-                        } 
-                        // else {
-                        //   print("Something went wrong while saving walk");
-                        // }
+                        walkController.addWalk(walk);
                         if (!mounted) return;
                         popPage(context);
                       },

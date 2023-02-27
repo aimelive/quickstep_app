@@ -33,7 +33,12 @@ class _OverMapWidgetState extends State<OverMapWidget> {
                   final leave = await showDialog<bool>(
                     context: context,
                     builder: ((context) {
-                      return const WarnDialogWidget();
+                      return const WarnDialogWidget(
+                        title: "Leave movement",
+                        subtitle:
+                            "Are you sure do you want to leave this movement?",
+                        okButtonText: "Leave",
+                      );
                     }),
                   );
                   if (leave == true) {

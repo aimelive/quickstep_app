@@ -58,7 +58,7 @@ Future<Object?> customSignInDialog(BuildContext context,
                         ),
                       ),
                     ),
-                    const SignInForm(),
+                    SignInForm(),
                     Row(
                       children: [
                         const Expanded(child: Divider()),

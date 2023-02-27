@@ -26,7 +26,7 @@ class Header extends StatelessWidget {
             width: double.infinity,
             height: 260.h,
             child: Text(
-              "Footstep App",
+              "Quick step App",
               style: TextStyle(
                 color: white,
                 fontSize: 30.sp,

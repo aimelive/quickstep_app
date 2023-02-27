@@ -1,14 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:quickstep_app/controllers/auth.dart';
 import 'package:quickstep_app/screens/authentication/signin/signin_input_field.dart';
-import 'package:quickstep_app/screens/layout.dart';
-import 'package:quickstep_app/utils/helpers.dart';
+
+import '../../../utils/helpers.dart';
 
 class SignInForm extends StatelessWidget {
-  const SignInForm({
+  SignInForm({
     Key? key,
   }) : super(key: key);
+  final auth = Get.put(AuthState());
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,12 @@ class SignInForm extends StatelessWidget {
             child: ElevatedButton.icon(
               onPressed: () {
                 popPage(context);
-                pushPage(context, to: const LayoutPage());
+                Future.delayed(
+                  const Duration(milliseconds: 400),
+                  () => auth.isSignedIn.value = true,
+                );
+
+                // pushPage(context, to: const LayoutPage());
               },
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 10.h),

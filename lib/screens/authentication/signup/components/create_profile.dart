@@ -40,7 +40,7 @@ class _CreateProfileState extends State<CreateProfile> {
         selectedImage = bytes;
       });
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 

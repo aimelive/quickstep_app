@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:quickstep_app/utils/colors.dart';
+import 'package:quickstep_app/utils/helpers.dart';
+
+import '../../controllers/auth.dart';
+import '../movements/map/widgets/warn_dialog.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  ProfilePage({super.key});
+
+  final auth = Get.put(AuthState());
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +52,57 @@ class ProfilePage extends StatelessWidget {
                   leading: const Icon(Icons.logout),
                   title: const Text("Logout"),
                   subtitle: const Text("Signed in as Aimelive"),
-                  onTap: () {},
+                  onTap: () async {
+                    final logout = await showDialog<bool>(
+                      context: context,
+                      barrierColor: Colors.black26,
+                      builder: ((context) {
+                        return const WarnDialogWidget(
+                          title: "Sign Out?",
+                          subtitle:
+                              "Are you sure do you want to log out this application?",
+                          okButtonText: "Log Out",
+                        );
+                      }),
+                    );
+                    if (logout == true) {
+                      auth.isSignedIn.value = false;
+                    }
+                  },
                 ),
               ],
             ),
-          )
+          ),
+          const Spacer(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.map,
+                color: primary,
+                size: 60,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Quick Step",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  addVerticalSpace(5),
+                  Text(
+                    "Live location tracking made easy",
+                    style: TextStyle(color: Colors.grey.shade800, fontSize: 14),
+                  )
+                ],
+              ),
+            ],
+          ),
+          addVerticalSpace(50)
         ],
       ),
     );
