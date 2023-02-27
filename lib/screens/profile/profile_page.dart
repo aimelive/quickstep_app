@@ -85,12 +85,13 @@ class ProfilePage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     "Quick Step",
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
+                      color: Colors.grey.shade600,
                     ),
                   ),
                   addVerticalSpace(5),

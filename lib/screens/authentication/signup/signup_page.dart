@@ -74,7 +74,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
             ),
-            toolbarHeight: 100,
+            toolbarHeight: 100.h,
           ),
           body: SingleChildScrollView(
             child: Padding(

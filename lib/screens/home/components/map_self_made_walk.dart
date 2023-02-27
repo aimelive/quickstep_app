@@ -179,7 +179,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                   ),
                 ),
               ),
-              toolbarHeight: 100,
+              toolbarHeight: 100.h,
             ),
             extendBodyBehindAppBar: true,
             body: Stack(
