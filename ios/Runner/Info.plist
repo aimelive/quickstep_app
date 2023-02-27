@@ -51,6 +51,10 @@
     <string>The app needs the location</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>The app needs the location</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>The app needs to access the gallery to choose a photo</string>
+	<key>NSCameraUsageDescription</key>
+    <string>The app needs to access the camera to take a photo</string>
 
 </dict>
 </plist>

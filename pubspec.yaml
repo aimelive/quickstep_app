@@ -46,7 +46,9 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   timeago: ^3.4.0
-
+  image_picker: ^0.8.6+3
+  image_cropper: ^3.0.1
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:

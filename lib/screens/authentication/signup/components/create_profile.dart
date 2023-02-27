@@ -1,17 +1,48 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../../utils/helpers.dart';
 import '../widgets/radio_buttons.dart';
 import '../widgets/text_input_field.dart';
 
-class CreateProfile extends StatelessWidget {
+class CreateProfile extends StatefulWidget {
   const CreateProfile({
     Key? key,
     required this.onStart,
   }) : super(key: key);
   final VoidCallback onStart;
+
+  @override
+  State<CreateProfile> createState() => _CreateProfileState();
+}
+
+class _CreateProfileState extends State<CreateProfile> {
+  final ImagePicker _picker = ImagePicker();
+  Uint8List? selectedImage;
+
+  void _pickImage(ImageSource source) async {
+    try {
+      final XFile? image = await _picker.pickImage(
+        source: source,
+      );
+      if (image == null) return;
+      final file = File(image.path);
+      final cropped = await ImageCropper().cropImage(sourcePath: file.path);
+      if (cropped == null) return;
+      final bytes = await File(cropped.path).readAsBytes();
+      setState(() {
+        selectedImage = bytes;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +103,9 @@ class CreateProfile extends StatelessWidget {
                       radius: 50.r,
                       backgroundColor: lightPrimary,
                       foregroundColor: white,
+                      foregroundImage: selectedImage == null
+                          ? null
+                          : MemoryImage(selectedImage!),
                       child: Icon(
                         Icons.add_photo_alternate_rounded,
                         size: 30.sp,
@@ -80,7 +114,7 @@ class CreateProfile extends StatelessWidget {
                     Column(
                       children: [
                         InkWell(
-                          onTap: () {},
+                          onTap: () => _pickImage(ImageSource.camera),
                           borderRadius: BorderRadius.circular(25.r),
                           child: Ink(
                             decoration: BoxDecoration(
@@ -103,7 +137,7 @@ class CreateProfile extends StatelessWidget {
                         ),
                         addVerticalSpace(10.h),
                         InkWell(
-                          onTap: () {},
+                          onTap: () => _pickImage(ImageSource.gallery),
                           borderRadius: BorderRadius.circular(25.r),
                           child: Ink(
                             decoration: BoxDecoration(
@@ -144,7 +178,7 @@ class CreateProfile extends StatelessWidget {
                   child: Directionality(
                     textDirection: TextDirection.rtl,
                     child: ElevatedButton.icon(
-                      onPressed: onStart,
+                      onPressed: widget.onStart,
                       icon: const Icon(Icons.arrow_back),
                       label: const Text("FINISH SIGNUP"),
                     ),

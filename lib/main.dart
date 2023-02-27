@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:quickstep_app/screens/authentication/welcome.dart';
 import 'package:quickstep_app/screens/layout.dart';
@@ -29,7 +30,7 @@ class AppWidget extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return MaterialApp(
+        return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Footstep App',
           theme: MyThemes.theme,
