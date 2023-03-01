@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickstep_app/screens/authentication/signup/components/create_profile.dart';
 import 'package:quickstep_app/screens/authentication/signup/components/verify_otp.dart';
 import 'package:quickstep_app/screens/movements/widgets/app_bar_2.dart';
+import 'package:quickstep_app/screens/widgets/slide_fade_switcher.dart';
 
 import '../../../utils/colors.dart';
 import 'components/create_account.dart';
@@ -76,11 +77,9 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             toolbarHeight: 100.h,
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 18.w),
-              child: steps[selectedIndex],
-            ),
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 18.w),
+            child: SlideFadeSwitcher(child: steps[selectedIndex]),
           ),
         ),
       ),

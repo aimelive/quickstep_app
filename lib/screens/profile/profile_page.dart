@@ -1,29 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:quickstep_app/screens/profile/caches.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
 import '../../controllers/auth.dart';
+import '../../models/account.dart';
+import '../../services/auth_service.dart';
 import '../movements/map/widgets/warn_dialog.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({super.key});
 
   final auth = Get.put(AuthState());
+  final _hiveDb = AuthService();
 
   @override
   Widget build(BuildContext context) {
+    final Account profile = _hiveDb.getAuth()!;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 5.w),
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
       child: Column(
         children: [
           ListTile(
-            title: const Text("Aime Ndayambaje"),
-            subtitle: const Text("Member since 12 Feb, 2022"),
+            title: Text(
+              profile.fullName,
+              style: TextStyle(fontSize: 14.sp),
+            ),
+            subtitle: Text(
+              "Member since ${profile.createdAt.day}/${profile.createdAt.month}/${profile.createdAt.year}",
+              style: TextStyle(fontSize: 12.sp),
+            ),
             trailing: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(200),
+                borderRadius: BorderRadius.circular(25.r),
                 border: Border.all(
                   width: 3,
                   color: lightPrimary,
@@ -31,9 +42,11 @@ class ProfilePage extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () {},
-                child: const CircleAvatar(
-                  radius: 25,
-                  foregroundImage: AssetImage("assets/images/aime.png"),
+                child: CircleAvatar(
+                  radius: 25.r,
+                  foregroundImage: AssetImage(
+                    "assets/images/${profile.profilePic}",
+                  ),
                 ),
               ),
             ),
@@ -43,15 +56,49 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               children: [
                 ListTile(
-                  leading: const Icon(Icons.run_circle_outlined),
-                  title: const Text("Inactive"),
-                  subtitle: const Text("Set your self as away"),
+                  leading: Icon(Icons.run_circle_outlined, size: 25.sp),
+                  title: Text(
+                    "Inactive",
+                    style: TextStyle(fontSize: 14.sp),
+                  ),
+                  subtitle: Text(
+                    "Set your self as away",
+                    style: TextStyle(fontSize: 12.sp),
+                  ),
                   onTap: () {},
                 ),
                 ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text("Logout"),
-                  subtitle: const Text("Signed in as Aimelive"),
+                  leading: Icon(
+                    Icons.cached,
+                    size: 25.sp,
+                  ),
+                  title: Text(
+                    "Clear caches",
+                    style: TextStyle(fontSize: 14.sp),
+                  ),
+                  subtitle: Text(
+                    "Cleaning caches from your device",
+                    style: TextStyle(fontSize: 12.sp),
+                  ),
+                  onTap: () => pushPage(
+                    context,
+                    to: const ClearCaches(),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 24.sp,
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.logout, size: 25.sp),
+                  title: Text(
+                    "Logout",
+                    style: TextStyle(fontSize: 14.sp),
+                  ),
+                  subtitle: Text(
+                    "Signed in as ${profile.username}",
+                    style: TextStyle(fontSize: 12.sp),
+                  ),
                   onTap: () async {
                     final logout = await showDialog<bool>(
                       context: context,
@@ -65,45 +112,52 @@ class ProfilePage extends StatelessWidget {
                         );
                       }),
                     );
-                    if (logout == true) {
-                      auth.isSignedIn.value = false;
-                    }
+                    if (logout != true) return;
+                    final res = await _hiveDb.removeAuth();
+                    if (res != true) return;
+                    auth.isSignedIn.value = false;
                   },
                 ),
               ],
             ),
           ),
           const Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.map,
-                color: primary,
-                size: 60,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Quick Step",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      color: Colors.grey.shade600,
+          Transform.scale(
+            scale: .7,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.map,
+                  color: primary,
+                  size: 60.sp,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Quick Step",
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.grey.shade600,
+                      ),
                     ),
-                  ),
-                  addVerticalSpace(5),
-                  Text(
-                    "Live location tracking made easy",
-                    style: TextStyle(color: Colors.grey.shade800, fontSize: 14),
-                  )
-                ],
-              ),
-            ],
+                    addVerticalSpace(5),
+                    Text(
+                      "Live location tracking made easy",
+                      style: TextStyle(
+                        color: Colors.grey.shade800,
+                        fontSize: 14.sp,
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
-          addVerticalSpace(50)
+          addVerticalSpace(25)
         ],
       ),
     );

@@ -69,7 +69,9 @@ class _LayoutPageState extends State<LayoutPage> {
             ),
             toolbarHeight: 100.h,
           ),
-          body: SlideFadeSwitcher(child: pages[currentPage]),
+          body: SlideFadeSwitcher(
+            child: pages[currentPage],
+          ),
           bottomNavigationBar: SafeArea(
             child: Container(
               decoration: BoxDecoration(

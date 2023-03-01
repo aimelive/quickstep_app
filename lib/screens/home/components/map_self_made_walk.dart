@@ -6,12 +6,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:quickstep_app/controllers/self_made_walks_controller.dart';
 import 'package:quickstep_app/models/self_made_walk.dart';
+import 'package:quickstep_app/services/auth_service.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
 import '../../../utils/colors.dart';
 import '../../movements/map/movement_live_map.dart';
 import '../../movements/map/widgets/warn_dialog.dart';
 import '../../movements/widgets/app_bar_2.dart';
+import 'save_walk_dialog.dart';
 
 enum SelfMadeWalkMapMode { idle, walk }
 
@@ -66,27 +68,31 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
   }
 
   void getRoutePolylines() async {
-    PolylinePoints polylinePoints = PolylinePoints();
+    try {
+      PolylinePoints polylinePoints = PolylinePoints();
 
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleApiKey,
-      PointLatLng(
-        origin.latitude,
-        origin.longitude,
-      ),
-      PointLatLng(
-        destination.latitude,
-        destination.longitude,
-      ),
-    );
-    if (result.points.isNotEmpty) {
-      for (PointLatLng point in result.points) {
-        polylineDestinationCoordinates.add(
-          LatLng(point.latitude, point.longitude),
-        );
+      PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        googleApiKey,
+        PointLatLng(
+          origin.latitude,
+          origin.longitude,
+        ),
+        PointLatLng(
+          destination.latitude,
+          destination.longitude,
+        ),
+      );
+      if (result.points.isNotEmpty) {
+        for (PointLatLng point in result.points) {
+          polylineDestinationCoordinates.add(
+            LatLng(point.latitude, point.longitude),
+          );
+        }
+        if (!mounted) return;
+        setState(() {});
       }
-      if (!mounted) return;
-      setState(() {});
+    } catch (e) {
+      // print("Unstable internet connection error");
     }
   }
 
@@ -99,7 +105,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
         locationData.longitude!,
       );
     });
-
+    if (!mounted) return;
     location.onLocationChanged.listen((newLoc) {
       if (!mounted) return;
       setState(() {
@@ -127,8 +133,11 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
           "Dear Aime, Current Location",
           "This is your current location",
         );
-        polylineCurrentLocationCoordinates.add(currentLocation!);
-        setState(() {});
+
+        if (!mounted) return;
+        setState(() {
+          polylineCurrentLocationCoordinates.add(currentLocation!);
+        });
       }
     });
   }
@@ -208,6 +217,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                     myLocationButtonEnabled: false,
                     onCameraMove: (position) {
                       if (widget.mode == SelfMadeWalkMapMode.walk) {
+                        if (!mounted) return;
                         setState(() {
                           zoomLevel = position.zoom;
                         });
@@ -248,16 +258,47 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (currentLocation == null) return;
+                        final name = await showGeneralDialog<String>(
+                          context: context,
+                          barrierLabel: "save-walk",
+                          barrierColor: Colors.black26,
+                          barrierDismissible: true,
+                          transitionDuration: const Duration(milliseconds: 400),
+                          transitionBuilder:
+                              ((context, animation, secondaryAnimation, child) {
+                            final tween = Tween(
+                              begin: const Offset(1, 0),
+                              end: Offset.zero,
+                            );
+                            return SlideTransition(
+                              position: tween.animate(
+                                CurvedAnimation(
+                                  parent: animation,
+                                  curve: Curves.easeInOut,
+                                ),
+                              ),
+                              child: child,
+                            );
+                          }),
+                          pageBuilder:
+                              ((context, animation, secondaryAnimation) {
+                            return const SaveWalkDialog();
+                          }),
+                        );
+                        if (name == null) return;
+                        await Future.delayed(const Duration(milliseconds: 400));
                         final walk = SelfMadeWalk(
-                          id: 4,
+                          id: 1,
                           initialPosition: origin,
                           coordinates: polylineCurrentLocationCoordinates,
                           destinationPosition: destination,
-                          title: "Aime Ndayambaje - Nice walk",
+                          title: name,
                           createdAt: widget.startedAt,
+                          creatorId:
+                              AuthService().getAuth()?.userId ?? "unkown-user",
                           endedAt: DateTime.now(),
                         );
-                        walkController.addWalk(walk);
+                        await walkController.addWalk(walk);
                         if (!mounted) return;
                         popPage(context);
                       },
@@ -272,15 +313,6 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
     );
   }
 
-  String getTimer(DateTime from, DateTime to) {
-    final duration = to.difference(from);
-    String twoDigits(int n) => n.toString().padLeft(2, '');
-    final hours = "${twoDigits(duration.inHours)}hr";
-    final minutes = "${twoDigits(duration.inMinutes.remainder(60))}min";
-    final seconds = "${twoDigits(duration.inSeconds.remainder(60))}sec";
-    return [if (duration.inHours > 0) hours, minutes, seconds].join(' ');
-  }
-
   addMarker(String id, LatLng location, String title, String desc) async {
     final marker = Marker(
       markerId: MarkerId(id),
@@ -290,7 +322,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
         snippet: desc,
       ),
     );
-
+    if (!mounted) return;
     setState(() {
       markers[id] = marker;
     });

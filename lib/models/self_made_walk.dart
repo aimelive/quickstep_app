@@ -2,6 +2,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SelfMadeWalk {
   int id;
+  String creatorId;
   LatLng initialPosition;
   List<LatLng> coordinates;
   LatLng destinationPosition;
@@ -11,6 +12,7 @@ class SelfMadeWalk {
 
   SelfMadeWalk({
     required this.id,
+    required this.creatorId,
     required this.initialPosition,
     required this.coordinates,
     required this.destinationPosition,
@@ -20,7 +22,6 @@ class SelfMadeWalk {
   });
 
   static SelfMadeWalk fromJSON(dynamic json, int id) {
-    // print(json["initialPosition"]["lat"]);
     return SelfMadeWalk(
       id: id,
       initialPosition: LatLng(
@@ -40,6 +41,7 @@ class SelfMadeWalk {
         json["destinationPosition"]["long"],
       ),
       title: json["title"],
+      creatorId: json["creatorId"],
       createdAt: json["createdAt"],
       endedAt: json["endedAt"],
     );
@@ -62,65 +64,9 @@ class SelfMadeWalk {
         "long": walk.destinationPosition.longitude
       },
       "title": walk.title,
+      "creatorId": walk.creatorId,
       "createdAt": walk.createdAt,
       "endedAt": walk.endedAt,
     };
   }
 }
-
-// List<SelfMadeWalk> walks = [
-//   SelfMadeWalk(
-//     id: 1,
-//     initialPosition: const LatLng(
-//       -1.9167688784786698,
-//       30.083218087221134,
-//     ),
-//     finalPosition: const LatLng(
-//       -1.9167688784786698,
-//       30.081166197413935,
-//     ),
-//     destinationPosition: const LatLng(
-//       -1.9167688784786698,
-//       30.081166197413935,
-//     ),
-//     title: "Another cool night walk",
-//     createdAt: DateTime.now(),
-//     endedAt: DateTime.now().subtract(const Duration(minutes: 7)),
-//   ),
-//   SelfMadeWalk(
-//     id: 2,
-//     initialPosition: const LatLng(
-//       -1.9167688784786698,
-//       30.083218087221134,
-//     ),
-//     finalPosition: const LatLng(
-//       -1.9167688784786698,
-//       30.081166197413935,
-//     ),
-//     destinationPosition: const LatLng(
-//       -1.9167688784786698,
-//       30.081166197413935,
-//     ),
-//     title: "Prince Armstrong kwa Teta kurya ibiraha",
-//     createdAt: DateTime.now(),
-//     endedAt: DateTime.now().subtract(const Duration(minutes: 20)),
-//   ),
-//   SelfMadeWalk(
-//     id: 3,
-//     initialPosition: const LatLng(
-//       -1.9167688784786698,
-//       30.083218087221134,
-//     ),
-//     finalPosition: const LatLng(
-//       -1.9167688784786698,
-//       30.081166197413935,
-//     ),
-//     destinationPosition: const LatLng(
-//       -1.9167688784786698,
-//       30.081166197413935,
-//     ),
-//     title: "Hugue walking to buy some nzuri",
-//     createdAt: DateTime.now(),
-//     endedAt: DateTime.now().subtract(const Duration(minutes: 7)),
-//   ),
-// ];

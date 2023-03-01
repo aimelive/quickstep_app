@@ -76,11 +76,11 @@ class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
     return Dialog(
       elevation: 10.0,
       backgroundColor: white,
+      insetPadding: EdgeInsets.symmetric(horizontal: 22.w),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: Container(
-        // decoration: BoxDecoration(color: primary),
         padding: EdgeInsets.symmetric(vertical: 10.h),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -95,7 +95,7 @@ class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
             ),
             addVerticalSpace(10),
             SizedBox(
-              height: 300.h,
+              height: 320.h,
               child: Stack(
                 children: [
                   Container(

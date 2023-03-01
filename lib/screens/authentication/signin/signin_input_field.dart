@@ -10,11 +10,13 @@ class SignInInputField extends StatelessWidget {
     required this.hintText,
     required this.svg,
     this.isPwd = false,
+    required this.onChanged,
   }) : super(key: key);
 
   final String hintText;
   final String svg;
   final bool isPwd;
+  final void Function(String value) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class SignInInputField extends StatelessWidget {
               fontWeight: FontWeight.w600,
               fontSize: 15.sp,
             ),
+            onChanged: onChanged,
             obscureText: isPwd,
             obscuringCharacter: "*",
             cursorColor: lightPrimary,

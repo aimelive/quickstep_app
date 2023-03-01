@@ -47,140 +47,150 @@ class _CreateProfileState extends State<CreateProfile> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text(
-              "Create Profile",
-              style: TextStyle(
-                fontSize: 16.sp,
-                color: Colors.grey.shade900,
-              ),
-            ),
-            addHorizontalSpace(5),
-            Icon(
-              Icons.person,
-              color: Colors.grey.shade600,
-            ),
-          ],
-        ),
-        Form(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 8.w,
-              vertical: 18.h,
-            ),
+        Expanded(
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "Username*".toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 15.sp,
-                    color: primary.withOpacity(0.7),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                addVerticalSpace(8),
-                const TextInputField(
-                  hintText: "a username",
-                ),
-                addVerticalSpace(18),
-                Text(
-                  "Profile photo*".toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 15.sp,
-                    color: primary.withOpacity(0.7),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                addVerticalSpace(20),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    CircleAvatar(
-                      radius: 50.r,
-                      backgroundColor: lightPrimary,
-                      foregroundColor: white,
-                      foregroundImage: selectedImage == null
-                          ? null
-                          : MemoryImage(selectedImage!),
-                      child: Icon(
-                        Icons.add_photo_alternate_rounded,
-                        size: 30.sp,
+                    Text(
+                      "Create Profile",
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: Colors.grey.shade900,
                       ),
                     ),
-                    Column(
+                    addHorizontalSpace(5),
+                    Icon(
+                      Icons.person,
+                      color: Colors.grey.shade600,
+                    ),
+                  ],
+                ),
+                Form(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.w,
+                      vertical: 18.h,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        InkWell(
-                          onTap: () => _pickImage(ImageSource.camera),
-                          borderRadius: BorderRadius.circular(25.r),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: white,
-                              border: Border.all(width: 2, color: primary),
-                              borderRadius: BorderRadius.circular(25.r),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16.w,
-                              vertical: 6.h,
-                            ),
-                            child: Text(
-                              "Choose from Camera",
-                              style: TextStyle(
-                                color: primary,
-                                fontSize: 14.sp,
-                              ),
-                            ),
+                        Text(
+                          "Username*".toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            color: primary.withOpacity(0.7),
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        addVerticalSpace(10.h),
-                        InkWell(
-                          onTap: () => _pickImage(ImageSource.gallery),
-                          borderRadius: BorderRadius.circular(25.r),
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: primary,
-                              border: Border.all(width: 2, color: primary),
-                              borderRadius: BorderRadius.circular(25.r),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16.w,
-                              vertical: 6.h,
-                            ),
-                            child: Text(
-                              "Choose from Gallery",
-                              style: TextStyle(
-                                color: white,
-                                fontSize: 14.sp,
+                        addVerticalSpace(8),
+                        const TextInputField(
+                          hintText: "a username",
+                        ),
+                        addVerticalSpace(18),
+                        Text(
+                          "Profile photo*".toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            color: primary.withOpacity(0.7),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        addVerticalSpace(20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CircleAvatar(
+                              radius: 50.r,
+                              backgroundColor: lightPrimary,
+                              foregroundColor: white,
+                              foregroundImage: selectedImage == null
+                                  ? null
+                                  : MemoryImage(selectedImage!),
+                              child: Icon(
+                                Icons.add_photo_alternate_rounded,
+                                size: 30.sp,
                               ),
+                            ),
+                            Column(
+                              children: [
+                                InkWell(
+                                  onTap: () => _pickImage(ImageSource.camera),
+                                  borderRadius: BorderRadius.circular(25.r),
+                                  child: Ink(
+                                    decoration: BoxDecoration(
+                                      color: white,
+                                      border:
+                                          Border.all(width: 2, color: primary),
+                                      borderRadius: BorderRadius.circular(25.r),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 16.w,
+                                      vertical: 6.h,
+                                    ),
+                                    child: Text(
+                                      "Choose from Camera",
+                                      style: TextStyle(
+                                        color: primary,
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                addVerticalSpace(10.h),
+                                InkWell(
+                                  onTap: () => _pickImage(ImageSource.gallery),
+                                  borderRadius: BorderRadius.circular(25.r),
+                                  child: Ink(
+                                    decoration: BoxDecoration(
+                                      color: primary,
+                                      border:
+                                          Border.all(width: 2, color: primary),
+                                      borderRadius: BorderRadius.circular(25.r),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 16.w,
+                                      vertical: 6.h,
+                                    ),
+                                    child: Text(
+                                      "Choose from Gallery",
+                                      style: TextStyle(
+                                        color: white,
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                        addVerticalSpace(20),
+                        Text(
+                          "Account purpose*".toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            color: primary.withOpacity(0.7),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        addVerticalSpace(10),
+                        const RadioButtons(),
+                        addVerticalSpace(20),
+                        Center(
+                          child: Directionality(
+                            textDirection: TextDirection.rtl,
+                            child: ElevatedButton.icon(
+                              onPressed: widget.onStart,
+                              icon: const Icon(Icons.arrow_back),
+                              label: const Text("FINISH SIGNUP"),
                             ),
                           ),
                         ),
                       ],
-                    )
-                  ],
-                ),
-                addVerticalSpace(20),
-                Text(
-                  "Account purpose*".toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 15.sp,
-                    color: primary.withOpacity(0.7),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                addVerticalSpace(10),
-                const RadioButtons(),
-                addVerticalSpace(20),
-                Center(
-                  child: Directionality(
-                    textDirection: TextDirection.rtl,
-                    child: ElevatedButton.icon(
-                      onPressed: widget.onStart,
-                      icon: const Icon(Icons.arrow_back),
-                      label: const Text("FINISH SIGNUP"),
                     ),
                   ),
                 ),

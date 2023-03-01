@@ -13,17 +13,17 @@ class WalksController extends GetxController {
     walks = _hiveService.getAllWalks();
   }
 
-  void addWalk(SelfMadeWalk walk) {
+  Future<void> addWalk(SelfMadeWalk walk) async {
     currentState.value = StateAction.loading;
-    _hiveService.addWalk(walk);
+    await _hiveService.addWalk(walk);
     walks.add(walk);
     currentState.value = StateAction.added;
   }
 
-  void removeWalk(int id) {
+  Future<void> removeWalk(SelfMadeWalk walk) async {
     currentState.value = StateAction.loading;
-    _hiveService.deleteWalk(id);
-    walks.removeWhere((walk) => walk.id == id);
+    await _hiveService.deleteWalk(walk);
+    walks.removeWhere((walkA) => walkA.id == walk.id);
     currentState.value = StateAction.removed;
   }
 }

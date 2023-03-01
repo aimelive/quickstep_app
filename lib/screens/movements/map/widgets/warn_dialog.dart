@@ -28,7 +28,8 @@ class WarnDialogWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(title,
+            Text(
+              title,
               style: TextStyle(
                 fontSize: 16.sp,
                 color: white,
@@ -36,7 +37,8 @@ class WarnDialogWidget extends StatelessWidget {
               ),
             ),
             addVerticalSpace(10),
-            Text(subtitle,
+            Text(
+              subtitle,
               style: TextStyle(
                 color: Colors.grey.shade100,
               ),

@@ -11,8 +11,12 @@ void main() async {
   //Initializing flutter hive database
   await Hive.initFlutter();
 
-  //Opening database of the saved text box
-  await Hive.openBox(Boxes.selfMadeWalksBox);
+  //Opening database of the saved walks
+  await Future.wait([
+    Hive.openBox(Boxes.selfMadeWalksBox),
+    Hive.openBox(Boxes.activitiesBox),
+    Hive.openBox(Boxes.authBox),
+  ]);
 
   //Running flutter application
   runApp(const AppWidget());

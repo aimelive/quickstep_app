@@ -8,10 +8,12 @@ class TextInputField extends StatefulWidget {
     Key? key,
     required this.hintText,
     this.obsecureText = false,
+    this.onChanged,
   }) : super(key: key);
 
   final String hintText;
   final bool obsecureText;
+  final void Function(String value)? onChanged;
 
   @override
   State<TextInputField> createState() => _TextInputFieldState();
@@ -22,6 +24,7 @@ class _TextInputFieldState extends State<TextInputField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: widget.onChanged,
       style: const TextStyle(
         color: primary,
         fontWeight: FontWeight.w600,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickstep_app/screens/movements/components/invite_members.dart';
 import 'package:quickstep_app/screens/movements/widgets/app_bar_2.dart';
+import 'package:quickstep_app/screens/widgets/slide_fade_switcher.dart';
 
 import '../../utils/colors.dart';
 import 'components/create_movement.dart';
@@ -41,9 +42,10 @@ class _CreateMovementPageState extends State<CreateMovementPage> {
             ),
             toolbarHeight: 100.h,
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 18.w),
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 18.w),
+            // physics: NeverScrollableScrollPhysics(),
+            child: SlideFadeSwitcher(
               child: create
                   ? CreateMovement(
                       onContinue: () {

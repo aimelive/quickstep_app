@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quickstep_app/services/auth_service.dart';
 
 import 'controllers/auth.dart';
 import 'screens/authentication/welcome.dart';
@@ -14,6 +15,22 @@ class AuthWrapper extends StatefulWidget {
 
 class _AuthWrapperState extends State<AuthWrapper> {
   final auth = Get.put(AuthState());
+
+  final _hiveDb = AuthService();
+
+  _init() {
+    final account = _hiveDb.getAuth();
+    if (account != null) {
+      auth.isSignedIn.value = true;
+    }
+  }
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(

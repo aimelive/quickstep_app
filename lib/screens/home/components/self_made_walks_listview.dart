@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:quickstep_app/models/self_made_walk.dart';
 import 'package:quickstep_app/screens/home/components/map_self_made_walk.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -31,8 +32,8 @@ class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
     // });
   }
 
-  void _handleDelete(int id) async {
-    walkController.removeWalk(id);
+  void _handleDelete(SelfMadeWalk walk) async {
+    walkController.removeWalk(walk);
     // final res = await _hiveService.deleteWalk(id);
     // if (res) {
     //   getWalks();
@@ -51,225 +52,261 @@ class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
     return Obx(() {
       walkController.currentState.value;
       final walks = walkController.walks;
-
-      return Container(
-        margin: EdgeInsets.symmetric(vertical: 15.h),
-        height: walks.isNotEmpty ? 190.h : null,
-        child: walks.isEmpty
-            ? Padding(
-                padding: EdgeInsets.all(18.sp),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(
-                      Icons.hourglass_empty,
-                      size: 30.sp,
-                      color: primary,
-                    ),
-                    addVerticalSpace(20),
-                    Text(
-                      "No walks saved yet, Click start walking below",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                      ),
-                    ),
-                  ],
+      walks.sort((a, b) => b.endedAt.compareTo(a.endedAt));
+      return Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                "Self-made Walks",
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  color: Colors.grey.shade700,
+                  fontWeight: FontWeight.w700,
                 ),
-              )
-            : ListView.builder(
-                itemCount: walks.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: ((context, index) {
-                  final walk = walks[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: lightPrimary,
-                      borderRadius: BorderRadius.circular(8.r),
-                      image: const DecorationImage(
-                        image: AssetImage("assets/images/map.jpeg"),
-                        fit: BoxFit.cover,
-                      ),
+              ),
+              const Spacer(),
+              if (walks.isNotEmpty)
+                Text(
+                  walks.length.toString(),
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    color: primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              if (walks.isNotEmpty)
+                Icon(
+                  Icons.travel_explore,
+                  size: 22.sp,
+                  color: primary,
+                )
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 15.h),
+            height: walks.isNotEmpty ? 190.h : null,
+            child: walks.isEmpty
+                ? Padding(
+                    padding: EdgeInsets.all(18.sp),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(
+                          Icons.hourglass_empty,
+                          size: 30.sp,
+                          color: primary,
+                        ),
+                        addVerticalSpace(20),
+                        Text(
+                          "No walks saved yet, Click start walking below",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                      ],
                     ),
-                    width: 190.w,
-                    margin: EdgeInsets.only(right: 15.w),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 8.r,
-                        horizontal: 15.w,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: primary.withOpacity(0.8),
-                              borderRadius: BorderRadius.circular(12.r),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: veryLightGrey,
-                                  blurRadius: 50,
-                                  offset: Offset(-2, -2),
-                                )
-                              ],
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 10.w,
-                              vertical: 1.5.h,
-                            ),
-                            child: Text(
-                              timeago.format(walk.createdAt),
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: white,
-                              ),
-                            ),
+                  )
+                : ListView.builder(
+                    itemCount: walks.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: ((context, index) {
+                      final walk = walks[index];
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: lightPrimary,
+                          borderRadius: BorderRadius.circular(8.r),
+                          image: const DecorationImage(
+                            image: AssetImage("assets/images/map.jpeg"),
+                            fit: BoxFit.cover,
                           ),
-                          Expanded(
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  top: 22.h,
-                                  left: 110.w,
-                                  child: CircleAvatar(
-                                    radius: 14.r,
-                                    foregroundImage: const AssetImage(
-                                      "assets/images/aime.png",
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 20.h,
-                                  left: 90.w,
-                                  child: CircleAvatar(
-                                    radius: 16.r,
-                                    foregroundImage: const AssetImage(
-                                      "assets/images/aime.png",
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 18.h,
-                                  left: 70.w,
-                                  child: CircleAvatar(
-                                    radius: 20.r,
-                                    foregroundImage: const AssetImage(
-                                      "assets/images/aime.png",
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 22.h,
-                                  right: 110.w,
-                                  child: CircleAvatar(
-                                    radius: 14.r,
-                                    foregroundImage: const AssetImage(
-                                      "assets/images/aime.png",
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 20.h,
-                                  right: 90.w,
-                                  child: CircleAvatar(
-                                    radius: 16.r,
-                                    foregroundImage: const AssetImage(
-                                      "assets/images/aime.png",
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                        ),
+                        width: 190.w,
+                        margin: EdgeInsets.only(right: 15.w),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 8.r,
+                            horizontal: 15.w,
                           ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.h),
-                            child: Text(
-                              "${walk.id} ${walk.title}",
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              style: TextStyle(
-                                color: white,
-                                fontSize: 16.sp,
-                                overflow: TextOverflow.ellipsis,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(8.r),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          child: Column(
                             children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  Map<String, LatLng> points = <String, LatLng>{
-                                    "origin": walk.initialPosition,
-                                    "destination": walk.destinationPosition,
-                                  };
-                                  pushPage(
-                                    context,
-                                    to: SelfMadeWalkMap(
-                                      points: points,
-                                      walk: walk,
-                                      mode: SelfMadeWalkMapMode.idle,
-                                      startedAt: DateTime.now(),
-                                    ),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: Size.zero,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 20.w,
-                                    vertical: 7.h,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25.r),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: primary.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: veryLightGrey,
+                                      blurRadius: 50,
+                                      offset: Offset(-2, -2),
+                                    )
+                                  ],
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 10.w,
+                                  vertical: 1.5.h,
+                                ),
+                                child: Text(
+                                  timeago.format(walk.createdAt),
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: white,
                                   ),
                                 ),
-                                child: const Text("View Travel"),
                               ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  final leave = await showDialog<bool>(
-                                    context: context,
-                                    barrierColor: Colors.black26,
-                                    builder: ((context) {
-                                      return const WarnDialogWidget(
-                                        title: "Delete Travel",
-                                        subtitle:
-                                            "Are you sure do you want to delete this travel?",
-                                        okButtonText: "Delete",
+                              Expanded(
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      top: 22.h,
+                                      left: 110.w,
+                                      child: CircleAvatar(
+                                        radius: 14.r,
+                                        foregroundImage: const AssetImage(
+                                          "assets/images/aime.png",
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 20.h,
+                                      left: 90.w,
+                                      child: CircleAvatar(
+                                        radius: 16.r,
+                                        foregroundImage: const AssetImage(
+                                          "assets/images/aime.png",
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 18.h,
+                                      left: 70.w,
+                                      child: CircleAvatar(
+                                        radius: 20.r,
+                                        foregroundImage: const AssetImage(
+                                          "assets/images/aime.png",
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 22.h,
+                                      right: 110.w,
+                                      child: CircleAvatar(
+                                        radius: 14.r,
+                                        foregroundImage: const AssetImage(
+                                          "assets/images/aime.png",
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 20.h,
+                                      right: 90.w,
+                                      child: CircleAvatar(
+                                        radius: 16.r,
+                                        foregroundImage: const AssetImage(
+                                          "assets/images/aime.png",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 8.h),
+                                child: Text(
+                                  walk.title,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                    color: white,
+                                    fontSize: 16.sp,
+                                    overflow: TextOverflow.ellipsis,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Map<String, LatLng> points =
+                                          <String, LatLng>{
+                                        "origin": walk.initialPosition,
+                                        "destination": walk.destinationPosition,
+                                      };
+                                      pushPage(
+                                        context,
+                                        to: SelfMadeWalkMap(
+                                          points: points,
+                                          walk: walk,
+                                          mode: SelfMadeWalkMapMode.idle,
+                                          startedAt: DateTime.now(),
+                                        ),
                                       );
-                                    }),
-                                  );
-                                  if (leave == true) {
-                                    _handleDelete(walk.id);
-                                  }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: Size.zero,
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w,
-                                    vertical: 7.h,
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      minimumSize: Size.zero,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 20.w,
+                                        vertical: 7.h,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.r),
+                                      ),
+                                    ),
+                                    child: const Text("View Travel"),
                                   ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25.r),
+                                  ElevatedButton(
+                                    onPressed: () async {
+                                      final leave = await showDialog<bool>(
+                                        context: context,
+                                        barrierColor: Colors.black26,
+                                        builder: ((context) {
+                                          return const WarnDialogWidget(
+                                            title: "Delete Travel",
+                                            subtitle:
+                                                "Are you sure do you want to delete this travel?",
+                                            okButtonText: "Delete",
+                                          );
+                                        }),
+                                      );
+                                      if (leave == true) {
+                                        _handleDelete(walk);
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      minimumSize: Size.zero,
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 10.w,
+                                        vertical: 7.h,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.r),
+                                      ),
+                                    ),
+                                    child: Icon(
+                                      Icons.delete,
+                                      size: 22.sp,
+                                    ),
                                   ),
-                                ),
-                                child: Icon(
-                                  Icons.delete,
-                                  size: 22.sp,
-                                ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
-              ),
+                        ),
+                      );
+                    }),
+                  ),
+          ),
+        ],
       );
     });
   }

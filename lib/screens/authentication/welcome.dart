@@ -79,12 +79,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               const Spacer(),
               SafeArea(
-                child: Text(
-                  "Copyright; Aime Ndayambaje 2023",
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: Colors.grey.shade600,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.copyright,
+                      size: 14.sp,
+                      color: Colors.grey.shade600,
+                    ),
+                    Text(
+                      " Aime Ndayambaje 2023",
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               addVerticalSpace(10)

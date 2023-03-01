@@ -12,7 +12,8 @@ void pushPage(BuildContext context, {required Widget to, bool? asDialog}) =>
     );
 
 /// Popping the current material page route from the queue
-void popPage(BuildContext context) => Navigator.pop(context);
+void popPage(BuildContext context, {dynamic data}) =>
+    Navigator.pop(context, data);
 
 /// Adding horizontal space in a row
 SizedBox addHorizontalSpace(double width) {
@@ -22,4 +23,14 @@ SizedBox addHorizontalSpace(double width) {
 /// Adding vertical space in a row
 SizedBox addVerticalSpace(double height) {
   return SizedBox(height: height.h);
+}
+
+///Get timing duration
+String getTimer(DateTime from, DateTime to) {
+  final duration = to.difference(from);
+  String twoDigits(int n) => n.toString().padLeft(2, '');
+  final hours = "${twoDigits(duration.inHours)}hr";
+  final minutes = "${twoDigits(duration.inMinutes.remainder(60))}min";
+  final seconds = "${twoDigits(duration.inSeconds.remainder(60))}sec";
+  return [if (duration.inHours > 0) hours, minutes, seconds].join(' ');
 }
