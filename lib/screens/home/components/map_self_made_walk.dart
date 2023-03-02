@@ -203,15 +203,14 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                     mapType: MapType.hybrid,
                     polylines: {
                       Polyline(
-                        polylineId: const PolylineId("current-route"),
-                        points: polylineCurrentLocationCoordinates,
-                        color: Colors.green.shade400,
-                        width: 8,
-                      ),
-                      Polyline(
                         polylineId: const PolylineId("destination-route"),
                         points: polylineDestinationCoordinates,
                         color: lightPrimary,
+                      ),
+                      Polyline(
+                        polylineId: const PolylineId("current-route"),
+                        points: polylineCurrentLocationCoordinates,
+                        color: Colors.green.shade400,
                       ),
                     },
                     myLocationButtonEnabled: false,
