@@ -154,24 +154,39 @@ class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
                                   filled: true,
                                   hintStyle: TextStyle(
                                     color: Colors.grey.shade600,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.normal,
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
                                     horizontal: 15.w,
-                                    vertical: 12.h,
+                                    // vertical: 5.h,
                                   ),
+                                  suffixIcon: Material(
+                                    color: Colors.transparent,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        Icons.search,
+                                        size: 25.sp,
+                                      ),
+                                      color: primary,
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                  suffixIconConstraints:
+                                      BoxConstraints(maxHeight: 40.h),
                                   isDense: true,
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.r),
+                                    borderRadius: BorderRadius.circular(25.r),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.r),
+                                    borderRadius: BorderRadius.circular(25.r),
                                     borderSide: BorderSide(
                                       width: 2,
                                       color: grey400,
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.r),
+                                    borderRadius: BorderRadius.circular(25.r),
                                     borderSide: const BorderSide(
                                       width: 2,
                                       color: lightPrimary,
@@ -180,26 +195,26 @@ class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
                                 ),
                               ),
                             ),
-                            Material(
-                              borderRadius: BorderRadius.circular(10.r),
-                              child: InkWell(
-                                onTap: () {},
-                                highlightColor: primary.withOpacity(0.2),
-                                splashColor: white,
-                                borderRadius: BorderRadius.circular(10.r),
-                                child: Ink(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 8.w,
-                                    vertical: 6.h,
-                                  ),
-                                  child: Icon(
-                                    Icons.search,
-                                    color: primary,
-                                    size: 25.sp,
-                                  ),
-                                ),
-                              ),
-                            )
+                            // Material(
+                            //   borderRadius: BorderRadius.circular(10.r),
+                            //   child: InkWell(
+                            //     onTap: () {},
+                            //     highlightColor: primary.withOpacity(0.2),
+                            //     splashColor: white,
+                            //     borderRadius: BorderRadius.circular(10.r),
+                            //     child: Ink(
+                            //       padding: EdgeInsets.symmetric(
+                            //         horizontal: 8.w,
+                            //         vertical: 6.h,
+                            //       ),
+                            //       child: Icon(
+                            //         Icons.search,
+                            //         color: primary,
+                            //         size: 25.sp,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // )
                           ],
                         ),
                         Container(

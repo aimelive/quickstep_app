@@ -38,7 +38,6 @@ class CreateMovement extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                
                 Form(
                   child: Padding(
                     padding: EdgeInsets.symmetric(

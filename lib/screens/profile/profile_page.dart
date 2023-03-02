@@ -34,18 +34,18 @@ class ProfilePage extends StatelessWidget {
             ),
             trailing: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25.r),
+                borderRadius: BorderRadius.circular(50.r),
                 border: Border.all(
-                  width: 3,
+                  width: 3.r,
                   color: lightPrimary,
                 ),
               ),
               child: GestureDetector(
                 onTap: () {},
                 child: CircleAvatar(
-                  radius: 25.r,
-                  foregroundImage: AssetImage(
-                    "assets/images/${profile.profilePic}",
+                  radius: 24.r,
+                  foregroundImage: NetworkImage(
+                    profile.profilePic,
                   ),
                 ),
               ),

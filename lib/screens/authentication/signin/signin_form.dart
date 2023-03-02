@@ -69,7 +69,8 @@ class _SignInFormState extends State<SignInForm> {
                     fullName: "Aime Ndayambaje",
                     email: email!,
                     username: "aimelive",
-                    profilePic: "aime.png",
+                    profilePic:
+                        "https://cdn.pixabay.com/photo/2023/02/08/07/32/vietnamese-woman-7775904_1280.jpg",
                     createdAt: DateTime.now().subtract(
                       const Duration(days: 100),
                     ),

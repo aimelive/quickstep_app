@@ -6,6 +6,7 @@ import 'package:quickstep_app/auth_wrapper.dart';
 import 'package:quickstep_app/services/hive_service.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/theme.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   //Initializing flutter hive database
@@ -17,6 +18,9 @@ void main() async {
     Hive.openBox(Boxes.activitiesBox),
     Hive.openBox(Boxes.authBox),
   ]);
+
+  //Initialising dotenv variables
+  await dotenv.load(fileName: "assets/dotenv/.env");
 
   //Running flutter application
   runApp(const AppWidget());

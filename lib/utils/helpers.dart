@@ -34,3 +34,10 @@ String getTimer(DateTime from, DateTime to) {
   final seconds = "${twoDigits(duration.inSeconds.remainder(60))}sec";
   return [if (duration.inHours > 0) hours, minutes, seconds].join(' ');
 }
+
+//Capitalize first letter of a word
+String cfl(String str) {
+  if (str.isEmpty) return str;
+  if (str.length == 1) return str.toUpperCase();
+  return str[0].toUpperCase() + str.substring(1).toLowerCase();
+}

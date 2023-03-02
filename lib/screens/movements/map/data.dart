@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quickstep_app/screens/movements/map/menu_pages/members.dart';
 import 'package:quickstep_app/screens/movements/map/menu_pages/messages.dart';
+import 'package:quickstep_app/screens/movements/map/menu_pages/settings.dart';
 
 class MapMenu {
   int id;
@@ -25,25 +27,13 @@ class MapMenu {
       id: 2,
       text: "Members",
       icon: Icons.group,
-      page: const MessagesPage(),
-    ),
-    MapMenu(
-      id: 3,
-      text: "Watchers",
-      icon: Icons.group_outlined,
-      page: const MessagesPage(),
-    ),
-    MapMenu(
-      id: 4,
-      text: "Actors",
-      icon: Icons.drive_eta,
-      page: const MessagesPage(),
+      page: const MembersPage(),
     ),
     MapMenu(
       id: 5,
       text: "Settings",
       icon: Icons.settings,
-      page: const MessagesPage(),
+      page: const SettingsPage(),
     ),
   ];
 }

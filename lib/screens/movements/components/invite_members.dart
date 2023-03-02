@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:quickstep_app/controllers/movements_controller.dart';
+import 'package:quickstep_app/models/movement.dart';
 import 'package:quickstep_app/models/user.dart';
 import 'package:quickstep_app/utils/colors.dart';
 
@@ -18,6 +21,7 @@ class InviteMembers extends StatefulWidget {
 
 class _InviteMembersState extends State<InviteMembers> {
   List<User> selected = [];
+  final _moveCnt = Get.find<MovementController>();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -88,20 +92,17 @@ class _InviteMembersState extends State<InviteMembers> {
                           selectedTileColor: Colors.grey.shade200,
                           selectedColor: primary,
                           leading: CircleAvatar(
-                            radius: 30.r,
+                            radius: 27.r,
                             backgroundColor: primary,
-                            child: Padding(
-                              padding: EdgeInsets.all(1.5.r),
-                              child: CircleAvatar(
-                                radius: 24.r,
-                                backgroundColor: primary,
-                                foregroundColor: white,
-                                foregroundImage: AssetImage(
-                                  "assets/images/${dummyUsers[i].imgUrl}",
-                                ),
-                                child: Text(
-                                  dummyUsers[i].username[0].toUpperCase(),
-                                ),
+                            child: CircleAvatar(
+                              radius: 24.r,
+                              backgroundColor: primary,
+                              foregroundColor: white,
+                              foregroundImage: AssetImage(
+                                "assets/images/${dummyUsers[i].imgUrl}",
+                              ),
+                              child: Text(
+                                dummyUsers[i].username[0].toUpperCase(),
                               ),
                             ),
                           ),
@@ -137,7 +138,20 @@ class _InviteMembersState extends State<InviteMembers> {
                     textDirection: TextDirection.rtl,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        widget.onContinue();
+                        _moveCnt.addMovement(
+                          Movement(
+                            id: "jeniffer-lopez",
+                            title: "Urugendo ruhire rwa jeniffer lopez",
+                            description: "Kubera ko nkunda Imana nabantu",
+                            members: 4,
+                            creator: "Munyanindi Dieudonne",
+                            createdAt: DateTime.now(),
+                            km: 8,
+                            role: Role.creator,
+                          ),
+                        );
+                        popPage(context);
+                        // widget.onContinue();
                       },
                       icon: Icon(
                         Icons.share,

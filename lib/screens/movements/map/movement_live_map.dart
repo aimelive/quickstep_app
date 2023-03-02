@@ -1,47 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:quickstep_app/utils/colors.dart';
+import 'package:quickstep_app/models/account.dart';
+import 'package:quickstep_app/models/movement.dart';
+import 'package:quickstep_app/screens/components/warn_method.dart';
+import 'package:quickstep_app/screens/movements/map/widgets/marker_custom.dart';
+import 'package:quickstep_app/services/auth_service.dart';
 // import 'package:image/image.dart' as image;
 
+import '../../../models/user.dart';
 import 'over_map_widget.dart';
 import 'widgets/circular_fab_widget.dart';
 
-const googleApiKey = 'AIzaSyC5ubzRytHakIp0hADsvsV5JArqVC4wcfo';
-
-
-
 class MovementLiveMap extends StatefulWidget {
-  const MovementLiveMap({super.key});
+  const MovementLiveMap({
+    super.key,
+    required this.movement,
+  });
+
+  final Movement movement;
 
   @override
   State<MovementLiveMap> createState() => _MovementLiveMapState();
 }
 
 class _MovementLiveMapState extends State<MovementLiveMap> {
-  final LatLng sourceLocation = const LatLng(
-    -1.9167688784786698,
-    30.083218087221134,
-  );
-  final LatLng destinationLocation = const LatLng(
-    -1.9167688784786698,
-    30.081166197413935,
-  );
-
   GoogleMapController? mapController;
-  // final key = GlobalKey();
+
   Map<String, Marker> markers = {};
 
-  List<LatLng> polylineCoordinates = [];
-  LocationData? currentLocation;
+  LatLng? currentLocation;
+  double zoomLevel = 18;
+
+  Account account = AuthService().getAuth()!;
+  List<User> members = [];
 
   void getCurrentLocation() async {
     Location location = Location();
 
     bool serviceEnabled;
     PermissionStatus permissionGranted;
-    // LocationData locationData;
 
     serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
@@ -60,82 +58,64 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
     }
 
     final locationData = await location.getLocation();
+    if (!mounted) return;
     setState(() {
-      currentLocation = locationData;
+      currentLocation = toCoor(locationData);
     });
 
     location.onLocationChanged.listen((newLoc) {
       if (!mounted) return;
       setState(() {
-        currentLocation = newLoc;
+        currentLocation = toCoor(newLoc);
       });
 
-      // print("Hello World new location,${currentLocation?.latitude}");
       if (mapController != null) {
         mapController?.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
-              zoom: 18,
-              target: LatLng(
-                currentLocation!.latitude!,
-                currentLocation!.longitude!,
-              ),
+              zoom: zoomLevel,
+              target: currentLocation!,
             ),
           ),
         );
         addMarker(
-          "currentLocation",
-          LatLng(
-            currentLocation!.latitude!,
-            currentLocation!.longitude!,
+          User(
+            id: account.userId,
+            imgUrl: account.profilePic,
+            username: "Me",
+            caption: "My current location",
+            location: currentLocation!,
           ),
         );
       }
     });
   }
 
-  //get polylinesloc
-  void getPolylines() async {
-    PolylinePoints polylinePoints = PolylinePoints();
-
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleApiKey,
-      PointLatLng(
-        sourceLocation.latitude,
-        sourceLocation.longitude,
-      ),
-      PointLatLng(
-        destinationLocation.latitude,
-        destinationLocation.longitude,
-      ),
-    );
-    if (result.points.isNotEmpty) {
-      for (PointLatLng point in result.points) {
-        polylineCoordinates.add(
-          LatLng(point.latitude, point.longitude),
-        );
-      }
-      // result.points.forEach((PointLatLng point) {
-      //   return polylineCoordinates.add(
-      //     LatLng(point.latitude, point.longitude),
-      //   );
-      // });
-      setState(() {});
+  getMembers() {
+    members = dummyUsers;
+    for (var user in members) {
+      addMarker(user);
     }
   }
 
   @override
   void initState() {
+    getMembers();
     getCurrentLocation();
-    getPolylines();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print(currentLocation);
     return WillPopScope(
       onWillPop: () async {
+        final leave = await warnMethod(
+          context,
+          title: "Leave movement",
+          subtitle: "Are you sure do you want to leave this movement?",
+          okButtonText: "Leave",
+        );
+        if (leave == true) return true;
         return false;
       },
       child: Scaffold(
@@ -143,34 +123,42 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
           children: [
             if (currentLocation != null)
               GoogleMap(
-                initialCameraPosition:  CameraPosition(
-                  target: sourceLocation,
-                  zoom: 18,
+                initialCameraPosition: CameraPosition(
+                  target: currentLocation!,
+                  zoom: zoomLevel,
                 ),
-                polylines: {
-                  Polyline(
-                    polylineId: const PolylineId("route"),
-                    points: polylineCoordinates,
-                    color: lightPrimary,
-                  ),
-                },
                 compassEnabled: false,
                 mapType: MapType.hybrid,
-                onMapCreated: (controller) {
+                onMapCreated: (controller) async {
                   mapController = controller;
-                  addMarker("source", sourceLocation);
-                  addMarker("destination", destinationLocation);
 
                   addMarker(
-                    "currentLocation",
-                    LatLng(
-                      currentLocation!.latitude!,
-                      currentLocation!.longitude!,
+                    User(
+                      id: account.userId,
+                      imgUrl: account.profilePic,
+                      username: account.fullName,
+                      caption: "My current location",
+                      location: currentLocation!,
                     ),
                   );
                 },
                 myLocationButtonEnabled: false,
                 markers: markers.values.toSet(),
+                onCameraMove: (position) {
+                  if (!mounted) return;
+                  // setState(() {
+                  //   zoomLevel = position.zoom;
+                  // });
+                },
+              ),
+            if (currentLocation == null)
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text("Loading current location..."),
+                  ],
+                ),
               ),
             const OverMapWidget(),
             // Positioned(
@@ -193,12 +181,14 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: const CircularFabWidget(),
+        floatingActionButton: mapController != null
+            ? CircularFabWidget(gMapController: mapController!)
+            : null,
       ),
     );
   }
 
-  addMarker(String id, LatLng location) async {
+  addMarker(User user) async {
     // var markerIcon = await BitmapDescriptor.fromAssetImage(
     //   const ImageConfiguration(size: Size(64, 64)),
     //   "assets/images/aime.png",
@@ -218,20 +208,16 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
     // final byteData = await image?.toByteData(format: ImageByteFormat.png);
     // final imageBytes = byteData?.buffer.asUint8List();
     // print(imageBytes);
-    var marker = Marker(
-      markerId: MarkerId(id),
-      position: location,
-      infoWindow: const InfoWindow(
-        title: "Aime Ndayambaje - Gisenyi",
-        snippet:
-            "Some description of the current location by aimelive and ndayambaje",
-      ),
-      // icon: BitmapDescriptor.fromBytes(resizedImg),
-      // icon: markerIcon,
-    );
-
+    var marker = customMarker(user);
     setState(() {
-      markers[id] = marker;
+      markers[user.id] = marker;
     });
+  }
+
+  LatLng toCoor(LocationData data) {
+    return LatLng(
+      data.latitude!,
+      data.longitude!,
+    );
   }
 }

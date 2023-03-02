@@ -10,7 +10,7 @@ import 'package:quickstep_app/services/auth_service.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
 import '../../../utils/colors.dart';
-import '../../movements/map/movement_live_map.dart';
+import '../../../utils/keys.dart';
 import '../../movements/map/widgets/warn_dialog.dart';
 import '../../movements/widgets/app_bar_2.dart';
 import 'save_walk_dialog.dart';
@@ -211,6 +211,8 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                         polylineId: const PolylineId("current-route"),
                         points: polylineCurrentLocationCoordinates,
                         color: Colors.green.shade400,
+                        width: 8,
+                        zIndex: 1,
                       ),
                     },
                     myLocationButtonEnabled: false,

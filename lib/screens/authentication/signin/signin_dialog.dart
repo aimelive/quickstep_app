@@ -37,108 +37,88 @@ Future<Object?> customSignInDialog(BuildContext context,
             color: Colors.white.withOpacity(0.94),
             borderRadius: BorderRadius.circular(40.r),
           ),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      "Sign In",
-                      style: TextStyle(fontSize: 34.sp),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.h),
-                      child: Text(
-                        "Get access to your account",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ),
-                    const SignInForm(),
-                    Row(
-                      children: [
-                        const Expanded(child: Divider()),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w),
-                          child: const Text(
-                            "OR",
-                            style: TextStyle(
-                              color: Colors.black26,
-                            ),
-                          ),
-                        ),
-                        const Expanded(child: Divider()),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.h),
-                      child: Text(
-                        "Sign up with Email, Apple or Google",
-                        style: TextStyle(
-                          color: Colors.black54,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            popPage(context);
-                            pushPage(context, to: const SignUpPage());
-                          },
-                          icon: SvgPicture.asset(
-                            "assets/icons/email_box.svg",
-                            height: 64.r,
-                            width: 64.r,
-                          ),
-                        ),
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {},
-                          icon: SvgPicture.asset(
-                            "assets/icons/google_box.svg",
-                            height: 64.r,
-                            width: 64.r,
-                          ),
-                        ),
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {},
-                          icon: SvgPicture.asset(
-                            "assets/icons/apple_box.svg",
-                            height: 64.r,
-                            width: 64.r,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: -48.h,
-                  child: GestureDetector(
-                    onTap: () => popPage(context),
-                    child: CircleAvatar(
-                      radius: 20.r,
-                      backgroundColor: white,
-                      foregroundColor: primary,
-                      child: Icon(
-                        Icons.close,
-                        size: 25.sp,
+          child: Material(
+            color: transparent,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    "Sign In",
+                    style: TextStyle(fontSize: 34.sp),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.h),
+                    child: Text(
+                      "Get access to your account",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14.sp,
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const SignInForm(),
+                  Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: const Text(
+                          "OR",
+                          style: TextStyle(
+                            color: Colors.black26,
+                          ),
+                        ),
+                      ),
+                      const Expanded(child: Divider()),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.h),
+                    child: Text(
+                      "Sign up with Email, Apple or Google",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          popPage(context);
+                          pushPage(context, to: const SignUpPage());
+                        },
+                        icon: SvgPicture.asset(
+                          "assets/icons/email_box.svg",
+                          height: 64.r,
+                          width: 64.r,
+                        ),
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {},
+                        icon: SvgPicture.asset(
+                          "assets/icons/google_box.svg",
+                          height: 64.r,
+                          width: 64.r,
+                        ),
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {},
+                        icon: SvgPicture.asset(
+                          "assets/icons/apple_box.svg",
+                          height: 64.r,
+                          width: 64.r,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ),

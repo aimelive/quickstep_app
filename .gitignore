@@ -9,7 +9,7 @@
 .history
 .svn/
 migrate_working_dir/
-
+assets/dotenv/.env
 # IntelliJ related
 *.iml
 *.ipr

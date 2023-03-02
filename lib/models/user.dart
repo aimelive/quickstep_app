@@ -23,10 +23,7 @@ List<User> dummyUsers = [
     username: "Aimelive",
     caption:
         "Joined this movement at 12:40 PM, 2 min ago, he is now at 3rd Kicukiro bus stop",
-    location: const LatLng(
-      1.122,
-      33.578,
-    ),
+    location: const LatLng(-1.9172235075192345, 30.081694631126986),
   ),
   User(
     id: "user-unique-id-1",
@@ -34,10 +31,7 @@ List<User> dummyUsers = [
     username: "Diamond",
     caption:
         "Joined this movement at 12:40 PM, 2 min ago, he is now at 3rd Kicukiro bus stop",
-    location: const LatLng(
-      1.122,
-      33.578,
-    ),
+    location: const LatLng(-1.9167999680077046, 30.082668172142643),
   ),
   User(
     id: "user-unique-id-2",
@@ -45,10 +39,7 @@ List<User> dummyUsers = [
     username: "Feza",
     caption:
         "Joined this movement at 12:40 PM, 2 min ago, he is now at 3rd Kicukiro bus stop",
-    location: const LatLng(
-      1.122,
-      33.578,
-    ),
+    location: const LatLng(-1.9163382716640436, 30.081935153024972),
   ),
   User(
     id: "user-unique-id-3",
@@ -56,20 +47,6 @@ List<User> dummyUsers = [
     username: "Hirwa Lucky",
     caption:
         "Joined this movement at 12:40 PM, 2 min ago, he is now at 3rd Kicukiro bus stop",
-    location: const LatLng(
-      1.122,
-      33.578,
-    ),
-  ),
-  User(
-    id: "user-unique-id-4",
-    imgUrl: "zebra.png",
-    username: "Ndayambaje",
-    caption:
-        "Joined this movement at 12:40 PM, 2 min ago, he is now at 3rd Kicukiro bus stop",
-    location: const LatLng(
-      1.122,
-      33.578,
-    ),
+    location: const LatLng(-1.9167618112898062, 30.08132430376024),
   ),
 ];

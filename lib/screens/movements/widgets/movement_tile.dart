@@ -10,7 +10,9 @@ class MovementTile extends StatelessWidget {
     Key? key,
     required this.movement,
   }) : super(key: key);
+
   final Movement movement;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,9 +41,10 @@ class MovementTile extends StatelessWidget {
               padding: EdgeInsets.all(4.r),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.r),
-                child: Image.asset(
-                  "assets/images/${movement.imgUrl}",
+                child: Image.network(
+                  "https://cdn.pixabay.com/photo/2019/05/29/15/09/maps-4237764_1280.jpg",
                   width: 120.w,
+                  height: double.infinity,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -150,7 +153,9 @@ class MovementTile extends StatelessWidget {
                         onPressed: () {
                           pushPage(
                             context,
-                            to: const MovementLiveMap(),
+                            to: MovementLiveMap(
+                              movement: movement,
+                            ),
                           );
                         },
                         style: ElevatedButton.styleFrom(

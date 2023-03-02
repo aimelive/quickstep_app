@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quickstep_app/models/account.dart';
 import 'package:quickstep_app/models/bottom_nav_item.dart';
 import 'package:quickstep_app/screens/activities/activities_page.dart';
 import 'package:quickstep_app/screens/components/app_bar.dart';
@@ -9,7 +10,9 @@ import 'package:quickstep_app/screens/home/home_page.dart';
 import 'package:quickstep_app/screens/movements/movements_page.dart';
 import 'package:quickstep_app/screens/profile/profile_page.dart';
 import 'package:quickstep_app/screens/widgets/slide_fade_switcher.dart';
+import 'package:quickstep_app/services/auth_service.dart';
 import 'package:quickstep_app/utils/colors.dart';
+import 'package:quickstep_app/utils/helpers.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class LayoutPage extends StatefulWidget {
@@ -22,6 +25,7 @@ class LayoutPage extends StatefulWidget {
 class _LayoutPageState extends State<LayoutPage> {
   late List<Widget> pages;
   int currentPage = 0;
+  late Account profile;
 
   void gotoExplore() {
     pages = [
@@ -38,9 +42,15 @@ class _LayoutPageState extends State<LayoutPage> {
     ];
   }
 
+  _init() {
+    final _hive = AuthService();
+    profile = _hive.getAuth()!;
+  }
+
   @override
   void initState() {
     gotoExplore();
+    _init();
     super.initState();
   }
 
@@ -101,15 +111,22 @@ class _LayoutPageState extends State<LayoutPage> {
                                 child: CircleAvatar(
                                   backgroundColor: lightPrimary,
                                   radius: 14.r,
-                                  foregroundImage: const AssetImage(
-                                      "assets/images/aime.png"),
+                                  foregroundImage: NetworkImage(
+                                    profile.profilePic,
+                                  ),
                                 ),
                               )
                             : Icon(
                                 item.icon,
                                 size: 25.sp,
                               ),
-                        title: Text(item.index == 3 ? "Aime" : item.text),
+                        title: Text(item.index == 3
+                            ? cfl(
+                                profile.username.length > 8
+                                    ? "${profile.username.substring(0, 6)}..."
+                                    : profile.username,
+                              )
+                            : item.text),
                       ),
                     )
                     .toList(),

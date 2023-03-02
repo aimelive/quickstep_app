@@ -1,7 +1,10 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:quickstep_app/screens/components/warn_method.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
@@ -10,39 +13,20 @@ const double buttonSize = 60;
 class FabItem {
   String text;
   IconData icon;
+  VoidCallback onPress;
   FabItem({
     required this.text,
     required this.icon,
+    required this.onPress,
   });
 }
-
-List<FabItem> fabItems = [
-  FabItem(
-    text: "Close",
-    icon: Icons.power_settings_new_outlined,
-  ),
-  FabItem(
-    text: "Leave",
-    icon: Icons.fork_left,
-  ),
-  FabItem(
-    text: "Take shot",
-    icon: Icons.camera_alt_outlined,
-  ),
-  FabItem(
-    text: "Invite",
-    icon: Icons.share,
-  ),
-  FabItem(
-    text: "Menu",
-    icon: Icons.menu,
-  ),
-];
 
 class CircularFabWidget extends StatefulWidget {
   const CircularFabWidget({
     Key? key,
+    required this.gMapController,
   }) : super(key: key);
+  final GoogleMapController gMapController;
 
   @override
   State<CircularFabWidget> createState() => _CircularFabWidgetState();
@@ -51,6 +35,86 @@ class CircularFabWidget extends StatefulWidget {
 class _CircularFabWidgetState extends State<CircularFabWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
+
+  late List<FabItem> fabItems;
+
+  _init() {
+    fabItems = [
+      FabItem(
+        text: "Close",
+        icon: Icons.power_settings_new_outlined,
+        onPress: () async {
+          final close = await warnMethod(
+            context,
+            title: "Close movement",
+            subtitle: "Are you sure do you want to close this movement?",
+            okButtonText: "Close",
+          );
+          if (close == null || !mounted) return;
+          popPage(context);
+        },
+      ),
+      FabItem(
+        text: "Leave",
+        icon: Icons.fork_left,
+        onPress: () async {
+          final leave = await warnMethod(
+            context,
+            title: "Leave movement",
+            subtitle: "Are you sure do you want to leave this movement?",
+            okButtonText: "Leave",
+          );
+          if (leave == null || !mounted) return;
+          popPage(context);
+        },
+      ),
+      FabItem(
+        text: "Take shot",
+        icon: Icons.camera_alt_outlined,
+        onPress: () async {
+          final image = await widget.gMapController.takeSnapshot();
+          if (image == null) return;
+          showGeneralDialog<Map<String, LatLng>>(
+            barrierLabel: "view-shot",
+            context: context,
+            barrierColor: Colors.black54,
+            barrierDismissible: true,
+            transitionDuration: const Duration(milliseconds: 400),
+            transitionBuilder:
+                ((context, animation, secondaryAnimation, child) {
+              final tween = Tween(
+                begin: const Offset(-1, 0),
+                end: Offset.zero,
+              );
+              return SlideTransition(
+                position: tween.animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeInOut,
+                  ),
+                ),
+                child: child,
+              );
+            }),
+            pageBuilder: ((context, _, __) {
+              return MapShotDialog(image: image);
+            }),
+          );
+        },
+      ),
+      FabItem(
+        text: "Invite",
+        icon: Icons.share,
+        onPress: () {},
+      ),
+      FabItem(
+        text: "Menu",
+        icon: Icons.menu,
+        onPress: () {},
+      ),
+    ];
+  }
+
   bool showFab = false;
   @override
   void initState() {
@@ -58,6 +122,7 @@ class _CircularFabWidgetState extends State<CircularFabWidget>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
+    _init();
     super.initState();
   }
 
@@ -96,6 +161,7 @@ class _CircularFabWidgetState extends State<CircularFabWidget>
           } else {
             controller.forward();
           }
+          item.onPress();
         },
         child: (item.icon == Icons.menu)
             ? CircleAvatar(
@@ -152,6 +218,35 @@ class _CircularFabWidgetState extends State<CircularFabWidget>
       //   ),
       //   onPressed: ,
       // ),
+    );
+  }
+}
+
+class MapShotDialog extends StatelessWidget {
+  const MapShotDialog({
+    Key? key,
+    required this.image,
+  }) : super(key: key);
+
+  final Uint8List image;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: 400.h,
+            width: double.infinity,
+            child: Image.memory(
+              image,
+              fit: BoxFit.fitWidth,
+              height: 400.h,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

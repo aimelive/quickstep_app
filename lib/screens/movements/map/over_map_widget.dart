@@ -87,11 +87,11 @@ class _OverMapWidgetState extends State<OverMapWidget> {
                             borderRadius: BorderRadius.circular(8.r),
                             child: InkWell(
                               onTap: () {
-                                // setState(() {
-                                //   showMenu = false;
-                                // });
+                                setState(() {
+                                  showMenu = false;
+                                });
 
-                                // pushPage(context, to: MapMenu.items[i].page);
+                                pushPage(context, to: MapMenu.items[i].page);
                               },
                               child: Ink(
                                 padding: EdgeInsets.symmetric(
@@ -115,6 +115,28 @@ class _OverMapWidgetState extends State<OverMapWidget> {
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
+                                    const Spacer(),
+                                    if (MapMenu.items[i].text != "Settings")
+                                      Container(
+                                        alignment: Alignment.center,
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 6.w,
+                                          vertical: 4.h,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: primary,
+                                          borderRadius:
+                                              BorderRadius.circular(25.r),
+                                        ),
+                                        child: Text(
+                                          "2+",
+                                          style: TextStyle(
+                                            color: white,
+                                            fontSize: 10.sp,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      )
                                   ],
                                 ),
                               ),

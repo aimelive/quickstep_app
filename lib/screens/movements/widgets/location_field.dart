@@ -64,9 +64,11 @@ class _ChooseLocationWidgetState extends State<ChooseLocationWidget> {
               return;
             }
             final location = await chooseLocationDialog(context);
+
             if (location != null) {
               setState(() {
-                text = "You have selected $location";
+                text =
+                    "${location["destination"]?.latitude},${location["destination"]?.longitude}";
               });
             }
           },
