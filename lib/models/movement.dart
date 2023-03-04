@@ -20,6 +20,19 @@ class Movement {
     required this.km,
     required this.role,
   });
+
+  factory Movement.fromJSON(dynamic json) {
+    return Movement(
+      id: json["_id"],
+      title: json["title"],
+      description: json["description"],
+      members: json["actors"].length,
+      creator: json["creator"],
+      createdAt: DateTime.parse(json["createdAt"]),
+      km: 17,
+      role: Role.member,
+    );
+  }
 }
 
 List<Movement> dummyMovements = <Movement>[
