@@ -186,38 +186,38 @@ class MembersPage extends StatelessWidget {
                           ],
                         ),
                         addVerticalSpace(20),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 10.h),
-                          child: ListTile(
-                            onTap: () {},
-                            leading: CircleAvatar(
-                              radius: 27.r,
-                              backgroundColor: primary,
-                              child: CircleAvatar(
-                                radius: 24.r,
-                                backgroundColor: primary,
-                                foregroundColor: white,
-                                foregroundImage: AssetImage(
-                                  "assets/images/${dummyUsers[0].imgUrl}",
-                                ),
-                                child: Text(
-                                  dummyUsers[0].username[0].toUpperCase(),
-                                ),
-                              ),
-                            ),
-                            title: Text(
-                              dummyUsers[0].username,
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            subtitle: Text(
-                              dummyUsers[0].caption,
-                              maxLines: 2,
-                            ),
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(bottom: 10.h),
+                        //   child: ListTile(
+                        //     onTap: () {},
+                        //     leading: CircleAvatar(
+                        //       radius: 27.r,
+                        //       backgroundColor: primary,
+                        //       child: CircleAvatar(
+                        //         radius: 24.r,
+                        //         backgroundColor: primary,
+                        //         foregroundColor: white,
+                        //         foregroundImage: AssetImage(
+                        //           "assets/images/${dummyUsers[0].imgUrl}",
+                        //         ),
+                        //         child: Text(
+                        //           dummyUsers[0].username[0].toUpperCase(),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     title: Text(
+                        //       dummyUsers[0].username,
+                        //       style: TextStyle(
+                        //         fontSize: 16.sp,
+                        //         fontWeight: FontWeight.w600,
+                        //       ),
+                        //     ),
+                        //     subtitle: Text(
+                        //       dummyUsers[0].caption,
+                        //       maxLines: 2,
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

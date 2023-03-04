@@ -43,8 +43,8 @@ class _LayoutPageState extends State<LayoutPage> {
   }
 
   _init() {
-    final _hive = AuthService();
-    profile = _hive.getAuth()!;
+    final hive = AuthService();
+    profile = hive.getAuth()!;
   }
 
   @override
