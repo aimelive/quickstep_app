@@ -19,7 +19,7 @@ SnackbarController showMessage({
         ? primary
         : type == MessageType.error
             ? Colors.pink.shade900
-            : Colors.green.shade300,
+            : Colors.green.shade400,
     colorText: white,
   );
 }

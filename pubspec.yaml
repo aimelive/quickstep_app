@@ -51,6 +51,7 @@ dependencies:
   get: ^4.6.5
   socket_io_client: ^2.0.1
   dio: ^5.0.1
+  loading_animation_widget: ^1.2.0+4
 
 dev_dependencies:
   flutter_test:

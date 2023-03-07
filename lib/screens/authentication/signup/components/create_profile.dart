@@ -3,13 +3,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:quickstep_app/controllers/auth.dart';
+import 'package:quickstep_app/screens/components/top_snackbar.dart';
+import 'package:quickstep_app/services/auth_service.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../../utils/helpers.dart';
 import '../widgets/radio_buttons.dart';
 import '../widgets/text_input_field.dart';
+import 'create_account.dart';
 
 class CreateProfile extends StatefulWidget {
   const CreateProfile({
@@ -23,6 +29,14 @@ class CreateProfile extends StatefulWidget {
 }
 
 class _CreateProfileState extends State<CreateProfile> {
+  String? username;
+  File? profilePic;
+  final authService = AuthService();
+
+  IsLoading _isLoading = IsLoading.idle;
+
+  final authState = Get.find<AuthState>();
+
   final ImagePicker _picker = ImagePicker();
   Uint8List? selectedImage;
 
@@ -38,14 +52,43 @@ class _CreateProfileState extends State<CreateProfile> {
       final bytes = await File(cropped.path).readAsBytes();
       setState(() {
         selectedImage = bytes;
+        profilePic = File(cropped.path);
       });
     } catch (e) {
-      // print(e);
+      onUnkownError(e);
+    }
+  }
+
+  void _createProfile() async {
+    if (profilePic != null && username != null) {
+      setState(() {
+        _isLoading = IsLoading.loading;
+      });
+      final res = await authService.createProfile(
+        authState.email.value,
+        username!,
+        profilePic!,
+        authState.token.value,
+      );
+      if (!mounted) return;
+      setState(() {
+        _isLoading = IsLoading.success;
+      });
+      if (res != null) {
+        showMessage(
+          message:
+              "Account created successfully, please go to sign in page and login to your account",
+          title: "Profile Created",
+          type: MessageType.success,
+        );
+        popPage(context);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final loading = _isLoading == IsLoading.loading;
     return Column(
       children: [
         Expanded(
@@ -87,8 +130,13 @@ class _CreateProfileState extends State<CreateProfile> {
                           ),
                         ),
                         addVerticalSpace(8),
-                        const TextInputField(
+                        TextInputField(
                           hintText: "a username",
+                          onChanged: (value) {
+                            setState(() {
+                              username = value;
+                            });
+                          },
                         ),
                         addVerticalSpace(18),
                         Text(
@@ -182,11 +230,29 @@ class _CreateProfileState extends State<CreateProfile> {
                         addVerticalSpace(20),
                         Center(
                           child: Directionality(
-                            textDirection: TextDirection.rtl,
+                            textDirection:
+                                loading ? TextDirection.ltr : TextDirection.rtl,
                             child: ElevatedButton.icon(
-                              onPressed: widget.onStart,
-                              icon: const Icon(Icons.arrow_back),
-                              label: const Text("FINISH SIGNUP"),
+                              style: ElevatedButton.styleFrom(
+                                disabledBackgroundColor: lightPrimary,
+                                disabledForegroundColor: white,
+                              ),
+                              onPressed: loading ? null : _createProfile,
+                              icon: loading
+                                  ? LoadingAnimationWidget.inkDrop(
+                                      color: white,
+                                      size: 18.sp,
+                                    )
+                                  : Icon(
+                                      Icons.arrow_back,
+                                      size: 24.sp,
+                                    ),
+                              label: Text(
+                                loading ? " LOADING..." : "FINISH SIGNUP",
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                ),
+                              ),
                             ),
                           ),
                         ),

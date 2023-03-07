@@ -4,6 +4,7 @@ import 'package:quickstep_app/screens/authentication/signup/components/create_pr
 import 'package:quickstep_app/screens/authentication/signup/components/verify_otp.dart';
 import 'package:quickstep_app/screens/movements/widgets/app_bar_2.dart';
 import 'package:quickstep_app/screens/widgets/slide_fade_switcher.dart';
+import 'package:quickstep_app/services/auth_service.dart';
 
 import '../../../utils/colors.dart';
 import 'components/create_account.dart';
@@ -11,7 +12,10 @@ import 'components/create_account.dart';
 class SignUpPage extends StatefulWidget {
   const SignUpPage({
     super.key,
+    this.index = 0,
   });
+
+  final int index;
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -19,9 +23,10 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   late List<Widget> steps;
-  int selectedIndex = 0;
+  late int selectedIndex;
 
   _init() {
+    selectedIndex = widget.index;
     steps = [
       CreateAccount(
         onContinue: () {

@@ -29,7 +29,7 @@ class ProfilePage extends StatelessWidget {
               style: TextStyle(fontSize: 14.sp),
             ),
             subtitle: Text(
-              "Member since ${profile.createdAt.day}/${profile.createdAt.month}/${profile.createdAt.year}",
+              "Member since ${months[profile.createdAt.month - 1]} ${profile.createdAt.day}, ${profile.createdAt.year}",
               style: TextStyle(fontSize: 12.sp),
             ),
             trailing: Container(
@@ -46,6 +46,7 @@ class ProfilePage extends StatelessWidget {
                   radius: 24.r,
                   foregroundImage: NetworkImage(
                     profile.profilePic,
+                    // "https://cdn.pixabay.com/photo/2023/02/18/16/02/bicycle-7798227_1280.jpg",
                   ),
                 ),
               ),

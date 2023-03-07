@@ -5,8 +5,9 @@ import 'package:quickstep_app/utils/colors.dart';
 
 class OTPNumberBoxWidget extends StatelessWidget {
   const OTPNumberBoxWidget({
-    super.key,
+    super.key,required this.controller,
   });
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class OTPNumberBoxWidget extends StatelessWidget {
         ),
       ),
       child: TextFormField(
-        // controller: controller,
+        controller: controller,
         keyboardType: TextInputType.number,
         cursorColor: lightPrimary,
         textAlign: TextAlign.center,

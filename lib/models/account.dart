@@ -32,4 +32,16 @@ class Account {
       createdAt: json["createdAt"],
     );
   }
+
+  // static Account fromJson(dynamic json) {
+  //   return Account(
+  //     userId: json["data"]["user"]["_id"],
+  //     fullName: json["data"]["user"]["fullName"],
+  //     email: json["data"]["user"]["email"],
+  //     username: json["data"]["user"]["fullName"],
+  //     profilePic:
+  //         "https://cdn.pixabay.com/photo/2023/02/08/07/32/vietnamese-woman-7775904_1280.jpg",
+  //     createdAt: DateTime.parse(json["data"]["user"]["createdAt"]),
+  //   );
+  // }
 }

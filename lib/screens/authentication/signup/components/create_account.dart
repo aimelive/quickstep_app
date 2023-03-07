@@ -1,19 +1,53 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:quickstep_app/screens/components/top_snackbar.dart';
 
+import '../../../../services/auth_service.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/helpers.dart';
 import '../widgets/text_input_field.dart';
 
-class CreateAccount extends StatelessWidget {
+enum IsLoading { loading, failed, success, idle }
+
+class CreateAccount extends StatefulWidget {
   const CreateAccount({
     Key? key,
     required this.onContinue,
   }) : super(key: key);
-  final VoidCallback onContinue;
+  final void Function() onContinue;
+
+  @override
+  State<CreateAccount> createState() => _CreateAccountState();
+}
+
+class _CreateAccountState extends State<CreateAccount> {
+  final authService = AuthService();
+
+  String? fullName;
+  String? email;
+  String? password;
+  String? confirmPassword;
+  IsLoading _isLoading = IsLoading.idle;
+
+  void _onCreateAccount() async {
+    setState(() {
+      _isLoading = IsLoading.loading;
+    });
+    final response =
+        await authService.createAccount(fullName!, email!, password!);
+    //TODO: starting from here when am back.
+    print(response);
+    setState(() {
+      _isLoading = IsLoading.success;
+    });
+    // widget.onContinue();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final loading = _isLoading == IsLoading.loading;
     return Column(
       children: [
         Expanded(
@@ -55,8 +89,13 @@ class CreateAccount extends StatelessWidget {
                           ),
                         ),
                         addVerticalSpace(8),
-                        const TextInputField(
+                        TextInputField(
                           hintText: "a name",
+                          onChanged: (value) {
+                            setState(() {
+                              fullName = value;
+                            });
+                          },
                         ),
                         addVerticalSpace(18),
                         Text(
@@ -68,8 +107,13 @@ class CreateAccount extends StatelessWidget {
                           ),
                         ),
                         addVerticalSpace(8),
-                        const TextInputField(
+                        TextInputField(
                           hintText: "an email",
+                          onChanged: (value) {
+                            setState(() {
+                              email = value;
+                            });
+                          },
                         ),
                         Text(
                           " Please note that you will be asked to verify this email",
@@ -88,9 +132,14 @@ class CreateAccount extends StatelessWidget {
                           ),
                         ),
                         addVerticalSpace(8),
-                        const TextInputField(
+                        TextInputField(
                           hintText: "password",
                           obsecureText: true,
+                          onChanged: (value) {
+                            setState(() {
+                              password = value;
+                            });
+                          },
                         ),
                         addVerticalSpace(18),
                         Text(
@@ -102,26 +151,79 @@ class CreateAccount extends StatelessWidget {
                           ),
                         ),
                         addVerticalSpace(8),
-                        const TextInputField(
+                        TextInputField(
                           hintText: "password again",
                           obsecureText: true,
+                          onChanged: (value) {
+                            setState(() {
+                              confirmPassword = value;
+                            });
+                          },
                         ),
                         addVerticalSpace(30),
                         Center(
                           child: Directionality(
-                            textDirection: TextDirection.rtl,
+                            textDirection:
+                                loading ? TextDirection.ltr : TextDirection.rtl,
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                onContinue();
+                                if (fullName == null ||
+                                    email == null ||
+                                    password == null ||
+                                    confirmPassword == null) {
+                                  showMessage(
+                                    message:
+                                        "All fields are required, please fill each text field below",
+                                    title: "Validation Failed",
+                                    type: MessageType.error,
+                                  );
+                                  return;
+                                }
+                                if (fullName!.isEmpty ||
+                                    email!.isEmpty ||
+                                    password!.isEmpty ||
+                                    confirmPassword!.isEmpty) {
+                                  showMessage(
+                                    message:
+                                        "All fields are required, please fill each text field below",
+                                    title: "Validation Failed",
+                                    type: MessageType.error,
+                                  );
+                                  return;
+                                }
+                                if (password != confirmPassword) {
+                                  showMessage(
+                                    message:
+                                        "Password and confirm password must be equal",
+                                    title: "Confirm Password",
+                                    type: MessageType.error,
+                                  );
+                                  return;
+                                }
+                                _onCreateAccount();
                               },
                               style: ElevatedButton.styleFrom(
+                                disabledBackgroundColor: lightPrimary,
+                                disabledForegroundColor: white,
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 30.w,
-                                  vertical: 8.h,
+                                  vertical: 7.h,
                                 ),
                               ),
-                              icon: const Icon(Icons.arrow_back),
-                              label: const Text("CREATE ACCOUNT"),
+                              icon: loading
+                                  ? LoadingAnimationWidget.inkDrop(
+                                      color: white, size: 18.sp)
+                                  : Icon(
+                                      CupertinoIcons.arrow_right,
+                                      color: const Color(0xFF9fcdf5),
+                                      size: 24.sp,
+                                    ),
+                              label: Text(
+                                loading ? " LOADING..." : "CREATE ACCOUNT",
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                ),
+                              ),
                             ),
                           ),
                         ),

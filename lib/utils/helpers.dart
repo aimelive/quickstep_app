@@ -41,3 +41,18 @@ String cfl(String str) {
   if (str.length == 1) return str.toUpperCase();
   return str[0].toUpperCase() + str.substring(1).toLowerCase();
 }
+
+List<String> months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec"
+];

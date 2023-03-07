@@ -113,7 +113,12 @@ class _LayoutPageState extends State<LayoutPage> {
                                   radius: 14.r,
                                   foregroundImage: NetworkImage(
                                     profile.profilePic,
+
+                                    // "https://cdn.pixabay.com/photo/2023/02/18/16/02/bicycle-7798227_1280.jpg",
                                   ),
+                                  // child: Image.network(
+                                  //   profile.profilePic,
+                                  // ),
                                 ),
                               )
                             : Icon(
