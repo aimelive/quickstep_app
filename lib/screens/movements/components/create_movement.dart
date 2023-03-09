@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quickstep_app/screens/components/top_snackbar.dart';
 
 import '../../../utils/colors.dart';
 import '../../../utils/helpers.dart';
 import '../widgets/category.dart';
 import '../widgets/location_field.dart';
 
-class CreateMovement extends StatelessWidget {
+class CreateMovement extends StatefulWidget {
   const CreateMovement({
     Key? key,
     required this.onContinue,
   }) : super(key: key);
-  final VoidCallback onContinue;
+  final void Function(String title, String desc) onContinue;
+
+  @override
+  State<CreateMovement> createState() => _CreateMovementState();
+}
+
+class _CreateMovementState extends State<CreateMovement> {
+  String name = "";
+  String? cat;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +71,11 @@ class CreateMovement extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                           cursorColor: lightPrimary,
+                          onChanged: (value) {
+                            setState(() {
+                              name = value;
+                            });
+                          },
                           decoration: InputDecoration(
                             hintText: "Enter a name",
                             hintStyle: TextStyle(
@@ -101,7 +115,11 @@ class CreateMovement extends StatelessWidget {
                           ),
                         ),
                         addVerticalSpace(8),
-                        CategoryChoose(onSelected: () {}),
+                        CategoryChoose(onSelected: (category) {
+                          setState(() {
+                            cat = category;
+                          });
+                        }),
                         addVerticalSpace(18),
                         Text(
                           "choose source(optional)".toUpperCase(),
@@ -139,7 +157,16 @@ class CreateMovement extends StatelessWidget {
                             textDirection: TextDirection.rtl,
                             child: ElevatedButton.icon(
                               onPressed: () {
-                                onContinue();
+                                if (name.isEmpty || cat == null) {
+                                  showMessage(
+                                    message:
+                                        "Name and category fields are required",
+                                    title: "Fields required*",
+                                    type: MessageType.error,
+                                  );
+                                  return;
+                                }
+                                widget.onContinue(name, cat!);
                               },
                               icon: const Icon(Icons.arrow_back),
                               label: const Text("CONTINUE"),

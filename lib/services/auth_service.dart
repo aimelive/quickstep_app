@@ -29,6 +29,23 @@ class AuthService {
     }
   }
 
+  String? getAuthToken() {
+    try {
+      final data = authBox.keys.map((key) {
+        final value = authBox.get(key);
+        DateTime expiredAt = value["expiredAt"];
+        if (!expiredAt.isAfter(DateTime.now())) {
+          removeAuth();
+          throw Exception("Token expired");
+        }
+        return value["authToken"];
+      }).toList();
+      return data.reversed.toList().single;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<bool> addAuth(String token, Account account) async {
     try {
       await authBox.add(
@@ -148,6 +165,7 @@ class AuthService {
         'profilePic': await MultipartFile.fromFile(profilePic.path)
       });
       dio.options.headers["Authorization"] = "Bearer $token";
+
       final response =
           await dio.post('$backendApiUrl/profile/create', data: formData);
       return response.data;

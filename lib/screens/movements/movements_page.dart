@@ -48,7 +48,8 @@ class _MovementsPageState extends State<MovementsPage> {
                 children: [
                   movementController.obx(
                     (state) {
-                      final moves = state!;
+                      if (state == null) return Container();
+                      final moves = state;
                       moves.sort((a, b) => b.createdAt.compareTo(a.createdAt));
                       return Column(
                         children: moves

@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
-import '../../../../models/user.dart';
 import '../../widgets/app_bar_2.dart';
 
 class MembersPage extends StatelessWidget {
@@ -84,39 +83,39 @@ class MembersPage extends StatelessWidget {
                           ],
                         ),
                         addVerticalSpace(20),
-                        for (int i = 0; i < dummyUsers.length; i++)
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10.h),
-                            child: ListTile(
-                              onTap: () {},
-                              leading: CircleAvatar(
-                                radius: 27.r,
-                                backgroundColor: primary,
-                                child: CircleAvatar(
-                                  radius: 24.r,
-                                  backgroundColor: primary,
-                                  foregroundColor: white,
-                                  foregroundImage: AssetImage(
-                                    "assets/images/${dummyUsers[i].imgUrl}",
-                                  ),
-                                  child: Text(
-                                    dummyUsers[i].username[0].toUpperCase(),
-                                  ),
-                                ),
-                              ),
-                              title: Text(
-                                dummyUsers[i].username,
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              subtitle: Text(
-                                dummyUsers[i].caption,
-                                maxLines: 2,
-                              ),
-                            ),
-                          ),
+                        // for (int i = 0; i < dummyUsers.length; i++)
+                        //   Padding(
+                        //     padding: EdgeInsets.only(bottom: 10.h),
+                        //     child: ListTile(
+                        //       onTap: () {},
+                        //       leading: CircleAvatar(
+                        //         radius: 27.r,
+                        //         backgroundColor: primary,
+                        //         child: CircleAvatar(
+                        //           radius: 24.r,
+                        //           backgroundColor: primary,
+                        //           foregroundColor: white,
+                        //           foregroundImage: AssetImage(
+                        //             "assets/images/${dummyUsers[i].imgUrl}",
+                        //           ),
+                        //           child: Text(
+                        //             dummyUsers[i].username[0].toUpperCase(),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       title: Text(
+                        //         dummyUsers[i].username,
+                        //         style: TextStyle(
+                        //           fontSize: 16.sp,
+                        //           fontWeight: FontWeight.w600,
+                        //         ),
+                        //       ),
+                        //       subtitle: Text(
+                        //         dummyUsers[i].caption,
+                        //         maxLines: 2,
+                        //       ),
+                        //     ),
+                        //   ),
                         Row(
                           children: [
                             Icon(
@@ -135,39 +134,39 @@ class MembersPage extends StatelessWidget {
                           ],
                         ),
                         addVerticalSpace(20),
-                        for (int i = 0; i < dummyUsers.length - 2; i++)
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10.h),
-                            child: ListTile(
-                              onTap: () {},
-                              leading: CircleAvatar(
-                                radius: 27.r,
-                                backgroundColor: primary,
-                                child: CircleAvatar(
-                                  radius: 24.r,
-                                  backgroundColor: primary,
-                                  foregroundColor: white,
-                                  foregroundImage: AssetImage(
-                                    "assets/images/${dummyUsers[i].imgUrl}",
-                                  ),
-                                  child: Text(
-                                    dummyUsers[i].username[0].toUpperCase(),
-                                  ),
-                                ),
-                              ),
-                              title: Text(
-                                dummyUsers[i].username,
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              subtitle: Text(
-                                dummyUsers[i].caption,
-                                maxLines: 2,
-                              ),
-                            ),
-                          ),
+                        // for (int i = 0; i < dummyUsers.length - 2; i++)
+                        //   Padding(
+                        //     padding: EdgeInsets.only(bottom: 10.h),
+                        //     child: ListTile(
+                        //       onTap: () {},
+                        //       leading: CircleAvatar(
+                        //         radius: 27.r,
+                        //         backgroundColor: primary,
+                        //         child: CircleAvatar(
+                        //           radius: 24.r,
+                        //           backgroundColor: primary,
+                        //           foregroundColor: white,
+                        //           foregroundImage: AssetImage(
+                        //             "assets/images/${dummyUsers[i].imgUrl}",
+                        //           ),
+                        //           child: Text(
+                        //             dummyUsers[i].username[0].toUpperCase(),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       title: Text(
+                        //         dummyUsers[i].username,
+                        //         style: TextStyle(
+                        //           fontSize: 16.sp,
+                        //           fontWeight: FontWeight.w600,
+                        //         ),
+                        //       ),
+                        //       subtitle: Text(
+                        //         dummyUsers[i].caption,
+                        //         maxLines: 2,
+                        //       ),
+                        //     ),
+                        //   ),
                         Row(
                           children: [
                             Icon(

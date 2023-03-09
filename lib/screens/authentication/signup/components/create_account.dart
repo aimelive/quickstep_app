@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:quickstep_app/controllers/auth.dart';
 import 'package:quickstep_app/screens/components/top_snackbar.dart';
 
 import '../../../../services/auth_service.dart';
@@ -24,6 +26,7 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   final authService = AuthService();
+  final authState = Get.find<AuthState>();
 
   String? fullName;
   String? email;
@@ -37,12 +40,18 @@ class _CreateAccountState extends State<CreateAccount> {
     });
     final response =
         await authService.createAccount(fullName!, email!, password!);
-    //TODO: starting from here when am back.
-    print(response);
+    if (!mounted) return;
     setState(() {
       _isLoading = IsLoading.success;
     });
-    // widget.onContinue();
+    if (response == null) return;
+    authState.email.value = response["data"]["email"];
+    showMessage(
+      message: response["data"]["email"],
+      title: response["message"],
+      type: MessageType.success,
+    );
+    widget.onContinue();
   }
 
   @override

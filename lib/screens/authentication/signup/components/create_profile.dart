@@ -20,9 +20,7 @@ import 'create_account.dart';
 class CreateProfile extends StatefulWidget {
   const CreateProfile({
     Key? key,
-    required this.onStart,
   }) : super(key: key);
-  final VoidCallback onStart;
 
   @override
   State<CreateProfile> createState() => _CreateProfileState();

@@ -18,6 +18,10 @@ class CreateMovementPage extends StatefulWidget {
 
 class _CreateMovementPageState extends State<CreateMovementPage> {
   bool create = true;
+
+  String title = "";
+  String description = "";
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,18 +52,17 @@ class _CreateMovementPageState extends State<CreateMovementPage> {
             child: SlideFadeSwitcher(
               child: create
                   ? CreateMovement(
-                      onContinue: () {
+                      onContinue: (name, desc) {
                         setState(() {
+                          title = name;
+                          description = desc;
                           create = false;
                         });
                       },
                     )
                   : InviteMembers(
-                      onContinue: () {
-                        setState(() {
-                          create = true;
-                        });
-                      },
+                      title: title,
+                      description: description,
                     ),
             ),
           ),

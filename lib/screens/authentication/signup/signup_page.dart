@@ -4,7 +4,6 @@ import 'package:quickstep_app/screens/authentication/signup/components/create_pr
 import 'package:quickstep_app/screens/authentication/signup/components/verify_otp.dart';
 import 'package:quickstep_app/screens/movements/widgets/app_bar_2.dart';
 import 'package:quickstep_app/screens/widgets/slide_fade_switcher.dart';
-import 'package:quickstep_app/services/auth_service.dart';
 
 import '../../../utils/colors.dart';
 import 'components/create_account.dart';
@@ -35,20 +34,8 @@ class _SignUpPageState extends State<SignUpPage> {
           });
         },
       ),
-      VerifyOTP(onContinue: () {
-        setState(() {
-          selectedIndex = 2;
-        });
-      }, onPrev: () {
-        setState(() {
-          selectedIndex = 0;
-        });
-      }),
-      CreateProfile(onStart: () {
-        setState(() {
-          selectedIndex = 0;
-        });
-      })
+      const VerifyOTP(),
+      const CreateProfile()
     ];
   }
 

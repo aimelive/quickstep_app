@@ -162,16 +162,8 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
     });
   }
 
-  getMembers() {
-    members = dummyUsers;
-    for (var user in members) {
-      addMarker(user);
-    }
-  }
-
   @override
   void initState() {
-    getMembers();
     getCurrentLocation();
     _connectSocket();
     super.initState();

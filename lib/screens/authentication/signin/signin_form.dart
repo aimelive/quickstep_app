@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,7 +49,6 @@ class _SignInFormState extends State<SignInForm> {
     });
     if (response == null) return;
     try {
-      print(response["data"]["user"]["email"]);
       if (response["data"]["user"]["verified"]) {
         String token = response["data"]["token"];
 
@@ -103,19 +100,47 @@ class _SignInFormState extends State<SignInForm> {
           //Go to profile page
           if (!mounted) return;
           popPage(context);
-          Future.delayed(
-            const Duration(milliseconds: 400),
-            () => pushPage(
-              context,
-              to: const SignUpPage(
-                index: 2,
-              ),
+          pushPage(
+            context,
+            to: const SignUpPage(
+              index: 2,
             ),
           );
+          // Future.delayed(
+          //   const Duration(milliseconds: 350),
+          //   () {
+          //     if (!mounted) return;
+
+          //   },
+          // );
         }
       } else {
         //Go to verification page
-        print("Go to verification page");
+        showMessage(
+          message:
+              "Use OTP sent to your email recently and verify your account by entering in below fields",
+          title: "Verify Account",
+        );
+        auth.email.value = response["data"]["user"]["email"];
+
+        //Go to verification page
+        if (!mounted) return;
+        popPage(context);
+        pushPage(
+          context,
+          to: const SignUpPage(
+            index: 1,
+          ),
+        );
+        // Future.delayed(
+        //   const Duration(milliseconds: 400),
+        //   () => pushPage(
+        //     context,
+        //     to: const SignUpPage(
+        //       index: 1,
+        //     ),
+        //   ),
+        // );
       }
     } catch (e) {
       onUnkownError(e);

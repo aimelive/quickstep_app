@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:quickstep_app/controllers/movements_controller.dart';
-import 'package:quickstep_app/models/movement.dart';
 import 'package:quickstep_app/models/user.dart';
+import 'package:quickstep_app/screens/components/top_snackbar.dart';
+import 'package:quickstep_app/services/db_service.dart';
 import 'package:quickstep_app/utils/colors.dart';
 
+import '../../../services/auth_service.dart';
 import '../../../utils/helpers.dart';
 
 class InviteMembers extends StatefulWidget {
   const InviteMembers({
     Key? key,
-    required this.onContinue,
+    required this.title,
+    required this.description,
   }) : super(key: key);
-  final VoidCallback onContinue;
+
+  final String title, description;
 
   @override
   State<InviteMembers> createState() => _InviteMembersState();
@@ -22,6 +28,67 @@ class InviteMembers extends StatefulWidget {
 class _InviteMembersState extends State<InviteMembers> {
   List<User> selected = [];
   final _moveCnt = Get.find<MovementController>();
+  final dbService = DBService();
+  final profile = AuthService().getAuth();
+
+  late bool isLoading;
+  List<User> users = [];
+
+  bool isCreating = false;
+
+  void _init() async {
+    isLoading = true;
+    final profiles = await dbService.getUsers();
+    if (profiles == null) return;
+    for (var profile in profiles) {
+      users.add(
+        User(
+          id: profile.userId,
+          imgUrl: profile.imgUrl,
+          username: profile.username,
+          caption: profile.email,
+          location: const LatLng(-1.9167999680077046, 30.082668172142643),
+        ),
+      );
+    }
+    isLoading = false;
+    if (!mounted) return;
+    setState(() {});
+  }
+
+  void _createMovement() async {
+    setState(() {
+      isCreating = true;
+    });
+    final movement = await dbService.createMovement(
+      title: widget.title,
+      description: "This movement created as ${widget.description}",
+      actors: selected.map<String>((user) => user.id).toList(),
+      creatorName: profile!.fullName,
+    );
+    if (!mounted) return;
+    setState(() {
+      isCreating = false;
+    });
+    if (movement == null) return;
+    showMessage(
+      message: "You created movement ${movement.title}",
+      title: "Movement created successfully",
+      type: MessageType.success,
+    );
+
+    _moveCnt.addMovement(movement);
+
+    if (!mounted) return;
+    popPage(context);
+  }
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -75,20 +142,20 @@ class _InviteMembersState extends State<InviteMembers> {
                 addVerticalSpace(18),
                 Column(
                   children: [
-                    for (int i = 0; i < dummyUsers.length; i++)
+                    for (int i = 0; i < users.length; i++)
                       Padding(
                         padding: EdgeInsets.only(bottom: 10.h),
                         child: ListTile(
                           onTap: () {
-                            if (selected.contains(dummyUsers[i])) {
-                              selected.remove(dummyUsers[i]);
+                            if (selected.contains(users[i])) {
+                              selected.remove(users[i]);
                             } else {
-                              selected.add(dummyUsers[i]);
+                              selected.add(users[i]);
                             }
 
                             setState(() {});
                           },
-                          selected: selected.contains(dummyUsers[i]),
+                          selected: selected.contains(users[i]),
                           selectedTileColor: Colors.grey.shade200,
                           selectedColor: primary,
                           leading: CircleAvatar(
@@ -98,30 +165,28 @@ class _InviteMembersState extends State<InviteMembers> {
                               radius: 24.r,
                               backgroundColor: primary,
                               foregroundColor: white,
-                              foregroundImage: AssetImage(
-                                "assets/images/${dummyUsers[i].imgUrl}",
-                              ),
+                              foregroundImage: NetworkImage(users[i].imgUrl),
                               child: Text(
-                                dummyUsers[i].username[0].toUpperCase(),
+                                users[i].username[0].toUpperCase(),
                               ),
                             ),
                           ),
                           title: Text(
-                            dummyUsers[i].username,
+                            users[i].username,
                             style: TextStyle(
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           subtitle: Text(
-                            dummyUsers[i].caption,
+                            users[i].caption,
                             maxLines: 2,
                           ),
                           trailing: CircleAvatar(
                             backgroundColor: lightPrimary,
                             foregroundColor: white,
                             radius: 12.r,
-                            child: selected.contains(dummyUsers[i])
+                            child: selected.contains(users[i])
                                 ? Icon(
                                     Icons.check,
                                     size: 16.sp,
@@ -137,28 +202,37 @@ class _InviteMembersState extends State<InviteMembers> {
                   child: Directionality(
                     textDirection: TextDirection.rtl,
                     child: ElevatedButton.icon(
-                      onPressed: () {
-                        _moveCnt.addMovement(
-                          Movement(
-                            id: "jeniffer-lopez",
-                            title: "Urugendo ruhire rwa jeniffer lopez",
-                            description: "Kubera ko nkunda Imana nabantu",
-                            members: 4,
-                            creator: "Munyanindi Dieudonne",
-                            createdAt: DateTime.now(),
-                            km: 8,
-                            role: Role.creator,
-                          ),
-                        );
-                        popPage(context);
-                        // widget.onContinue();
-                      },
-                      icon: Icon(
-                        Icons.share,
-                        size: 24.sp,
+                      onPressed: isCreating
+                          ? null
+                          : () {
+                              if (selected.isEmpty) {
+                                showMessage(
+                                  message:
+                                      "Please select a member to start a movement",
+                                  title: "No member selected",
+                                  type: MessageType.error,
+                                );
+                                return;
+                              }
+                              _createMovement();
+                            },
+                      icon: isCreating
+                          ? LoadingAnimationWidget.inkDrop(
+                              color: white, size: 18.sp)
+                          : Icon(
+                              Icons.share,
+                              size: 24.sp,
+                            ),
+                      style: ElevatedButton.styleFrom(
+                        disabledBackgroundColor: lightPrimary,
+                        disabledForegroundColor: white,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 30.w,
+                          vertical: 7.h,
+                        ),
                       ),
                       label: Text(
-                        "  INVITE  ",
+                        isCreating ? "  LOADING  " : "  INVITE  ",
                         style: TextStyle(
                           fontSize: 14.sp,
                         ),

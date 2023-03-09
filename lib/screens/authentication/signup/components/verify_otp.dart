@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:quickstep_app/screens/authentication/signup/widgets/otp_number_widget.dart';
 import 'package:quickstep_app/services/auth_service.dart';
 
+import '../../../../controllers/auth.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/helpers.dart';
+import '../../../components/top_snackbar.dart';
 
 class VerifyOTP extends StatefulWidget {
   const VerifyOTP({
     Key? key,
-    required this.onContinue,
-    required this.onPrev,
   }) : super(key: key);
-
-  final VoidCallback onPrev;
-  final VoidCallback onContinue;
 
   @override
   State<VerifyOTP> createState() => _VerifyOTPState();
@@ -27,10 +26,14 @@ class _VerifyOTPState extends State<VerifyOTP> {
   final ct4 = TextEditingController();
 
   final authService = AuthService();
+  final authState = Get.find<AuthState>();
+
+  bool isResending = false;
+  bool isVerifying = false;
 
   @override
   Widget build(BuildContext context) {
-    // print(widget.email);
+    // print(authState.email);
     return Column(
       children: [
         Expanded(
@@ -82,53 +85,56 @@ class _VerifyOTPState extends State<VerifyOTP> {
                           ],
                         ),
                         addVerticalSpace(30),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () async {
-                                // await authService.resendOTP(widget.email);
-                                // showMessage(
-                                //   message: "OTP resent on ${widget.email}",
-                                //   title: "Resend OTP",
-                                // );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 30.w,
-                                  vertical: 8.h,
-                                ),
+                        Directionality(
+                          textDirection: TextDirection.rtl,
+                          child: ElevatedButton.icon(
+                            onPressed: isVerifying
+                                ? null
+                                : () async {
+                                    final str =
+                                        "${ct1.text}${ct2.text}${ct3.text}${ct4.text}";
+                                    if (int.tryParse(str) == null) return;
+                                    int otp = int.parse(str);
+                                    setState(() {
+                                      isVerifying = true;
+                                    });
+                                    final result = await authService.verifyOTP(
+                                      authState.email.value,
+                                      otp,
+                                    );
+                                    if (!mounted) return;
+                                    setState(() {
+                                      isVerifying = false;
+                                    });
+                                    if (result == null) return;
+                                    showMessage(
+                                      message:
+                                          "Account verified successfully, you can now sign in",
+                                      title: "Account verified successfully",
+                                      type: MessageType.success,
+                                    );
+                                    popPage(context);
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              disabledBackgroundColor: lightPrimary,
+                              disabledForegroundColor: white,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 30.w,
+                                vertical: 8.h,
                               ),
-                              // icon: const Icon(Icons.arrow_back),
-                              child: const Text("RESEND"),
                             ),
-                            Directionality(
-                              textDirection: TextDirection.rtl,
-                              child: ElevatedButton.icon(
-                                onPressed: () async {
-                                  final str =
-                                      "${ct1.text}${ct2.text}${ct3.text}${ct4.text}";
-                                  if (int.tryParse(str) == null) return;
-                                  int otp = int.parse(str);
-                                  // final result = await authService.verifyOTP(
-                                  //   widget.email,
-                                  //   otp,
-                                  // );
-                                  // if (result.runtimeType != ErrorException) {
-                                  //   widget.onContinue();
-                                  // }
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 30.w,
-                                    vertical: 8.h,
+                            icon: isVerifying
+                                ? LoadingAnimationWidget.inkDrop(
+                                    color: white, size: 18.sp)
+                                : Icon(
+                                    Icons.arrow_back,
+                                    size: 22.sp,
                                   ),
-                                ),
-                                icon: const Icon(Icons.arrow_back),
-                                label: const Text("VERIFY"),
-                              ),
+                            label: Text(
+                              isVerifying ? "LOADING " : "VERIFY",
+                              style: TextStyle(fontSize: 12.sp),
                             ),
-                          ],
+                          ),
                         ),
                         addVerticalSpace(30),
                         Row(
@@ -139,10 +145,46 @@ class _VerifyOTPState extends State<VerifyOTP> {
                           ],
                         ),
                         addVerticalSpace(30),
-                        ElevatedButton.icon(
-                          onPressed: widget.onPrev,
-                          icon: const Icon(Icons.arrow_back),
-                          label: const Text("GO BACK"),
+                        Text(
+                          "If you haven't received an email with OTP, click here to resend back to you",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                        addVerticalSpace(30),
+                        ElevatedButton(
+                          onPressed: isResending
+                              ? null
+                              : () async {
+                                  setState(() {
+                                    isResending = true;
+                                  });
+                                  final response = await authService
+                                      .resendOTP(authState.email.value);
+                                  setState(() {
+                                    isResending = false;
+                                  });
+                                  if (response == null) return;
+                                  showMessage(
+                                    message:
+                                        "OTP resent on ${authState.email.value}, check your email and enter the number sent to you in below fields",
+                                    title: "Resend OTP",
+                                  );
+                                },
+                          style: ElevatedButton.styleFrom(
+                            disabledBackgroundColor: lightPrimary,
+                            disabledForegroundColor: white,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 30.w,
+                              vertical: 8.h,
+                            ),
+                          ),
+                          child: Text(
+                            isResending ? "SENDING..." : "RESEND",
+                            style: TextStyle(fontSize: 12.sp),
+                          ),
                         ),
                       ],
                     ),

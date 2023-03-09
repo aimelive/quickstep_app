@@ -14,14 +14,13 @@ class MovementController extends GetxController
   }
 
   getMovements() async {
-    movements = dummyMovements;
+    // movements = dummyMovements;
     change(movements, status: RxStatus.loading());
     final moves = await dbService.getMovements();
     change(moves, status: RxStatus.success());
   }
 
   addMovement(Movement movement) {
-    change(movements, status: RxStatus.loading());
     movements.add(movement);
     change(movements, status: RxStatus.success());
   }

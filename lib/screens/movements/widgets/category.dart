@@ -9,7 +9,7 @@ class CategoryChoose extends StatefulWidget {
     Key? key,
     required this.onSelected,
   }) : super(key: key);
-  final VoidCallback onSelected;
+  final void Function(String category) onSelected;
 
   @override
   State<CategoryChoose> createState() => _CategoryChooseState();
@@ -122,6 +122,7 @@ class _CategoryChooseState extends State<CategoryChoose> {
         setState(() {
           selectedIndex = item.index;
         });
+        widget.onSelected(item.text);
       },
       borderRadius: BorderRadius.circular(25.r),
       child: Ink(
