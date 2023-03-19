@@ -6,6 +6,7 @@ class MovementController extends GetxController
     with StateMixin<List<Movement>> {
   List<Movement> movements = RxList<Movement>([]);
   final dbService = DBService();
+  var currentMovementId = "".obs;
 
   @override
   void onInit() {
@@ -21,7 +22,18 @@ class MovementController extends GetxController
   }
 
   addMovement(Movement movement) {
-    movements.add(movement);
-    change(movements, status: RxStatus.success());
+    getMovements();
+  }
+
+  removeMovement(String id) {
+    getMovements();
+  }
+
+  Future<bool> leaveMovement() async {
+    final res = await dbService.leaveMovement(currentMovementId.value);
+    if (res == true) {
+      getMovements();
+    }
+    return res;
   }
 }

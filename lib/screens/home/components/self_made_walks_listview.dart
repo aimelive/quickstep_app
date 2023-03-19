@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quickstep_app/models/self_made_walk.dart';
 import 'package:quickstep_app/screens/home/components/map_self_made_walk.dart';
+import 'package:quickstep_app/services/auth_service.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../../controllers/self_made_walks_controller.dart';
@@ -20,29 +21,19 @@ class SelfMadeWalksWidget extends StatefulWidget {
 }
 
 class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
-  // late HiveService _hiveService;
   final walkController = Get.put(WalksController());
-  // List<SelfMadeWalk> walks = [];
+  final profile = AuthService().getAuth();
 
   void getWalks() {
     walkController.getWalks();
-    // final res = _hiveService.getAllWalks();
-    // setState(() {
-    //   walks = res;
-    // });
   }
 
   void _handleDelete(SelfMadeWalk walk) async {
     walkController.removeWalk(walk);
-    // final res = await _hiveService.deleteWalk(id);
-    // if (res) {
-    //   getWalks();
-    // }
   }
 
   @override
   void initState() {
-    // _hiveService = HiveService();
     getWalks();
     super.initState();
   }
@@ -115,7 +106,13 @@ class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
                       final walk = walks[index];
                       return Container(
                         decoration: BoxDecoration(
-                          color: lightPrimary,
+                          color: white,
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 10,
+                              color: lightPrimary,
+                            )
+                          ],
                           borderRadius: BorderRadius.circular(8.r),
                           image: const DecorationImage(
                             image: AssetImage("assets/images/map.jpeg"),
@@ -160,65 +157,17 @@ class _SelfMadeWalksWidgetState extends State<SelfMadeWalksWidget> {
                                 ),
                               ),
                               Expanded(
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      top: 22.h,
-                                      left: 110.w,
-                                      child: CircleAvatar(
-                                        radius: 14.r,
-                                        foregroundImage: const AssetImage(
-                                          "assets/images/aime.png",
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 20.h,
-                                      left: 90.w,
-                                      child: CircleAvatar(
-                                        radius: 16.r,
-                                        foregroundImage: const AssetImage(
-                                          "assets/images/aime.png",
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 18.h,
-                                      left: 70.w,
-                                      child: CircleAvatar(
-                                        radius: 20.r,
-                                        foregroundImage: const AssetImage(
-                                          "assets/images/aime.png",
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 22.h,
-                                      right: 110.w,
-                                      child: CircleAvatar(
-                                        radius: 14.r,
-                                        foregroundImage: const AssetImage(
-                                          "assets/images/aime.png",
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 20.h,
-                                      right: 90.w,
-                                      child: CircleAvatar(
-                                        radius: 16.r,
-                                        foregroundImage: const AssetImage(
-                                          "assets/images/aime.png",
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                child: CircleAvatar(
+                                  radius: 32.r,
+                                  foregroundImage: NetworkImage(
+                                    profile!.profilePic,
+                                  ),
                                 ),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 8.h),
                                 child: Text(
-                                  walk.title,
+                                  cfl(walk.title),
                                   textAlign: TextAlign.center,
                                   maxLines: 2,
                                   style: TextStyle(

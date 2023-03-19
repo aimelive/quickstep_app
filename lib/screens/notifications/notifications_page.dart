@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quickstep_app/models/notification.dart';
+import 'package:quickstep_app/services/db_service.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
@@ -13,34 +15,27 @@ class NotificationsPage extends StatefulWidget {
   State<NotificationsPage> createState() => _NotificationsPageState();
 }
 
-class _NotificationsPageState extends State<NotificationsPage>
-    with SingleTickerProviderStateMixin {
-  late AnimationController animation;
+class _NotificationsPageState extends State<NotificationsPage> {
+  final dbService = DBService();
+
+  List<AppNotification> notifications = [];
+
+  void _init() async {
+    final notis = await dbService.getNotifications();
+    if (notis == null || !mounted) return;
+    setState(() {
+      notifications = notis;
+    });
+  }
 
   @override
   void initState() {
-    animation = AnimationController(
-      vsync: this,
-      duration: const Duration(
-        milliseconds: 350,
-      ),
-      // upperBound: 0.0,
-      // lowerBound: 1.0,
-    )..addListener(() {
-        setState(() {});
-      });
+    _init();
     super.initState();
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    animation.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-     
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -54,24 +49,35 @@ class _NotificationsPageState extends State<NotificationsPage>
                 onPress: () => popPage(context),
                 icon: Icons.arrow_back,
               ),
-              IconShadowButton(
-                onPress: () {
-                  if (animation.isCompleted) {
-                    animation.reverse();
-                  } else {
-                    animation.forward();
-                  }
-                },
-                icon: animation.value > 0 ? Icons.menu : Icons.close,
-              ),
             ],
           ),
         ),
       ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Padding(
+      body: notifications.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.notifications_off_outlined,
+                    size: 80.sp,
+                    color: lightPrimary,
+                  ),
+                  addVerticalSpace(10),
+                  Text(
+                    "You have no recent notifications",
+                    style: TextStyle(fontSize: 15.sp),
+                  ),
+                  addVerticalSpace(10),
+                  ElevatedButton(
+                    onPressed: () => popPage(context),
+                    child: const Text("Go Back"),
+                  ),
+                  addVerticalSpace(100),
+                ],
+              ),
+            )
+          : SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,70 +91,20 @@ class _NotificationsPageState extends State<NotificationsPage>
                     ),
                   ),
                   addVerticalSpace(10),
-                  const SectionTitle("Today"),
-                  for (int i = 0; i < 2; i++) const NotificationTile(),
-                  const SectionTitle("Yesterday"),
-                  for (int i = 0; i < 2; i++) const NotificationTile(),
-                  const SectionTitle("This week"),
-                  for (int i = 0; i < 2; i++) const NotificationTile(),
-                  const SectionTitle("This month"),
-                  for (int i = 0; i < 2; i++) const NotificationTile(),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            // top: -240.w * animation.value,
-            right: -240.w * animation.value,
-            child: Container(
-              // height: 200,
-              margin: EdgeInsets.only(right: 20.w),
-              decoration: BoxDecoration(
-                color: white,
-                borderRadius: BorderRadius.circular(10.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: lightPrimary.withOpacity(0.7),
-                    blurRadius: 10,
-                  ),
-                ],
-              ),
-              width: 220.w,
-              child: Column(
-                children: [
-                  addVerticalSpace(5),
-                  for (int i = 0; i < MenuItem.items.length; i++)
-                    Material(
-                      color: white,
-                      child: ListTile(
-                        leading: Padding(
-                          padding: EdgeInsets.all(10.r),
-                          child: Icon(
-                            MenuItem.items[i].icon,
-                            size: 24.sp,
-                          ),
-                        ),
-                        onTap: () {
-                          // animation.forward();
-                        },
-                        iconColor: primary.withOpacity(1 - animation.value),
-                        textColor: primary.withOpacity(1 - animation.value),
-                        // contentPadding: EdgeInsets.symmetric(vertical: 2.h),
-                        title: Text(
-                          MenuItem.items[i].title,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                  // const SectionTitle("Today"),
+                  for (int i = 0; i < notifications.length; i++)
+                    NotificationTile(
+                      notification: notifications[i],
+                      dbService: dbService,
+                      onDeleted: () {
+                        setState(() {
+                          notifications.remove(notifications[i]);
+                        });
+                      },
                     ),
-                  addVerticalSpace(5),
                 ],
               ),
             ),
-          )
-        ],
-      ),
     );
   }
 }

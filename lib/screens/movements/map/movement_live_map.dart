@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:quickstep_app/controllers/movements_controller.dart';
 import 'package:quickstep_app/models/account.dart';
 import 'package:quickstep_app/models/movement.dart';
 import 'package:quickstep_app/screens/components/top_snackbar.dart';
@@ -29,6 +31,7 @@ class MovementLiveMap extends StatefulWidget {
 }
 
 class _MovementLiveMapState extends State<MovementLiveMap> {
+  final moveCnt = Get.find<MovementController>();
   GoogleMapController? mapController;
 
   Map<String, Marker> markers = {};
@@ -41,7 +44,7 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
 
   //Sockets connections
   final io.Socket _socket = io.io(
-    backendUrl,
+    backendUrl.split('/api/v1')[0],
     io.OptionBuilder().setTransports(['websocket']).build(),
   );
 
@@ -166,6 +169,7 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
   void initState() {
     getCurrentLocation();
     _connectSocket();
+    moveCnt.currentMovementId.value = widget.movement.id;
     super.initState();
   }
 
@@ -234,7 +238,8 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         floatingActionButton: mapController != null
-            ? CircularFabWidget(gMapController: mapController!)
+            ? CircularFabWidget(
+                gMapController: mapController!, id: widget.movement.id)
             : null,
       ),
     );

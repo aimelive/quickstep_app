@@ -1,6 +1,8 @@
 import 'package:quickstep_app/models/movement.dart';
 import 'package:dio/dio.dart';
+import 'package:quickstep_app/models/notification.dart';
 import 'package:quickstep_app/models/profile.dart';
+import 'package:quickstep_app/screens/components/top_snackbar.dart';
 import 'package:quickstep_app/utils/keys.dart';
 
 import 'auth_service.dart';
@@ -27,6 +29,37 @@ class DBService {
     } catch (e) {
       onUnkownError(e);
       return null;
+    }
+  }
+
+  Future<Movement?> getOneMovement(String id) async {
+    try {
+      dio.options.headers["Authorization"] =
+          "Bearer ${authService.getAuthToken()}";
+      final res = await dio.get("$backendApiUrl/movements/$id");
+      return Movement.fromJSON(res.data["data"]);
+    } on DioError catch (e) {
+      onDioError(e);
+      return null;
+    } catch (e) {
+      onUnkownError(e);
+      return null;
+    }
+  }
+
+  Future<bool> leaveMovement(String id) async {
+    try {
+      dio.options.headers["Authorization"] =
+          "Bearer ${authService.getAuthToken()}";
+      final res = await dio.patch("$backendApiUrl/movements/$id");
+      showMessage(message: res.data["message"], title: res.data["data"]);
+      return true;
+    } on DioError catch (e) {
+      onDioError(e);
+      return false;
+    } catch (e) {
+      onUnkownError(e);
+      return false;
     }
   }
 
@@ -80,7 +113,11 @@ class DBService {
     try {
       dio.options.headers["Authorization"] =
           "Bearer ${authService.getAuthToken()}";
-      await dio.delete("$backendApiUrl/movements/$id");
+      final res = await dio.delete("$backendApiUrl/movements/$id");
+      onSuccess(
+        title: "Movement deleted",
+        message: res.data["message"],
+      );
       return true;
     } on DioError catch (e) {
       onDioError(e);
@@ -88,6 +125,43 @@ class DBService {
     } catch (e) {
       onUnkownError(e);
       return null;
+    }
+  }
+
+  Future<List<AppNotification>?> getNotifications() async {
+    try {
+      dio.options.headers["Authorization"] =
+          "Bearer ${authService.getAuthToken()}";
+      final res = await dio.get("$backendApiUrl/notifications");
+
+      List<AppNotification> notis = [];
+
+      for (var notification in res.data["notifications"]) {
+        notis.add(AppNotification.fromJSON(notification));
+      }
+
+      return notis;
+    } on DioError catch (e) {
+      onDioError(e);
+      return null;
+    } catch (e) {
+      onUnkownError(e);
+      return null;
+    }
+  }
+
+  Future<bool> deleteNotification(String id) async {
+    try {
+      dio.options.headers["Authorization"] =
+          "Bearer ${authService.getAuthToken()}";
+      await dio.delete("$backendApiUrl/notifications/$id");
+      return true;
+    } on DioError catch (e) {
+      onDioError(e);
+      return false;
+    } catch (e) {
+      onUnkownError(e);
+      return false;
     }
   }
 }

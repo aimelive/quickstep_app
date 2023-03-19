@@ -53,21 +53,52 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  "personal info".toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: primary.withOpacity(0.7),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 ListTile(
-                  leading: Icon(Icons.run_circle_outlined, size: 25.sp),
+                  leading: Icon(
+                    Icons.mail_outline_outlined,
+                    size: 25.sp,
+                  ),
                   title: Text(
-                    "Inactive",
+                    "Email",
                     style: TextStyle(fontSize: 14.sp),
                   ),
                   subtitle: Text(
-                    "Set your self as away",
+                    profile.email,
                     style: TextStyle(fontSize: 12.sp),
                   ),
-                  onTap: () {},
                 ),
+                Text(
+                  "general".toUpperCase(),
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: primary.withOpacity(0.7),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                // ListTile(
+                //   leading: Icon(Icons.run_circle_outlined, size: 25.sp),
+                //   title: Text(
+                //     "Inactive",
+                //     style: TextStyle(fontSize: 14.sp),
+                //   ),
+                //   subtitle: Text(
+                //     "Set your self as away",
+                //     style: TextStyle(fontSize: 12.sp),
+                //   ),
+                //   onTap: () {},
+                // ),
                 ListTile(
                   leading: Icon(
                     Icons.cached,

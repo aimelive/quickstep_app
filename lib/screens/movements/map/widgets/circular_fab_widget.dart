@@ -3,8 +3,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:quickstep_app/controllers/movements_controller.dart';
 import 'package:quickstep_app/screens/components/warn_method.dart';
+import 'package:quickstep_app/services/db_service.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
@@ -14,6 +17,7 @@ class FabItem {
   String text;
   IconData icon;
   VoidCallback onPress;
+
   FabItem({
     required this.text,
     required this.icon,
@@ -25,8 +29,11 @@ class CircularFabWidget extends StatefulWidget {
   const CircularFabWidget({
     Key? key,
     required this.gMapController,
+    required this.id,
   }) : super(key: key);
+
   final GoogleMapController gMapController;
+  final String id;
 
   @override
   State<CircularFabWidget> createState() => _CircularFabWidgetState();
@@ -37,6 +44,9 @@ class _CircularFabWidgetState extends State<CircularFabWidget>
   late AnimationController controller;
 
   late List<FabItem> fabItems;
+
+  final dbService = DBService();
+  final _mvt = Get.find<MovementController>();
 
   _init() {
     fabItems = [
@@ -50,8 +60,12 @@ class _CircularFabWidgetState extends State<CircularFabWidget>
             subtitle: "Are you sure do you want to close this movement?",
             okButtonText: "Close",
           );
-          if (close == null || !mounted) return;
-          popPage(context);
+          if (close == null) return;
+          final deleted = await dbService.deleteMovement(widget.id);
+          if (deleted == true && mounted) {
+            _mvt.removeMovement(widget.id);
+            popPage(context);
+          }
         },
       ),
       FabItem(

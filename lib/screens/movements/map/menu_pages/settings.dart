@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:quickstep_app/controllers/movements_controller.dart';
+import 'package:quickstep_app/screens/components/warn_method.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
 import '../../widgets/app_bar_2.dart';
 import 'widgets/setting_tile.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  final move = Get.find<MovementController>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -101,6 +110,27 @@ class SettingsPage extends StatelessWidget {
                         active: true,
                         subText:
                             "Disable other users to view your current location",
+                      ),
+                      SettingTile(
+                        icon: Icons.logout_outlined,
+                        onTap: () async {
+                          final res = await warnMethod(
+                            context,
+                            title: "Leave Movement Forever?",
+                            subtitle:
+                                "Are you sure do you want to leave this movement forever?",
+                            okButtonText: "Leave",
+                          );
+                          if (res == true && mounted) {
+                            // popPage(context, data: "LEAVE_FOREVER");
+                            final leave = await move.leaveMovement();
+                            if (leave && mounted) {
+                              popPage(context, data: "LEAVE");
+                            }
+                          }
+                        },
+                        text: "Leave movement",
+                        subText: "Leave this movement forever",
                       ),
                     ],
                   ),

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:quickstep_app/controllers/movements_controller.dart';
 import 'package:quickstep_app/screens/movements/create_movement.dart';
+import 'package:quickstep_app/screens/movements/widgets/on_empty.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
 import 'widgets/movement_tile.dart';
@@ -51,6 +52,9 @@ class _MovementsPageState extends State<MovementsPage> {
                       if (state == null) return Container();
                       final moves = state;
                       moves.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+                      if (moves.isEmpty) {
+                        return const OnEmpty();
+                      }
                       return Column(
                         children: moves
                             .map<Widget>(
@@ -60,7 +64,7 @@ class _MovementsPageState extends State<MovementsPage> {
                       );
                     },
                     onLoading: const Text("Loading, please wait..."),
-                    onEmpty: const Text("Empty..."),
+                    onEmpty: const OnEmpty(),
                     onError: (error) => Text("$error"),
                   ),
                 ],

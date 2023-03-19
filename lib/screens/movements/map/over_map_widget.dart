@@ -86,12 +86,16 @@ class _OverMapWidgetState extends State<OverMapWidget> {
                             color: white,
                             borderRadius: BorderRadius.circular(8.r),
                             child: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  showMenu = false;
-                                });
-
-                                pushPage(context, to: MapMenu.items[i].page);
+                              onTap: () async {
+                                final data = await pushPage(context,
+                                    to: MapMenu.items[i].page);
+                                if (data == "LEAVE" && mounted) {
+                                  popPage(context);
+                                } else {
+                                  setState(() {
+                                    showMenu = false;
+                                  });
+                                }
                               },
                               child: Ink(
                                 padding: EdgeInsets.symmetric(

@@ -140,6 +140,27 @@ class _InviteMembersState extends State<InviteMembers> {
                   ],
                 ),
                 addVerticalSpace(18),
+                if (users.isEmpty)
+                  Padding(
+                    padding: EdgeInsets.all(20.r),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.hide_source,
+                          size: 40.sp,
+                          color: Colors.red.shade300,
+                        ),
+                        addVerticalSpace(20),
+                        Text(
+                          "We're sorry, there is no any member in our system you can invite to your movement",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 Column(
                   children: [
                     for (int i = 0; i < users.length; i++)

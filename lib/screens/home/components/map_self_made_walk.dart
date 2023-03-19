@@ -184,7 +184,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                   child: AnotherCustomAppBar(
                     title: widget.walk == null
                         ? "Self-made Walk"
-                        : widget.walk!.title * 2,
+                        : cfl(widget.walk!.title),
                   ),
                 ),
               ),

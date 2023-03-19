@@ -82,7 +82,6 @@ class MovementTile extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 4.h),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
@@ -102,24 +101,7 @@ class MovementTile extends StatelessWidget {
                             )
                           ],
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.location_on_outlined,
-                              size: 15.sp,
-                              color: Colors.green.shade400,
-                            ),
-                            Text(
-                              " ${movement.km}km",
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: Colors.green.shade500,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            )
-                          ],
-                        ),
+                        addHorizontalSpace(10),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
@@ -129,7 +111,7 @@ class MovementTile extends StatelessWidget {
                               color: primary,
                             ),
                             Text(
-                              " 15+",
+                              " ${movement.members}+",
                               style: TextStyle(
                                 fontSize: 12.sp,
                                 color: primary,

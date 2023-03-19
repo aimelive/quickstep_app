@@ -177,16 +177,6 @@ class AuthService {
   }
 }
 
-// class ErrorException {
-//   int status;
-//   String message;
-
-//   ErrorException({
-//     required this.status,
-//     required this.message,
-//   });
-// }
-
 void onDioError(DioError e) {
   if (e.response != null) {
     final data = e.response?.data;
@@ -199,7 +189,7 @@ void onDioError(DioError e) {
     } catch (e) {
       showMessage(
         message:
-            "Something went wrong | Invalid image file | Unknown error occured, try again later or contact admin",
+            "Something went wrong | Unknown error occured, try again later or contact admin",
         title: "Internal Server Error",
         type: MessageType.error,
       );
@@ -218,5 +208,13 @@ void onUnkownError(Object e) {
     message: e.toString(),
     title: "Something went wrong",
     type: MessageType.error,
+  );
+}
+
+void onSuccess({required String title, required String message}) {
+  showMessage(
+    message: message,
+    title: title,
+    type: MessageType.success,
   );
 }

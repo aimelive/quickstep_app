@@ -27,29 +27,28 @@ class _LayoutPageState extends State<LayoutPage> {
   int currentPage = 0;
   late Account profile;
 
-  void gotoExplore() {
+  _onExplore() {
+    if (currentPage == 2) return;
+    setState(() {
+      currentPage = 2;
+    });
+  }
+
+  _init() {
     pages = [
       HomePage(
-        onExploreMore: () {
-          setState(() {
-            currentPage = 2;
-          });
-        },
+        onExploreMore: _onExplore,
       ),
       const ActivitiesPage(),
       const MovementsPage(),
       ProfilePage(),
     ];
-  }
-
-  _init() {
     final hive = AuthService();
     profile = hive.getAuth()!;
   }
 
   @override
   void initState() {
-    gotoExplore();
     _init();
     super.initState();
   }
@@ -74,7 +73,7 @@ class _LayoutPageState extends State<LayoutPage> {
               tag: "appbar-hero-custom-1",
               child: Material(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                child: const MyAppBar(),
+                child: MyAppBar(gotoExplore: _onExplore),
               ),
             ),
             toolbarHeight: 100.h,
