@@ -16,7 +16,8 @@ class MovementController extends GetxController
 
   getMovements() async {
     // movements = dummyMovements;
-    change(movements, status: RxStatus.loading());
+    if (isClosed) return;
+    // change(movements, status: RxStatus.loading());
     final moves = await dbService.getMovements();
     change(moves, status: RxStatus.success());
   }
