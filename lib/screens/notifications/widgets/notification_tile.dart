@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:quickstep_app/controllers/movements_controller.dart';
 import 'package:quickstep_app/models/notification.dart';
+import 'package:quickstep_app/screens/components/warn_method.dart';
 import 'package:quickstep_app/services/db_service.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
@@ -130,6 +131,14 @@ class _NotificationTileState extends State<NotificationTile> {
                         onPressed: isDeclining || isDeleting
                             ? null
                             : () async {
+                                final wantDecline = await warnMethod(
+                                  context,
+                                  title: "Decline Movement",
+                                  subtitle:
+                                      "Are you sure do you want to decline joining the movement?",
+                                  okButtonText: "Decline",
+                                );
+                                if (wantDecline != true) return;
                                 setState(() {
                                   isDeclining = true;
                                 });
@@ -183,6 +192,14 @@ class _NotificationTileState extends State<NotificationTile> {
               onTap: isDeleting || isDeclining
                   ? null
                   : () async {
+                      final wantDelete = await warnMethod(
+                        context,
+                        title: "Clear Notification",
+                        subtitle:
+                            "Are you sure do you clear this notification?",
+                        okButtonText: "Clear",
+                      );
+                      if (wantDelete != true) return;
                       setState(() {
                         isDeleting = true;
                       });

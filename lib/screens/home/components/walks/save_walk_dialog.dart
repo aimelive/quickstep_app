@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../utils/colors.dart';
-import '../../../utils/helpers.dart';
-import '../../authentication/signup/widgets/text_input_field.dart';
+import '../../../../utils/colors.dart';
+import '../../../../utils/helpers.dart';
+import '../../../authentication/signup/widgets/text_input_field.dart';
 
 class SaveWalkDialog extends StatefulWidget {
   const SaveWalkDialog({

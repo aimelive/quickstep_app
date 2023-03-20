@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:quickstep_app/controllers/movements_controller.dart';
 import 'package:quickstep_app/screens/movements/create_movement.dart';
 import 'package:quickstep_app/screens/movements/widgets/on_empty.dart';
+import 'package:quickstep_app/screens/movements/widgets/on_error.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
 import 'widgets/movement_tile.dart';
@@ -49,7 +50,9 @@ class _MovementsPageState extends State<MovementsPage> {
                 children: [
                   movementController.obx(
                     (state) {
-                      if (state == null) return Container();
+                      if (state == null) {
+                        return const OnError();
+                      }
                       final moves = state;
                       moves.sort((a, b) => b.createdAt.compareTo(a.createdAt));
                       if (moves.isEmpty) {

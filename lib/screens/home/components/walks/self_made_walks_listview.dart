@@ -3,13 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:quickstep_app/models/self_made_walk.dart';
-import 'package:quickstep_app/screens/home/components/map_self_made_walk.dart';
+import 'package:quickstep_app/screens/home/components/walks/map_self_made_walk.dart';
 import 'package:quickstep_app/services/auth_service.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import '../../../controllers/self_made_walks_controller.dart';
-import '../../../utils/colors.dart';
-import '../../movements/map/widgets/warn_dialog.dart';
+import '../../../../controllers/self_made_walks_controller.dart';
+import '../../../../utils/colors.dart';
+import '../../../movements/map/widgets/warn_dialog.dart';
 
 class SelfMadeWalksWidget extends StatefulWidget {
   const SelfMadeWalksWidget({

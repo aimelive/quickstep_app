@@ -9,10 +9,10 @@ import 'package:quickstep_app/models/self_made_walk.dart';
 import 'package:quickstep_app/services/auth_service.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
-import '../../../utils/colors.dart';
-import '../../../utils/keys.dart';
-import '../../movements/map/widgets/warn_dialog.dart';
-import '../../movements/widgets/app_bar_2.dart';
+import '../../../../utils/colors.dart';
+import '../../../../utils/keys.dart';
+import '../../../movements/map/widgets/warn_dialog.dart';
+import '../../../movements/widgets/app_bar_2.dart';
 import 'save_walk_dialog.dart';
 
 enum SelfMadeWalkMapMode { idle, walk }

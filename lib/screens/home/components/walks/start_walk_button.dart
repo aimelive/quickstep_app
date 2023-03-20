@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quickstep_app/screens/home/components/map_self_made_walk.dart';
+import 'package:quickstep_app/screens/home/components/walks/map_self_made_walk.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
-import '../../components/choose_location_dialog_func.dart';
+import '../../../components/choose_location_dialog_func.dart';
 
 class StartWalkingButton extends StatefulWidget {
   const StartWalkingButton({
