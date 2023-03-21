@@ -195,8 +195,18 @@ void onDioError(DioError e) {
       );
     }
   } else {
+    String msg = e.message ?? "Unkown error";
+    if (DioErrorType.receiveTimeout == e.type ||
+        DioErrorType.sendTimeout == e.type) {
+      msg =
+          "Server is not reachable. Please verify your internet connection and try again";
+    } else
+    // if (e.type != DioErrorType.unknown)
+    {
+      msg = "Problem connecting to the server. Please try again.";
+    }
     showMessage(
-      message: e.message ?? "Unkown error",
+      message: msg,
       title: "Something went wrong",
       type: MessageType.error,
     );

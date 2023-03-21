@@ -11,7 +11,9 @@ import 'widgets/warn_dialog.dart';
 class OverMapWidget extends StatefulWidget {
   const OverMapWidget({
     Key? key,
+    required this.membersLength,
   }) : super(key: key);
+  final int membersLength;
 
   @override
   State<OverMapWidget> createState() => _OverMapWidgetState();
@@ -133,7 +135,9 @@ class _OverMapWidgetState extends State<OverMapWidget> {
                                               BorderRadius.circular(25.r),
                                         ),
                                         child: Text(
-                                          "2+",
+                                          MapMenu.items[i].text == "Members"
+                                              ? "${widget.membersLength}+"
+                                              : "9+",
                                           style: TextStyle(
                                             color: white,
                                             fontSize: 10.sp,

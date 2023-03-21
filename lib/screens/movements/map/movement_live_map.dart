@@ -233,7 +233,9 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
                   ],
                 ),
               ),
-            const OverMapWidget(),
+            OverMapWidget(
+              membersLength: widget.movement.members,
+            ),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,

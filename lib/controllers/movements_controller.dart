@@ -19,6 +19,9 @@ class MovementController extends GetxController
     if (isClosed) return;
     // change(movements, status: RxStatus.loading());
     final moves = await dbService.getMovements();
+    if (moves != null) {
+      movements = moves;
+    }
     change(moves, status: RxStatus.success());
   }
 

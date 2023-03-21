@@ -1,12 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:quickstep_app/controllers/movements_controller.dart';
+import 'package:quickstep_app/models/movement.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
-
+import 'package:timeago/timeago.dart' as timeago;
 import '../../widgets/app_bar_2.dart';
 
-class MembersPage extends StatelessWidget {
+class MembersPage extends StatefulWidget {
   const MembersPage({super.key});
+
+  @override
+  State<MembersPage> createState() => _MembersPageState();
+}
+
+class _MembersPageState extends State<MembersPage> {
+  final moveController = Get.find<MovementController>();
+
+  Movement? movement;
+
+  init() {
+    try {
+      movement = moveController.movements
+          .where((move) => moveController.currentMovementId.value == move.id)
+          .toList()
+          .first;
+    } catch (e) {
+      movement = null;
+    }
+  }
+
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,14 +77,15 @@ class MembersPage extends StatelessWidget {
                       ),
                     ),
                     const Spacer(),
-                    Text(
-                      123.toString(),
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        // color: primary.withOpacity(1),
-                        fontWeight: FontWeight.w600,
+                    if (movement != null)
+                      Text(
+                        movement!.members.toString(),
+                        style: TextStyle(
+                          fontSize: 15.sp,
+                          // color: primary.withOpacity(1),
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
                     addHorizontalSpace(10),
                     const Icon(Icons.group)
                   ],
@@ -73,7 +103,7 @@ class MembersPage extends StatelessWidget {
                               color: Colors.amberAccent,
                             ),
                             Text(
-                              " Active",
+                              " Creator",
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 color: Colors.amberAccent.shade700,
@@ -82,52 +112,42 @@ class MembersPage extends StatelessWidget {
                             )
                           ],
                         ),
+                        addVerticalSpace(5),
+                        if (movement != null)
+                          ListTile(
+                            leading: CircleAvatar(
+                              radius: 24.r,
+                              backgroundColor: lightPrimary,
+                              foregroundColor: white,
+                              child: Text(
+                                movement!.creator[0].toUpperCase(),
+                              ),
+                            ),
+                            title: Text(
+                              movement!.creator,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            subtitle: Text(
+                              "Created this movement ${timeago.format(movement!.createdAt)}",
+                              maxLines: 2,
+                            ),
+                          ),
                         addVerticalSpace(20),
-                        // for (int i = 0; i < dummyUsers.length; i++)
-                        //   Padding(
-                        //     padding: EdgeInsets.only(bottom: 10.h),
-                        //     child: ListTile(
-                        //       onTap: () {},
-                        //       leading: CircleAvatar(
-                        //         radius: 27.r,
-                        //         backgroundColor: primary,
-                        //         child: CircleAvatar(
-                        //           radius: 24.r,
-                        //           backgroundColor: primary,
-                        //           foregroundColor: white,
-                        //           foregroundImage: AssetImage(
-                        //             "assets/images/${dummyUsers[i].imgUrl}",
-                        //           ),
-                        //           child: Text(
-                        //             dummyUsers[i].username[0].toUpperCase(),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //       title: Text(
-                        //         dummyUsers[i].username,
-                        //         style: TextStyle(
-                        //           fontSize: 16.sp,
-                        //           fontWeight: FontWeight.w600,
-                        //         ),
-                        //       ),
-                        //       subtitle: Text(
-                        //         dummyUsers[i].caption,
-                        //         maxLines: 2,
-                        //       ),
-                        //     ),
-                        //   ),
                         Row(
                           children: [
                             Icon(
                               Icons.circle,
                               size: 20.sp,
-                              color: Colors.amberAccent,
+                              color: Colors.green.shade400,
                             ),
                             Text(
-                              " Watchers",
+                              " Active",
                               style: TextStyle(
                                 fontSize: 14.sp,
-                                color: Colors.amberAccent.shade700,
+                                color: Colors.green.shade400,
                                 fontWeight: FontWeight.w500,
                               ),
                             )
@@ -172,13 +192,13 @@ class MembersPage extends StatelessWidget {
                             Icon(
                               Icons.circle,
                               size: 20.sp,
-                              color: Colors.amberAccent,
+                              color: Colors.redAccent.shade700,
                             ),
                             Text(
-                              " Admin",
+                              " Inactive",
                               style: TextStyle(
                                 fontSize: 14.sp,
-                                color: Colors.amberAccent.shade700,
+                                color: Colors.redAccent.shade700,
                                 fontWeight: FontWeight.w500,
                               ),
                             )

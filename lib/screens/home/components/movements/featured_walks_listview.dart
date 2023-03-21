@@ -7,7 +7,7 @@ import '../../../../controllers/movements_controller.dart';
 import 'movement_story_card.dart';
 
 class FeaturedMovements extends StatefulWidget {
- const FeaturedMovements({
+  const FeaturedMovements({
     Key? key,
   }) : super(key: key);
 
@@ -42,7 +42,10 @@ class _FeaturedMovementsState extends State<FeaturedMovements> {
             scrollDirection: Axis.horizontal,
             itemCount: moves.length,
             itemBuilder: ((context, index) {
-              return MovementStoryCard(movement: moves[index]);
+              return MovementStoryCard(
+                movement: moves[index],
+                mounted: mounted,
+              );
             }),
           );
         },
