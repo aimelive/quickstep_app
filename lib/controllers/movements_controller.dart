@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:quickstep_app/models/movement.dart';
+import 'package:quickstep_app/models/user.dart';
 import 'package:quickstep_app/services/db_service.dart';
 
 class MovementController extends GetxController
@@ -7,6 +8,8 @@ class MovementController extends GetxController
   List<Movement> movements = RxList<Movement>([]);
   final dbService = DBService();
   var currentMovementId = "".obs;
+  List<User> currentMoveMembers = RxList<User>([]);
+  List<ChatMessage> chatMessages = RxList<ChatMessage>([]);
 
   @override
   void onInit() {
@@ -39,5 +42,28 @@ class MovementController extends GetxController
       getMovements();
     }
     return res;
+  }
+
+  addMessage(ChatMessage message) {
+    chatMessages.add(message);
+  }
+
+  void markAsSeen(ChatMessage message) {
+    try {
+      final index = chatMessages.indexWhere((element) =>
+          element.user.id == message.user.id &&
+          element.message == message.message);
+      chatMessages[index] = message;
+    } catch (e) {
+      return;
+    }
+  }
+
+  @override
+  void onClose() {
+    currentMoveMembers.clear();
+    currentMovementId.value = "";
+    chatMessages.clear();
+    super.onClose();
   }
 }

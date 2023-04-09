@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:quickstep_app/controllers/movements_controller.dart';
 import 'package:quickstep_app/models/user.dart';
@@ -46,8 +45,7 @@ class _InviteMembersState extends State<InviteMembers> {
           id: profile.userId,
           imgUrl: profile.imgUrl,
           username: profile.username,
-          caption: profile.email,
-          location: const LatLng(-1.9167999680077046, 30.082668172142643),
+          joinedAt: profile.email,
         ),
       );
     }
@@ -200,7 +198,7 @@ class _InviteMembersState extends State<InviteMembers> {
                             ),
                           ),
                           subtitle: Text(
-                            users[i].caption,
+                            users[i].joinedAt,
                             maxLines: 2,
                           ),
                           trailing: CircleAvatar(

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:quickstep_app/controllers/movements_controller.dart';
 import 'package:quickstep_app/models/movement.dart';
+import 'package:quickstep_app/services/auth_service.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -17,18 +18,15 @@ class MembersPage extends StatefulWidget {
 
 class _MembersPageState extends State<MembersPage> {
   final moveController = Get.find<MovementController>();
+  final auth = AuthService().getAuth();
 
   Movement? movement;
 
   init() {
-    try {
-      movement = moveController.movements
-          .where((move) => moveController.currentMovementId.value == move.id)
-          .toList()
-          .first;
-    } catch (e) {
-      movement = null;
-    }
+    movement = moveController.movements.cast<Movement?>().firstWhere(
+          (move) => moveController.currentMovementId.value == move?.id,
+          orElse: () => null,
+        );
   }
 
   @override
@@ -124,7 +122,9 @@ class _MembersPageState extends State<MembersPage> {
                               ),
                             ),
                             title: Text(
-                              movement!.creator,
+                              auth?.fullName == movement!.creator
+                                  ? "You"
+                                  : movement!.creator,
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w600,
@@ -154,39 +154,46 @@ class _MembersPageState extends State<MembersPage> {
                           ],
                         ),
                         addVerticalSpace(20),
-                        // for (int i = 0; i < dummyUsers.length - 2; i++)
-                        //   Padding(
-                        //     padding: EdgeInsets.only(bottom: 10.h),
-                        //     child: ListTile(
-                        //       onTap: () {},
-                        //       leading: CircleAvatar(
-                        //         radius: 27.r,
-                        //         backgroundColor: primary,
-                        //         child: CircleAvatar(
-                        //           radius: 24.r,
-                        //           backgroundColor: primary,
-                        //           foregroundColor: white,
-                        //           foregroundImage: AssetImage(
-                        //             "assets/images/${dummyUsers[i].imgUrl}",
-                        //           ),
-                        //           child: Text(
-                        //             dummyUsers[i].username[0].toUpperCase(),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //       title: Text(
-                        //         dummyUsers[i].username,
-                        //         style: TextStyle(
-                        //           fontSize: 16.sp,
-                        //           fontWeight: FontWeight.w600,
-                        //         ),
-                        //       ),
-                        //       subtitle: Text(
-                        //         dummyUsers[i].caption,
-                        //         maxLines: 2,
-                        //       ),
-                        //     ),
-                        //   ),
+                        for (int i = 0;
+                            i < moveController.currentMoveMembers.length;
+                            i++)
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 10.h),
+                            child: ListTile(
+                              onTap: () {},
+                              leading: CircleAvatar(
+                                radius: 27.r,
+                                backgroundColor: lightPrimary,
+                                child: CircleAvatar(
+                                  radius: 22.r,
+                                  backgroundColor: primary,
+                                  foregroundColor: white,
+                                  foregroundImage: NetworkImage(moveController
+                                      .currentMoveMembers[i].imgUrl),
+                                  child: Text(
+                                    moveController
+                                        .currentMoveMembers[i].username[0]
+                                        .toUpperCase(),
+                                  ),
+                                ),
+                              ),
+                              title: Text(
+                                auth?.userId ==
+                                        moveController.currentMoveMembers[i].id
+                                    ? "You"
+                                    : moveController
+                                        .currentMoveMembers[i].username,
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              subtitle: Text(
+                                "Joined ${timeago.format(moveController.currentMoveMembers[i].joinedAt)}",
+                                maxLines: 2,
+                              ),
+                            ),
+                          ),
                         Row(
                           children: [
                             Icon(

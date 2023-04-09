@@ -6,6 +6,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:quickstep_app/controllers/self_made_walks_controller.dart';
 import 'package:quickstep_app/models/self_made_walk.dart';
+import 'package:quickstep_app/models/user.dart';
+import 'package:quickstep_app/screens/movements/map/widgets/marker_custom.dart';
 import 'package:quickstep_app/services/auth_service.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
@@ -35,6 +37,7 @@ class SelfMadeWalkMap extends StatefulWidget {
 
 class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
   final walkController = Get.put(WalksController());
+  final profile = AuthService().getAuth();
 
   late LatLng origin;
   late LatLng destination;
@@ -106,7 +109,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
       );
     });
     if (!mounted) return;
-    location.onLocationChanged.listen((newLoc) {
+    location.onLocationChanged.listen((newLoc) async {
       if (!mounted) return;
       setState(() {
         currentLocation = LatLng(
@@ -116,6 +119,12 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
       });
 
       if (googleMapController != null) {
+        await addMarker(
+          "currentLocation",
+          currentLocation!,
+          "Dear Aime, Current Location",
+          "This is your current location",
+        );
         googleMapController?.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
@@ -126,12 +135,6 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
               ),
             ),
           ),
-        );
-        addMarker(
-          "currentLocation",
-          currentLocation!,
-          "Dear Aime, Current Location",
-          "This is your current location",
         );
 
         if (!mounted) return;
@@ -229,13 +232,13 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                       addMarker(
                         "origin",
                         origin,
-                        "Aime Ndayambaje - Origin",
+                        "${profile?.fullName} - Origin",
                         "The origin location",
                       );
                       addMarker(
                         "destination",
                         destination,
-                        "Aime Ndayambaje - Destination",
+                        "${profile?.fullName} - Destination",
                         "The destination location",
                       );
                       if (widget.mode == SelfMadeWalkMapMode.idle) {
@@ -244,7 +247,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                           polylineCurrentLocationCoordinates[
                               polylineCurrentLocationCoordinates.length - 1],
                           "Where I stopped",
-                          "This location took me: ${getTimer(widget.walk!.createdAt, widget.walk!.endedAt)}",
+                          "This travel took ${getTimer(widget.walk!.createdAt, widget.walk!.endedAt)}",
                         );
                       }
                     },
@@ -308,6 +311,26 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
                   )
               ],
             ),
+            floatingActionButton: googleMapController == null ||
+                    widget.mode != SelfMadeWalkMapMode.idle
+                ? null
+                : FloatingActionButton(
+                    onPressed: () {
+                      googleMapController
+                          ?.animateCamera(CameraUpdate.newCameraPosition(
+                        CameraPosition(
+                          zoom: zoomLevel,
+                          target: polylineCurrentLocationCoordinates[
+                              polylineCurrentLocationCoordinates.length - 1],
+                        ),
+                      ));
+                    },
+                    backgroundColor: primary,
+                    child: Icon(
+                      Icons.share_location,
+                      size: 28.sp,
+                    ),
+                  ),
           ),
         ),
       ),
@@ -315,7 +338,7 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
   }
 
   addMarker(String id, LatLng location, String title, String desc) async {
-    final marker = Marker(
+    Marker marker = Marker(
       markerId: MarkerId(id),
       position: location,
       infoWindow: InfoWindow(
@@ -323,6 +346,20 @@ class _SelfMadeWalkMapState extends State<SelfMadeWalkMap> {
         snippet: desc,
       ),
     );
+    if (id == "final-made-destination" || id == "currentLocation") {
+      marker = await customMarker(
+        MoveUser(
+          user: User(
+            id: id,
+            imgUrl: profile!.profilePic,
+            username: "You",
+            joinedAt: desc,
+          ),
+          location: location,
+        ),
+      );
+    }
+
     if (!mounted) return;
     setState(() {
       markers[id] = marker;

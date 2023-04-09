@@ -21,7 +21,9 @@ class MapMenu {
       id: 1,
       text: "Messages",
       icon: Icons.message,
-      page: const MessagesPage(),
+      page: MessagesPage(
+        onSendMessage: (message) {},
+      ),
     ),
     MapMenu(
       id: 2,
@@ -30,7 +32,7 @@ class MapMenu {
       page: const MembersPage(),
     ),
     MapMenu(
-      id: 5,
+      id: 3,
       text: "Settings",
       icon: Icons.settings,
       page: const SettingsPage(),

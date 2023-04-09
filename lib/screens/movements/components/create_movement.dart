@@ -5,7 +5,6 @@ import 'package:quickstep_app/screens/components/top_snackbar.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/helpers.dart';
 import '../widgets/category.dart';
-import '../widgets/location_field.dart';
 
 class CreateMovement extends StatefulWidget {
   const CreateMovement({
@@ -120,28 +119,28 @@ class _CreateMovementState extends State<CreateMovement> {
                             cat = category;
                           });
                         }),
-                        addVerticalSpace(18),
-                        Text(
-                          "choose source(optional)".toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            color: primary.withOpacity(0.7),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        addVerticalSpace(8),
-                        const ChooseLocationWidget(),
-                        addVerticalSpace(18),
-                        Text(
-                          "choose destination(optional)".toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            color: primary.withOpacity(0.7),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        addVerticalSpace(8),
-                        const ChooseLocationWidget(),
+                        // addVerticalSpace(18),
+                        // Text(
+                        //   "choose source(optional)".toUpperCase(),
+                        //   style: TextStyle(
+                        //     fontSize: 15.sp,
+                        //     color: primary.withOpacity(0.7),
+                        //     fontWeight: FontWeight.w600,
+                        //   ),
+                        // ),
+                        // addVerticalSpace(8),
+                        // const ChooseLocationWidget(),
+                        // addVerticalSpace(18),
+                        // Text(
+                        //   "choose destination(optional)".toUpperCase(),
+                        //   style: TextStyle(
+                        //     fontSize: 15.sp,
+                        //     color: primary.withOpacity(0.7),
+                        //     fontWeight: FontWeight.w600,
+                        //   ),
+                        // ),
+                        // addVerticalSpace(8),
+                        // const ChooseLocationWidget(),
                         addVerticalSpace(18),
                         Text(
                           "continue to invite members".toUpperCase(),

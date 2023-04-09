@@ -4,37 +4,49 @@ class User {
   String id;
   String imgUrl;
   String username;
-  String caption;
-  LatLng location;
+  dynamic joinedAt;
+  /*
+      joinedAt: should be DateTime, except at invite members page it will 
+      be String to accept the email
+  */
 
   User({
     required this.id,
     required this.imgUrl,
     required this.username,
-    required this.caption,
-    required this.location,
+    required this.joinedAt,
   });
 
   factory User.fromJson(dynamic json) {
     return User(
-      id: json["user"],
+      id: json["id"],
       username: json["username"],
-      imgUrl: "aime.png",
-      caption: "No caption",
-      location: LatLng(
-        json["lat"],
-        json["long"],
-      ),
+      imgUrl: json["img"],
+      joinedAt: DateTime.parse(json["joinedAt"]),
     );
   }
 }
 
-class RoomMember {
-  final String id;
-  final String username;
+class MoveUser {
+  User user;
+  LatLng location;
 
-  RoomMember({
-    required this.id,
-    required this.username,
+  MoveUser({
+    required this.user,
+    required this.location,
+  });
+}
+
+class ChatMessage {
+  User user;
+  String message;
+  DateTime sentAt;
+  bool seen;
+
+  ChatMessage({
+    required this.user,
+    required this.message,
+    required this.sentAt,
+    this.seen = false,
   });
 }

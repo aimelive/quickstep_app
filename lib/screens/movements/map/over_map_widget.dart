@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:quickstep_app/controllers/movements_controller.dart';
 import 'package:quickstep_app/screens/movements/map/data.dart';
+import 'package:quickstep_app/screens/movements/map/menu_pages/messages.dart';
 import 'package:quickstep_app/screens/widgets/slide_fade_switcher.dart';
 
 import '../../../utils/colors.dart';
@@ -9,11 +11,15 @@ import '../../widgets/icon_shadow_button.dart';
 import 'widgets/warn_dialog.dart';
 
 class OverMapWidget extends StatefulWidget {
-  const OverMapWidget({
-    Key? key,
-    required this.membersLength,
-  }) : super(key: key);
+  const OverMapWidget(
+      {Key? key,
+      required this.membersLength,
+      required this.cnt,
+      required this.onSendMessage})
+      : super(key: key);
   final int membersLength;
+  final MovementController cnt;
+  final void Function(String message) onSendMessage;
 
   @override
   State<OverMapWidget> createState() => _OverMapWidgetState();
@@ -89,8 +95,14 @@ class _OverMapWidgetState extends State<OverMapWidget> {
                             borderRadius: BorderRadius.circular(8.r),
                             child: InkWell(
                               onTap: () async {
-                                final data = await pushPage(context,
-                                    to: MapMenu.items[i].page);
+                                final data = await pushPage(
+                                  context,
+                                  to: MapMenu.items[i].id == 1
+                                      ? MessagesPage(
+                                          onSendMessage: widget.onSendMessage,
+                                        )
+                                      : MapMenu.items[i].page,
+                                );
                                 if (data == "LEAVE" && mounted) {
                                   popPage(context);
                                 } else {
@@ -137,14 +149,14 @@ class _OverMapWidgetState extends State<OverMapWidget> {
                                         child: Text(
                                           MapMenu.items[i].text == "Members"
                                               ? "${widget.membersLength}+"
-                                              : "9+",
+                                              : "${widget.cnt.chatMessages.length}+",
                                           style: TextStyle(
                                             color: white,
                                             fontSize: 10.sp,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                      )
+                                      ),
                                   ],
                                 ),
                               ),

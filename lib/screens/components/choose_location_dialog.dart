@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:quickstep_app/models/user.dart';
+import 'package:quickstep_app/screens/movements/map/widgets/marker_custom.dart';
+import 'package:quickstep_app/services/auth_service.dart';
 import 'package:quickstep_app/utils/colors.dart';
 import 'package:quickstep_app/utils/helpers.dart';
 
@@ -17,6 +20,7 @@ class ChooseLocationDialog extends StatefulWidget {
 class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
   LatLng? currentLocation;
   LatLng? choosenLocation;
+  final profile = AuthService().getAuth();
 
   Map<String, Marker> markers = {};
 
@@ -50,7 +54,6 @@ class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
 
     location.onLocationChanged.listen((newLoc) {
       if (!mounted) return;
-
       setState(() {
         currentLocation = LatLng(
           newLoc.latitude!,
@@ -107,12 +110,12 @@ class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
                               zoom: 16,
                             ),
                             mapType: MapType.hybrid,
-                            onMapCreated: (controller) {
+                            onMapCreated: (controller) async {
                               addMarker(
                                 "current-location",
                                 currentLocation!,
                                 "My Current Location - Last known",
-                                "If this is not your right current location close this page and try again",
+                                "If this is not your right current location close this dialog and try again",
                               );
                             },
                             onTap: (newLoc) {
@@ -312,7 +315,7 @@ class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
   }
 
   addMarker(String id, LatLng location, String title, String desc) async {
-    final marker = Marker(
+    Marker marker = Marker(
       markerId: MarkerId(id),
       position: location,
       infoWindow: InfoWindow(
@@ -320,6 +323,19 @@ class _ChooseLocationDialogState extends State<ChooseLocationDialog> {
         snippet: desc,
       ),
     );
+    if (id == "current-location") {
+      marker = await customMarker(
+        MoveUser(
+          user: User(
+            id: id,
+            imgUrl: profile!.profilePic,
+            username: "You",
+            joinedAt: null,
+          ),
+          location: location,
+        ),
+      );
+    }
 
     setState(() {
       markers[id] = marker;

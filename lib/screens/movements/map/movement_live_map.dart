@@ -49,6 +49,8 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
   );
 
   _connectSocket() {
+    _socket.connect();
+    // print(_socket.c);
     _socket.onConnect(
       (data) {
         //Joining the room movement
@@ -56,6 +58,7 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
           "room": widget.movement.id,
           "user": account.userId,
           "username": account.username,
+          "profileUrl": account.profilePic
         });
 
         //Listn to a connected message from backend
@@ -66,16 +69,71 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
         //Listen to current members active in the movement
         _socket.on("roomUsers", (data) {
           try {
-            // print(data["users"]);
+            List<User> roomUsers = [];
+            for (var userData in data["users"]) {
+              roomUsers.add(User.fromJson(userData));
+            }
+            setState(() {
+              members = roomUsers;
+            });
+            moveCnt.currentMoveMembers = members;
           } catch (e) {
             // print("Something went wrong while getting room users");
           }
         });
 
         //Listens to when someone changed location
-        _socket.on("locationChanged", (data) {
+        _socket.on("locationChanged", (data) async {
           try {
-            addMarker(User.fromJson(data));
+            final user = members.cast<User?>().firstWhere(
+                  (member) => member?.id == data["user"],
+                  orElse: () => null,
+                );
+            if (user == null ||
+                data["lat"].runtimeType != double ||
+                data["long"].runtimeType != double) return;
+
+            final location = LatLng(data["lat"], data["long"]);
+
+            await addMarker(user, location);
+            if (user.id == account.userId && members.length > 1) {
+              return;
+            }
+            mapController?.animateCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(
+                  zoom: zoomLevel,
+                  target: location,
+                ),
+              ),
+            );
+          } catch (e) {
+            // print(e);
+          }
+        });
+
+        //Listens to when new chat message is received
+        _socket.on("chatMessage", (data) async {
+          try {
+            final user = members.cast<User?>().firstWhere(
+                  (member) => member?.id == data["userId"],
+                  orElse: () => null,
+                );
+            if (user == null) return;
+            final message = ChatMessage(
+              user: user,
+              message: data["message"],
+              sentAt: DateTime.parse(data["sentAt"]),
+              seen: members.length > 1,
+            );
+            if (user.id == account.userId) {
+              if (members.length > 1) {
+                moveCnt.markAsSeen(message);
+              }
+              return;
+            }
+
+            moveCnt.addMessage(message);
           } catch (e) {
             // print(e);
           }
@@ -96,7 +154,7 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
     );
 
     _socket.onDisconnect(
-      (data) => null,
+      (data) {},
     );
   }
 
@@ -135,23 +193,23 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
       });
 
       if (mapController != null) {
-        mapController?.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              zoom: zoomLevel,
-              target: currentLocation!,
-            ),
-          ),
-        );
-        addMarker(
-          User(
-            id: account.userId,
-            imgUrl: account.profilePic,
-            username: "Me",
-            caption: "My current location",
-            location: currentLocation!,
-          ),
-        );
+        // mapController?.animateCamera(
+        //   CameraUpdate.newCameraPosition(
+        //     CameraPosition(
+        //       zoom: zoomLevel,
+        //       target: currentLocation!,
+        //     ),
+        //   ),
+        // );
+        // addMarker(
+        //   User(
+        //     id: account.userId,
+        //     imgUrl: account.profilePic,
+        //     username: "Me",
+        //     caption: "My current location",
+        //     location: currentLocation!,
+        //   ),
+        // );
         if (_socket.connected) {
           //Emite location to the server
           _socket.emit("locationChanged", {
@@ -175,7 +233,10 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
 
   @override
   void dispose() {
+    _socket.disconnect();
+    _socket.destroy();
     _socket.dispose();
+    moveCnt.onClose();
     super.dispose();
   }
 
@@ -205,14 +266,14 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
                 mapType: MapType.hybrid,
                 onMapCreated: (controller) async {
                   mapController = controller;
-                  addMarker(
+                  await addMarker(
                     User(
                       id: account.userId,
                       imgUrl: account.profilePic,
                       username: account.fullName,
-                      caption: "My current location",
-                      location: currentLocation!,
+                      joinedAt: DateTime.now(),
                     ),
+                    currentLocation!,
                   );
                 },
                 myLocationButtonEnabled: false,
@@ -235,6 +296,15 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
               ),
             OverMapWidget(
               membersLength: widget.movement.members,
+              cnt: moveCnt,
+              onSendMessage: (message) {
+                if (_socket.connected) {
+                  _socket.emit("chatMessage", {
+                    "userId": account.userId,
+                    "message": message,
+                  });
+                }
+              },
             ),
           ],
         ),
@@ -247,8 +317,21 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
     );
   }
 
-  addMarker(User user) async {
-    var marker = customMarker(user);
+  addMarker(User user, LatLng location) async {
+    var marker = await customMarker(
+      MoveUser(
+        user: user.id == account.userId
+            ? User(
+                id: user.id,
+                imgUrl: user.imgUrl,
+                username: "You",
+                joinedAt: null,
+              )
+            : user,
+        location: location,
+      ),
+    );
+    if (!mounted) return;
     setState(() {
       markers[user.id] = marker;
     });
