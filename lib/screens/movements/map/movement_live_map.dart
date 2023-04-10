@@ -96,9 +96,16 @@ class _MovementLiveMapState extends State<MovementLiveMap> {
             final location = LatLng(data["lat"], data["long"]);
 
             await addMarker(user, location);
+
+            if (moveCnt.currentMovingUserId.value != "" &&
+                moveCnt.currentMovingUserId.value != user.id) {
+              return;
+            }
+
             if (user.id == account.userId && members.length > 1) {
               return;
             }
+
             mapController?.animateCamera(
               CameraUpdate.newCameraPosition(
                 CameraPosition(

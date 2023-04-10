@@ -10,6 +10,7 @@ class MovementController extends GetxController
   var currentMovementId = "".obs;
   List<User> currentMoveMembers = RxList<User>([]);
   List<ChatMessage> chatMessages = RxList<ChatMessage>([]);
+  var currentMovingUserId = "".obs;
 
   @override
   void onInit() {
@@ -63,6 +64,7 @@ class MovementController extends GetxController
   void onClose() {
     currentMoveMembers.clear();
     currentMovementId.value = "";
+    currentMovingUserId.value = "";
     chatMessages.clear();
     super.onClose();
   }

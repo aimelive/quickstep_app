@@ -160,7 +160,9 @@ class _MembersPageState extends State<MembersPage> {
                           Padding(
                             padding: EdgeInsets.only(bottom: 10.h),
                             child: ListTile(
-                              onTap: () {},
+                              onTap: () =>
+                                  moveController.currentMovingUserId.value =
+                                      moveController.currentMoveMembers[i].id,
                               leading: CircleAvatar(
                                 radius: 27.r,
                                 backgroundColor: lightPrimary,
@@ -192,6 +194,17 @@ class _MembersPageState extends State<MembersPage> {
                                 "Joined ${timeago.format(moveController.currentMoveMembers[i].joinedAt)}",
                                 maxLines: 2,
                               ),
+                              trailing: Obx(() {
+                                return CircleAvatar(
+                                  radius: 9.r,
+                                  backgroundColor: moveController
+                                              .currentMovingUserId.value ==
+                                          moveController
+                                              .currentMoveMembers[i].id
+                                      ? Colors.green.shade400
+                                      : lightPrimary,
+                                );
+                              }),
                             ),
                           ),
                         Row(
