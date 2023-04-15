@@ -75,7 +75,7 @@ Future<Object?> customSignInDialog(BuildContext context,
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 20.h),
                     child: Text(
-                      "Sign up with Email, Apple or Google",
+                      "Sign up with Email",
                       style: TextStyle(
                         color: Colors.black54,
                         fontSize: 14.sp,
@@ -97,24 +97,24 @@ Future<Object?> customSignInDialog(BuildContext context,
                           width: 64.r,
                         ),
                       ),
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () {},
-                        icon: SvgPicture.asset(
-                          "assets/icons/google_box.svg",
-                          height: 64.r,
-                          width: 64.r,
-                        ),
-                      ),
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        onPressed: () {},
-                        icon: SvgPicture.asset(
-                          "assets/icons/apple_box.svg",
-                          height: 64.r,
-                          width: 64.r,
-                        ),
-                      ),
+                      // IconButton(
+                      //   padding: EdgeInsets.zero,
+                      //   onPressed: () {},
+                      //   icon: SvgPicture.asset(
+                      //     "assets/icons/google_box.svg",
+                      //     height: 64.r,
+                      //     width: 64.r,
+                      //   ),
+                      // ),
+                      // IconButton(
+                      //   padding: EdgeInsets.zero,
+                      //   onPressed: () {},
+                      //   icon: SvgPicture.asset(
+                      //     "assets/icons/apple_box.svg",
+                      //     height: 64.r,
+                      //     width: 64.r,
+                      //   ),
+                      // ),
                     ],
                   )
                 ],
