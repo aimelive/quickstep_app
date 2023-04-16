@@ -30,7 +30,7 @@ Copy this URL
 https://drive.google.com/file/d/1uVAM4gpTXExx2GmP78F1Gi7zIEmltBeO/view
 ```
 
-Or click [here](https://drive.google.com/file/d/1cqYvwGoKT1_w95lXOGCo3PO4qDYkbls-/view?usp=sharing)
+Or click [here](https://drive.google.com/file/d/1uVAM4gpTXExx2GmP78F1Gi7zIEmltBeO/view)
 
 ### Screenshots
 
@@ -73,11 +73,7 @@ Or click [here](https://drive.google.com/file/d/1cqYvwGoKT1_w95lXOGCo3PO4qDYkbls
 
 ### Server
 
-- This app is using node js as backend, you can find the whole source code of the backend server via here:
-
-```bash
-https://github.com/aimelive/quickstep-backend
-```
+- This app is using node js as backend, you can find the whole source code of the backend server via here: [https://github.com/aimelive/quickstep-backend](https://github.com/aimelive/quickstep-backend)
 
 ### Run locally
 
