@@ -24,7 +24,7 @@ In addition to real-time location tracking, this app also includes chat messagin
 
 ### Get APK
 
-Copy this URL
+Copy this URL (EDITED: Currently APK has issues due to backend deployment)
 
 ```bash
 https://drive.google.com/file/d/1uVAM4gpTXExx2GmP78F1Gi7zIEmltBeO/view
@@ -110,7 +110,7 @@ flutter pub get
 
 ### Pre-requisites
 
-- Flutter SDK
+- Flutter SDK (3.10.0)
 - Android Studio for Android platform or XCode for iOS platform
 - Google Map Api Key
 
@@ -143,3 +143,5 @@ flutter pub get
 ### Contact Me
 
 - For any ideas, suggestions, improvements, guidance or questions regarding this project, please contact me via my email [aimendayambaje24@gmail.com](mailto:aimendayambaje24@gmail.com) or LinkedIn [Aime Ndayambaje](https://linkedin.com/in/aime-ndayambaje)
+### Note (Edited)
+Currently APK has issues due to backend deployment, I advise you to run the project locally on PC by following the above instructions.
