@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -65,13 +65,13 @@ class _MyAppBarState extends State<MyAppBar> {
                         );
                       }
                     },
-                    child: Badge(
+                    child: badges.Badge(
                       badgeContent: Text(
                         "",
                         style: TextStyle(color: white, fontSize: 10.sp),
                       ),
                       showBadge: true,
-                      position: BadgePosition.topEnd(),
+                      position: badges.BadgePosition.topEnd(),
                       child: SvgPicture.asset(
                         'assets/icons/notification.svg',
                         height: 28.sp,

@@ -97,6 +97,7 @@ class AuthService {
     String pwd,
   ) async {
     try {
+      print(backendApiUrl);
       final uri = "$backendApiUrl/accounts/login";
       final result = await dio.post(uri, data: {
         "email": email,
